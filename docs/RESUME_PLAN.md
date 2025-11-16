@@ -7,6 +7,21 @@
 
 ---
 
+## Table des Matières
+
+1. [Architecture Technique](#architecture-technique)
+2. [Vue d'Ensemble - Base de Connaissances](#vue-densemble---base-de-connaissances)
+3. [Les 10 Maladies](#les-10-maladies)
+4. [Les 8 Syndromes Intermédiaires](#les-8-syndromes-intermédiaires)
+5. [Les 23 Symptômes (Conventions Prolog)](#les-23-symptômes-conventions-prolog)
+6. [Les 23 Questions du Système](#les-23-questions-du-système)
+7. [Interface Utilisateur](#interface-utilisateur)
+8. [Exemple de Session Utilisateur](#exemple-de-session-utilisateur)
+9. [Les 23 Règles du Système](#les-23-règles-du-système)
+10. [Contraintes Respectées](#contraintes-respectées)
+
+---
+
 ## Architecture Technique
 
 ### Structure de Fichiers Proposée
@@ -18,9 +33,6 @@ TP2/
 ```
 
 **Note**: Les 3 cas de test distincts demandés dans l'énoncé (scénarios de démonstration avec raisonnement) seront documentés dans le rapport final.
-
-### Méthode d'Inférence
-**Chaînage arrière (backward chaining)**: Le système part de l'hypothèse de maladie et remonte aux symptômes pour valider ou réfuter le diagnostic.
 
 ### Structure Hiérarchique (3 Niveaux)
 ```
@@ -166,35 +178,53 @@ Syndromes identifiés: [Liste des syndromes détectés]
 
 ## Exemple de Session Utilisateur
 
-**Scénario**: Diagnostic du Rhume
+**Scénario**: Diagnostic du Rhume (avec ordre optimisé des questions)
 
 ```
 === SYSTÈME EXPERT DE DIAGNOSTIC MÉDICAL ===
 
-Question 1: Avez-vous de la toux ?
-1. Oui | 2. Non | 3. Je ne sais pas
-> 1
-
-Question 2: Avez-vous le nez bouché ?
-1. Oui | 2. Non | 3. Je ne sais pas
-> 1
-
-Question 3: Avez-vous la gorge irritée ?
-1. Oui | 2. Non | 3. Je ne sais pas
-> 1
-
-Question 4: Avez-vous de la fièvre élevée (>38.5°C) ?
+Question 1: Avez-vous perdu l'odorat ou le goût ?
 1. Oui | 2. Non | 3. Je ne sais pas
 > 2
 
-Question 5: Avez-vous de la fatigue intense ?
+Question 2: Avez-vous des sécrétions purulentes aux yeux ?
 1. Oui | 2. Non | 3. Je ne sais pas
 > 2
+
+Question 3: Avez-vous un sifflement respiratoire (wheezing) ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 2
+
+Question 4: Avez-vous un mal de gorge intense ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 2
+
+Question 5: Ressentez-vous une fatigue intense ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 2
+
+Question 6: Avez-vous de la fièvre élevée (supérieure à 38.5°C) ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 2
+
+Question 7: Avez-vous de la toux ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 1
+
+Question 8: Avez-vous le nez bouché ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 1
+
+Question 9: Avez-vous la gorge irritée ?
+1. Oui | 2. Non | 3. Je ne sais pas
+> 1
 
 === DIAGNOSTIC ===
 Diagnostic: Rhume
 Syndromes identifiés: syndrome_respiratoire
 ```
+
+**Note**: Les questions 1-6 éliminent rapidement les maladies à symptômes discriminants (COVID, Conjonctivite, Asthme, Angine, Grippe). Les questions 7-9 confirment le syndrome respiratoire sans syndrome fébrile ni grippal → diagnostic de Rhume.
 
 ---
 
