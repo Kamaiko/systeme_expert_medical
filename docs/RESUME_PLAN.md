@@ -14,7 +14,6 @@
    - [Vue d'Ensemble](#vue-densemble)
    - [Les Maladies](#les-maladies)
    - [Les Syndromes Intermédiaires](#les-syndromes-intermédiaires)
-   - [Relations et Dépendances](#relations-et-dépendances)
    - [Les Symptômes](#les-symptômes)
    - [Les Questions](#les-questions)
 3. [Interface Utilisateur](#interface-utilisateur)
@@ -92,46 +91,6 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 | **syndrome_orl** | Mal gorge intense + difficulté avaler | 1 maladie (Angine) |
 
 **Note**: 5 syndromes sur 8 sont partagés par plusieurs maladies, créant ainsi l'arbre de dépendance global requis.
-
----
-
-## Relations et Dépendances
-
-**Connexions Syndromes → Maladies:**
-
-| Syndrome | Nb | Maladies connectées |
-|----------|----|--------------------|
-| `syndrome_respiratoire` | 5 | Grippe, COVID-19, Bronchite, Rhume, Asthme |
-| `syndrome_febrile` | 4 | Grippe, COVID-19, Angine, Gastro-entérite |
-| `syndrome_grippal` | 2 | Grippe, COVID-19 |
-| `syndrome_allergique` | 2 | Allergie, Asthme |
-| `syndrome_oculaire` | 2 | Allergie, Conjonctivite |
-| `syndrome_digestif` | 1 | Gastro-entérite |
-| `syndrome_neurologique` | 1 | Migraine |
-| `syndrome_orl` | 1 | Angine |
-
-**Formule par maladie (pour le graphe):**
-
-- **Grippe** = Respiratoire ∧ Grippal ∧ Fébrile ∧ ¬perte_odorat
-- **COVID-19** = Respiratoire ∧ Grippal ∧ Fébrile ∧ perte_odorat
-- **Bronchite** = Respiratoire ∧ toux_productive ∧ fievre_legere
-- **Rhume** = Respiratoire ∧ ¬Fébrile ∧ ¬Grippal
-- **Angine** = ORL ∧ Fébrile
-- **Allergie** = Allergique ∧ Oculaire ∧ ¬difficultes_respiratoires
-- **Asthme** = Respiratoire ∧ Allergique ∧ wheezing ∧ difficultes_respiratoires
-- **Migraine** = Neurologique
-- **Gastro-entérite** = Digestif ∧ Fébrile
-- **Conjonctivite** = Oculaire ∧ secretions_purulentes
-
-**Symptômes directs (bypass syndromes):**
-- `perte_odorat` → COVID-19 (connexion directe)
-- `secretions_purulentes` → Conjonctivite (connexion directe)
-- `wheezing` → Asthme (connexion directe)
-
-**Notes pour la modélisation:**
-- Les syndromes avec Nb > 1 créent des **convergences** (plusieurs branches mènent au même nœud)
-- Grippe et COVID-19 partagent 3 syndromes → distinction par `perte_odorat` uniquement
-- 3 symptômes discriminants créent des **chemins directs** (court-circuitent la hiérarchie)
 
 ---
 
