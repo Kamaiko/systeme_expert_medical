@@ -13,11 +13,10 @@
 2. [Vue d'Ensemble - Base de Connaissances](#vue-densemble---base-de-connaissances)
 3. [Les 10 Maladies](#les-10-maladies)
 4. [Les 8 Syndromes Intermédiaires](#les-8-syndromes-intermédiaires)
-5. [Les 23 Symptômes (Conventions Prolog)](#les-23-symptômes-conventions-prolog)
-6. [Les 23 Questions du Système](#les-23-questions-du-système)
-7. [Interface Utilisateur](#interface-utilisateur)
-8. [Exemple de Session Utilisateur](#exemple-de-session-utilisateur)
-9. [Les 23 Règles du Système](#les-23-règles-du-système)
+5. [Les 23 Symptômes et Questions du Système](#les-23-symptômes-et-questions-du-système)
+6. [Interface Utilisateur](#interface-utilisateur)
+7. [Exemple de Session Utilisateur](#exemple-de-session-utilisateur)
+8. [Les 23 Règles d'Inférence](#les-23-règles-dinférence)
 
 ---
 
@@ -91,7 +90,11 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ---
 
-## Les 23 Symptômes (Conventions Prolog)
+## Les 23 Symptômes et Questions du Système
+
+Le système utilise **23 symptômes**, chacun correspondant à une question posée à l'utilisateur. Cette section présente deux vues complémentaires: la vue organisée (par catégorie médicale) et la vue opérationnelle (ordre de questionnement optimisé).
+
+### Vue Organisée: Symptômes par Catégorie
 
 | Catégorie | Symptômes Prolog | Français |
 |-----------|------------------|----------|
@@ -108,11 +111,9 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 **Convention de nommage**: snake_case, sans accents, mots complets (compatibilité Prolog).
 
----
+### Vue Opérationnelle: Ordre Stratégique de Questionnement
 
-## Les 23 Questions du Système
-
-Le système pose les questions dans un **ordre fixe optimisé**, en commençant par les symptômes les plus discriminants (qui identifient rapidement des maladies spécifiques ou éliminent plusieurs hypothèses).
+Le système pose les questions dans un **ordre fixe optimisé**, en commençant par les symptômes les plus discriminants.
 
 | # | Symptôme Prolog | Question en français |
 |---|-----------------|---------------------|
@@ -227,7 +228,7 @@ Syndromes identifiés: syndrome_respiratoire
 
 ---
 
-## Les 23 Règles du Système
+## Les 23 Règles d'Inférence
 
 ### Niveau 1 → 2: Symptômes → Syndromes (13 règles)
 
