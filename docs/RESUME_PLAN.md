@@ -10,13 +10,15 @@
 ## Table des Matières
 
 1. [Architecture Technique](#architecture-technique)
-2. [Vue d'Ensemble - Base de Connaissances](#vue-densemble---base-de-connaissances)
-3. [Les 10 Maladies](#les-10-maladies)
-4. [Les 8 Syndromes Intermédiaires](#les-8-syndromes-intermédiaires)
-5. [Les 23 Symptômes et Questions du Système](#les-23-symptômes-et-questions-du-système)
-6. [Interface Utilisateur](#interface-utilisateur)
-7. [Exemple de Session Utilisateur](#exemple-de-session-utilisateur)
-8. [Les 23 Règles d'Inférence](#les-23-règles-dinférence)
+2. [Base de Connaissance](#base-de-connaissance)
+   - [Vue d'Ensemble](#vue-densemble)
+   - [Les Maladies](#les-maladies)
+   - [Les Syndromes Intermédiaires](#les-syndromes-intermédiaires)
+   - [Les Symptômes](#les-symptômes)
+   - [Les Questions](#les-questions)
+3. [Interface Utilisateur](#interface-utilisateur)
+4. [Exemple de Session Utilisateur](#exemple-de-session-utilisateur)
+5. [Les 23 Règles d'Inférence](#les-23-règles-dinférence)
 
 ---
 
@@ -43,7 +45,9 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ---
 
-## Vue d'Ensemble - Base de Connaissances
+# Base de Connaissance
+
+## Vue d'Ensemble
 
 | Composante | Quantité | Détails |
 |------------|----------|---------|
@@ -56,7 +60,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ---
 
-## Les 10 Maladies
+## Les Maladies
 
 | Maladie | Syndromes requis | Discriminants clés |
 |---------|------------------|-------------------|
@@ -73,7 +77,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ---
 
-## Les 8 Syndromes Intermédiaires
+## Les Syndromes Intermédiaires
 
 | Syndrome | Symptômes déclencheurs | Maladies connectées (Nb) |
 |----------|------------------------|--------------------------|
@@ -90,9 +94,9 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ---
 
-## Les 23 Symptômes et Questions du Système
+## Les Symptômes
 
-Le système utilise **23 symptômes**, chacun correspondant à une question posée à l'utilisateur. Cette section présente deux vues complémentaires: la vue organisée (par catégorie médicale) et la vue opérationnelle (ordre de questionnement optimisé).
+Le système utilise **23 symptômes**, chacun correspondant à une question posée à l'utilisateur.
 
 ### Vue Organisée: Symptômes par Catégorie
 
@@ -110,6 +114,10 @@ Le système utilise **23 symptômes**, chacun correspondant à une question pos�
 | **Respiratoires avancés** | `difficultes_respiratoires`, `wheezing` | Difficultés respiratoires, Wheezing (sifflement) |
 
 **Convention de nommage**: snake_case, sans accents, mots complets (compatibilité Prolog).
+
+---
+
+## Les Questions
 
 ### Vue Opérationnelle: Ordre Stratégique de Questionnement
 
