@@ -97,75 +97,41 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ## Relations et Dépendances
 
-### Structure des Relations
+**Connexions Syndromes → Maladies:**
 
-Le système repose sur un **graphe de dépendances hiérarchique** à 3 niveaux avec relations partagées:
+| Syndrome | Nb | Maladies connectées |
+|----------|----|--------------------|
+| `syndrome_respiratoire` | 5 | Grippe, COVID-19, Bronchite, Rhume, Asthme |
+| `syndrome_febrile` | 4 | Grippe, COVID-19, Angine, Gastro-entérite |
+| `syndrome_grippal` | 2 | Grippe, COVID-19 |
+| `syndrome_allergique` | 2 | Allergie, Asthme |
+| `syndrome_oculaire` | 2 | Allergie, Conjonctivite |
+| `syndrome_digestif` | 1 | Gastro-entérite |
+| `syndrome_neurologique` | 1 | Migraine |
+| `syndrome_orl` | 1 | Angine |
 
-**Syndromes partagés (hub de convergence):**
-- `syndrome_respiratoire` → 5 maladies (Grippe, COVID-19, Bronchite, Rhume, Asthme) - **Hub principal**
-- `syndrome_febrile` → 4 maladies (Grippe, COVID-19, Angine, Gastro-entérite)
-- `syndrome_grippal` → 2 maladies (Grippe, COVID-19)
-- `syndrome_allergique` → 2 maladies (Allergie, Asthme)
-- `syndrome_oculaire` → 2 maladies (Allergie, Conjonctivite)
+**Formule par maladie (pour le graphe):**
 
-**Syndromes spécifiques (1-1):**
-- `syndrome_digestif` → Gastro-entérite uniquement
-- `syndrome_neurologique` → Migraine uniquement
-- `syndrome_orl` → Angine uniquement
+- **Grippe** = Respiratoire ∧ Grippal ∧ Fébrile ∧ ¬perte_odorat
+- **COVID-19** = Respiratoire ∧ Grippal ∧ Fébrile ∧ perte_odorat
+- **Bronchite** = Respiratoire ∧ toux_productive ∧ fievre_legere
+- **Rhume** = Respiratoire ∧ ¬Fébrile ∧ ¬Grippal
+- **Angine** = ORL ∧ Fébrile
+- **Allergie** = Allergique ∧ Oculaire ∧ ¬difficultes_respiratoires
+- **Asthme** = Respiratoire ∧ Allergique ∧ wheezing ∧ difficultes_respiratoires
+- **Migraine** = Neurologique
+- **Gastro-entérite** = Digestif ∧ Fébrile
+- **Conjonctivite** = Oculaire ∧ secretions_purulentes
 
-### Combinaisons discriminantes
+**Symptômes directs (bypass syndromes):**
+- `perte_odorat` → COVID-19 (connexion directe)
+- `secretions_purulentes` → Conjonctivite (connexion directe)
+- `wheezing` → Asthme (connexion directe)
 
-**Maladies à syndromes multiples (nécessitent plusieurs confirmations):**
-- **Grippe**: 3 syndromes (Respiratoire + Grippal + Fébrile) + condition négative (pas de perte odorat)
-- **COVID-19**: 3 syndromes + symptôme unique discriminant (`perte_odorat`)
-- **Asthme**: 2 syndromes (Respiratoire + Allergique) + 2 symptômes spécifiques (`wheezing`, `difficultes_respiratoires`)
-- **Allergie**: 2 syndromes (Allergique + Oculaire) + condition négative (pas de difficultés respiratoires)
-- **Angine**: 2 syndromes (ORL + Fébrile)
-- **Gastro-entérite**: 2 syndromes (Digestif + Fébrile)
-
-**Maladies à syndrome unique + discriminants:**
-- **Bronchite**: 1 syndrome + symptômes spécifiques (`toux_productive`, `fievre_legere`)
-- **Rhume**: 1 syndrome + conditions négatives (pas Fébrile, pas Grippal)
-- **Migraine**: 1 syndrome suffisant (Neurologique très spécifique)
-- **Conjonctivite**: 1 syndrome + symptôme unique (`secretions_purulentes`)
-
-### Propagation de l'incertitude
-
-**Symptômes discriminants critiques (identification quasi-immédiate):**
-- `perte_odorat` → COVID-19 (unique, probabilité >95%)
-- `secretions_purulentes` → Conjonctivite (unique, probabilité >90%)
-- `wheezing` + `difficultes_respiratoires` → Asthme (probabilité >85%)
-- `mal_gorge_intense` + `difficulte_avaler` + `fievre_elevee` → Angine (probabilité >80%)
-- `mal_tete_intense` + `photophobie` → Migraine (probabilité >80%)
-
-**Symptômes génériques (nécessitent combinaisons):**
-- `fievre` → 6 maladies possibles (discrimination faible)
-- `toux` → 5 maladies possibles (discrimination faible)
-- `fatigue_intense` → 2 maladies (discrimination moyenne)
-
-### Principe du backward chaining
-
-Le moteur d'inférence remonte le graphe depuis la maladie hypothèse vers les symptômes observables:
-
-```
-But: Prouver "Grippe"
-  ├→ Sous-but: syndrome_respiratoire ?
-  │   ├→ Question: fievre_elevee ? → OUI
-  │   └→ Question: toux ? → OUI
-  │   → Syndrome confirmé ✓
-  ├→ Sous-but: syndrome_grippal ?
-  │   ├→ Question: fatigue_intense ? → OUI
-  │   ├→ Question: courbatures ? → OUI
-  │   └→ Prérequis: fievre_elevee déjà confirmé ✓
-  │   → Syndrome confirmé ✓
-  ├→ Sous-but: syndrome_febrile ?
-  │   └→ Prérequis: fievre_elevee déjà confirmé ✓
-  │   → Syndrome confirmé ✓
-  └→ Condition négative: perte_odorat ? → NON ✓
-→ Diagnostic: Grippe (certitude élevée)
-```
-
-**Avantage du graphe partagé:** Les symptômes communs (`fievre_elevee`) sont demandés **une seule fois** et réutilisés dans plusieurs syndromes, réduisant le nombre total de questions de ~40%.
+**Notes pour la modélisation:**
+- Les syndromes avec Nb > 1 créent des **convergences** (plusieurs branches mènent au même nœud)
+- Grippe et COVID-19 partagent 3 syndromes → distinction par `perte_odorat` uniquement
+- 3 symptômes discriminants créent des **chemins directs** (court-circuitent la hiérarchie)
 
 ---
 
