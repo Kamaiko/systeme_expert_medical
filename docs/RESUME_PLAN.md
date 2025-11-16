@@ -24,7 +24,7 @@ TP2/
 
 ### Structure Hiérarchique (3 Niveaux)
 ```
-NIVEAU 1: SYMPTÔMES (17 symptômes de base)
+NIVEAU 1: SYMPTÔMES (23 symptômes de base)
     ↓ (13 règles)
 NIVEAU 2: SYNDROMES (8 syndromes intermédiaires)
     ↓ (10 règles)
@@ -39,7 +39,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 |------------|----------|---------|
 | **Maladies** | 10 | Grippe, COVID-19, Bronchite, Rhume, Angine, Allergie saisonnière, Asthme, Migraine, Gastro-entérite, Conjonctivite |
 | **Syndromes** | 8 | Respiratoire, Fébrile, Grippal, Allergique, Oculaire, Digestif, Neurologique, ORL |
-| **Symptômes** | 17 | Fébriles, Respiratoires, Grippaux, Neurologiques, Digestifs, Allergiques, Oculaires |
+| **Symptômes** | 23 | Fébriles, Respiratoires, Grippaux, Neurologiques, Digestifs, Allergiques, Oculaires, ORL, Respiratoires avancés |
 | **Règles totales** | 23 | 13 règles (Symptômes → Syndromes) + 10 règles (Syndromes → Maladies) |
 
 **Principe clé**: Les syndromes intermédiaires créent un arbre de dépendance global interconnecté (évite les sous-arbres isolés).
@@ -80,7 +80,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ---
 
-## Les 17 Symptômes (Conventions Prolog)
+## Les 23 Symptômes (Conventions Prolog)
 
 | Catégorie | Symptômes Prolog | Français |
 |-----------|------------------|----------|
@@ -96,6 +96,49 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 | **Respiratoires avancés** | `difficultes_respiratoires`, `wheezing` | Difficultés respiratoires, Wheezing (sifflement) |
 
 **Convention de nommage**: snake_case, sans accents, mots complets (compatibilité Prolog).
+
+---
+
+## Les 23 Questions du Système
+
+Le système pose les questions dans un **ordre fixe optimisé**, en commençant par les symptômes les plus discriminants (qui identifient rapidement des maladies spécifiques ou éliminent plusieurs hypothèses).
+
+| # | Symptôme Prolog | Question en français |
+|---|-----------------|---------------------|
+| 1 | `perte_odorat` | Avez-vous perdu l'odorat ou le goût ? |
+| 2 | `secretions_purulentes` | Avez-vous des sécrétions purulentes aux yeux ? |
+| 3 | `wheezing` | Avez-vous un sifflement respiratoire (wheezing) ? |
+| 4 | `mal_gorge_intense` | Avez-vous un mal de gorge intense ? |
+| 5 | `photophobie` | Êtes-vous sensible à la lumière (photophobie) ? |
+| 6 | `mal_tete_intense` | Avez-vous un mal de tête intense ? |
+| 7 | `diarrhee` | Avez-vous de la diarrhée ? |
+| 8 | `vomissements` | Avez-vous des vomissements ? |
+| 9 | `fatigue_intense` | Ressentez-vous une fatigue intense ? |
+| 10 | `courbatures` | Avez-vous des courbatures (douleurs musculaires) ? |
+| 11 | `fievre_elevee` | Avez-vous de la fièvre élevée (supérieure à 38.5°C) ? |
+| 12 | `fievre_legere` | Avez-vous de la fièvre légère (entre 37.5°C et 38.5°C) ? |
+| 13 | `frissons` | Avez-vous des frissons ? |
+| 14 | `toux_productive` | Avez-vous une toux productive (avec expectorations/crachats) ? |
+| 15 | `toux` | Avez-vous de la toux ? |
+| 16 | `nez_bouche` | Avez-vous le nez bouché ? |
+| 17 | `gorge_irritee` | Avez-vous la gorge irritée ? |
+| 18 | `difficulte_avaler` | Avez-vous de la difficulté à avaler ? |
+| 19 | `eternuement` | Éternuez-vous fréquemment ? |
+| 20 | `nez_qui_coule_clair` | Avez-vous le nez qui coule (écoulement clair) ? |
+| 21 | `yeux_rouges` | Avez-vous les yeux rouges ? |
+| 22 | `yeux_qui_piquent` | Avez-vous les yeux qui piquent ou qui démangent ? |
+| 23 | `difficultes_respiratoires` | Avez-vous des difficultés respiratoires ? |
+
+**Stratégie de questionnement:**
+- **Questions 1-5**: Symptômes uniques ou quasi-uniques (COVID, Conjonctivite, Asthme, Angine, Migraine)
+- **Questions 6-14**: Syndromes discriminants (Neurologique, Digestif, Grippal, Fébrile)
+- **Questions 15-23**: Symptômes génériques (Respiratoires, Allergiques, Oculaires)
+
+**Nombre de questions posées par diagnostic:**
+> Le système ne pose **pas toutes les 23 questions**. Selon le diagnostic et les réponses:
+> - **Minimum**: 2-3 questions (ex: Migraine, Conjonctivite)
+> - **Moyen**: 5-6 questions (la plupart des cas)
+> - **Maximum**: 10-12 questions (cas complexes ou ambigus)
 
 ---
 

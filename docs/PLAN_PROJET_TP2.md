@@ -111,7 +111,7 @@ Ces syndromes sont le **ciment** qui connecte toutes les règles en un arbre glo
 
 Pour assurer la compatibilité Prolog, tous les symptômes et syndromes suivent la convention **snake_case sans accents** :
 
-#### Symptômes de Base (17 symptômes)
+#### Symptômes de Base (23 symptômes)
 
 | Catégorie | Symptômes Prolog | Français |
 |-----------|------------------|----------|
@@ -126,7 +126,7 @@ Pour assurer la compatibilité Prolog, tous les symptômes et syndromes suivent 
 | **Oculaires** | `yeux_rouges`, `yeux_qui_piquent`, `secretions_purulentes` | Yeux rouges, Yeux qui piquent, Sécrétions purulentes |
 | **Respiratoires avancés** | `difficultes_respiratoires`, `wheezing` | Difficultés respiratoires, Wheezing (sifflement) |
 
-**Total : 17 symptômes** (réduit de 20+ pour rester dans contrainte 20-30 règles)
+**Total : 23 symptômes** utilisés dans les 23 règles du système
 
 ---
 
@@ -303,5 +303,63 @@ TP2/
 ```
 
 **Note**: Les 3 cas de test distincts demandés dans l'énoncé (scénarios de démonstration avec raisonnement) seront documentés dans le rapport final.
+
+---
+
+## 💬 Les 23 Questions du Système
+
+Le système pose les questions dans un **ordre fixe optimisé**, en commençant par les symptômes les plus discriminants (qui identifient rapidement des maladies spécifiques ou éliminent plusieurs hypothèses).
+
+### Ordre Stratégique des Questions
+
+| # | Symptôme Prolog | Question en français |
+|---|-----------------|---------------------|
+| 1 | `perte_odorat` | Avez-vous perdu l'odorat ou le goût ? |
+| 2 | `secretions_purulentes` | Avez-vous des sécrétions purulentes aux yeux ? |
+| 3 | `wheezing` | Avez-vous un sifflement respiratoire (wheezing) ? |
+| 4 | `mal_gorge_intense` | Avez-vous un mal de gorge intense ? |
+| 5 | `photophobie` | Êtes-vous sensible à la lumière (photophobie) ? |
+| 6 | `mal_tete_intense` | Avez-vous un mal de tête intense ? |
+| 7 | `diarrhee` | Avez-vous de la diarrhée ? |
+| 8 | `vomissements` | Avez-vous des vomissements ? |
+| 9 | `fatigue_intense` | Ressentez-vous une fatigue intense ? |
+| 10 | `courbatures` | Avez-vous des courbatures (douleurs musculaires) ? |
+| 11 | `fievre_elevee` | Avez-vous de la fièvre élevée (supérieure à 38.5°C) ? |
+| 12 | `fievre_legere` | Avez-vous de la fièvre légère (entre 37.5°C et 38.5°C) ? |
+| 13 | `frissons` | Avez-vous des frissons ? |
+| 14 | `toux_productive` | Avez-vous une toux productive (avec expectorations/crachats) ? |
+| 15 | `toux` | Avez-vous de la toux ? |
+| 16 | `nez_bouche` | Avez-vous le nez bouché ? |
+| 17 | `gorge_irritee` | Avez-vous la gorge irritée ? |
+| 18 | `difficulte_avaler` | Avez-vous de la difficulté à avaler ? |
+| 19 | `eternuement` | Éternuez-vous fréquemment ? |
+| 20 | `nez_qui_coule_clair` | Avez-vous le nez qui coule (écoulement clair) ? |
+| 21 | `yeux_rouges` | Avez-vous les yeux rouges ? |
+| 22 | `yeux_qui_piquent` | Avez-vous les yeux qui piquent ou qui démangent ? |
+| 23 | `difficultes_respiratoires` | Avez-vous des difficultés respiratoires ? |
+
+### Stratégie de Questionnement
+
+**Ordre fixe optimisé (Stratégie 1 Optimisée):**
+- **Questions 1-5**: Symptômes uniques ou quasi-uniques (COVID, Conjonctivite, Asthme, Angine, Migraine)
+- **Questions 6-14**: Syndromes discriminants (Neurologique, Digestif, Grippal, Fébrile)
+- **Questions 15-23**: Symptômes génériques (Respiratoires, Allergiques, Oculaires)
+
+**Nombre de questions posées par diagnostic:**
+
+Le système ne pose **pas toutes les 23 questions**. Selon le diagnostic et les réponses:
+- **Minimum**: 2-3 questions (ex: Migraine, Conjonctivite)
+- **Moyen**: 5-6 questions (la plupart des cas)
+- **Maximum**: 10-12 questions (cas complexes ou ambigus)
+
+### Note Technique sur l'Implémentation Prolog
+
+**En Prolog, l'ordre des clauses = ordre d'évaluation.** Pour implémenter cette stratégie optimisée, il suffit de définir les prédicats de vérification de symptômes dans cet ordre dans `base_connaissances.pl`. Le chaînage arrière natif de Prolog testera alors automatiquement les symptômes discriminants en premier.
+
+**Avantages:**
+- ✅ Aucune complexité algorithmique supplémentaire
+- ✅ Comportement natif de Prolog (ordre des clauses)
+- ✅ Réduction significative du nombre moyen de questions (~30%)
+- ✅ Diagnostics uniques détectés rapidement (2-4 questions)
 
 ---

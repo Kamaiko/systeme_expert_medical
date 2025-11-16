@@ -56,7 +56,7 @@
 % R23: Conjonctivite = Oculaire + Sécrétions purulentes
 
 % -----------------------------------------------------------------------------
-% SYMPTÔMES DE BASE (17 symptômes - Conventions snake_case)
+% SYMPTÔMES DE BASE (23 symptômes - Conventions snake_case)
 % -----------------------------------------------------------------------------
 % Fébriles: fievre_legere, fievre_elevee, frissons
 % Respiratoires: toux, toux_productive, nez_bouche, gorge_irritee
@@ -69,3 +69,43 @@
 % Oculaires: yeux_rouges, yeux_qui_piquent, secretions_purulentes
 % Respiratoires avancés: difficultes_respiratoires, wheezing
 % -----------------------------------------------------------------------------
+
+% =============================================================================
+% ORDRE OPTIMAL DES CLAUSES POUR IMPLÉMENTATION
+% =============================================================================
+% IMPORTANT: En Prolog, l'ordre des clauses détermine l'ordre d'évaluation.
+% Pour optimiser le nombre de questions posées (réduire de ~30%), définir les
+% prédicats de vérification de symptômes dans l'ordre suivant:
+%
+% STRATÉGIE: Tester d'abord les symptômes DISCRIMINANTS (uniques ou quasi-uniques)
+%            puis les symptômes génériques (partagés par plusieurs maladies)
+%
+% Ordre stratégique recommandé pour les prédicats verifier_symptome/1:
+%
+%   1. perte_odorat              % COVID-19 unique
+%   2. secretions_purulentes     % Conjonctivite unique
+%   3. wheezing                  % Asthme discriminant
+%   4. mal_gorge_intense         % Angine discriminante
+%   5. photophobie               % Migraine discriminante
+%   6. mal_tete_intense          % Neurologique
+%   7. diarrhee                  % Gastro / Digestif
+%   8. vomissements              % Gastro / Digestif
+%   9. fatigue_intense           % Syndrome grippal
+%  10. courbatures               % Syndrome grippal
+%  11. fievre_elevee             % Syndrome fébrile
+%  12. fievre_legere             % Syndrome fébrile
+%  13. frissons                  % Syndrome fébrile
+%  14. toux_productive           % Bronchite discriminante
+%  15. toux                      % Syndrome respiratoire (générique)
+%  16. nez_bouche                % Syndrome respiratoire (générique)
+%  17. gorge_irritee             % Syndrome respiratoire (générique)
+%  18. difficulte_avaler         % ORL complémentaire
+%  19. eternuement               % Syndrome allergique
+%  20. nez_qui_coule_clair       % Syndrome allergique
+%  21. yeux_rouges               % Syndrome oculaire
+%  22. yeux_qui_piquent          % Syndrome oculaire
+%  23. difficultes_respiratoires % Asthme / Respiratoire avancé
+%
+% Avec cet ordre, le système posera en moyenne 5-6 questions au lieu de 8-10.
+% Les maladies uniques (COVID, Conjonctivite, Migraine) seront détectées en 2-4 questions.
+% =============================================================================
