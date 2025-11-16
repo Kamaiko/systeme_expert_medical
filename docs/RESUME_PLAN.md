@@ -62,7 +62,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 |---------|------------------|-------------------|
 | **Grippe** | Respiratoire + Grippal + Fébrile | Fatigue intense (sans perte odorat) |
 | **COVID-19** | Respiratoire + Grippal + Fébrile | Perte odorat/goût |
-| **Bronchite** | Respiratoire + Fébrile | Toux productive |
+| **Bronchite** | Respiratoire | Toux productive + Fièvre légère |
 | **Rhume** | Respiratoire seul | Sans fièvre élevée, sans fatigue intense |
 | **Angine** | ORL + Fébrile | Mal gorge intense + difficulté avaler |
 | **Allergie saisonnière** | Allergique + Oculaire | Éternuements + nez clair (sans difficultés respiratoires) |
@@ -78,7 +78,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 | Syndrome | Symptômes déclencheurs | Maladies connectées (Nb) |
 |----------|------------------------|--------------------------|
 | **syndrome_respiratoire** | Fièvre + toux, ou Nez bouché + gorge irritée | 5 maladies (Grippe, COVID, Bronchite, Rhume, Asthme) |
-| **syndrome_febrile** | Fièvre élevée + frissons | 5 maladies (Grippe, COVID, Bronchite, Angine, Gastro) |
+| **syndrome_febrile** | Fièvre élevée + frissons | 4 maladies (Grippe, COVID, Angine, Gastro) |
 | **syndrome_grippal** | Fatigue intense + courbatures + fièvre élevée | 2 maladies (Grippe, COVID) |
 | **syndrome_allergique** | Éternuements + nez clair | 2 maladies (Allergie, Asthme) |
 | **syndrome_oculaire** | Yeux rouges + yeux qui piquent | 2 maladies (Allergie, Conjonctivite) |
@@ -249,7 +249,7 @@ Syndromes identifiés: syndrome_respiratoire
 |---------|-------|
 | **Grippe** | R14: Respiratoire + Grippal + Fébrile + Fatigue intense (sans perte odorat) |
 | **COVID-19** | R15: Respiratoire + Grippal + Fébrile + Perte odorat |
-| **Bronchite** | R16: Respiratoire + Fébrile + Toux productive |
+| **Bronchite** | R16: Respiratoire + Fièvre légère + Toux productive |
 | **Rhume** | R17: Respiratoire (sans Fébrile, sans Grippal) |
 | **Angine** | R18: ORL + Fébrile |
 | **Allergie saisonnière** | R19: Allergique + Oculaire (sans difficultés respiratoires) |

@@ -46,7 +46,7 @@
 
 % R14: Grippe = Respiratoire + Grippal + Fébrile + Fatigue intense (sans perte odorat)
 % R15: COVID-19 = Respiratoire + Grippal + Fébrile + Perte odorat
-% R16: Bronchite = Respiratoire + Fébrile + Toux productive
+% R16: Bronchite = Respiratoire + Fièvre légère + Toux productive
 % R17: Rhume = Respiratoire (sans Fébrile, sans Grippal)
 % R18: Angine = ORL + Fébrile
 % R19: Allergie saisonnière = Allergique + Oculaire (sans difficultés respiratoires)

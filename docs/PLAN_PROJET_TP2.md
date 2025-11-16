@@ -63,7 +63,7 @@ MALADIES FINALES
 
 **Exemple d'interconnexion**:
 - `syndrome_respiratoire` est partagé par 5 maladies (Grippe, COVID-19, Bronchite, Rhume, Asthme)
-- `syndrome_fébrile` est partagé par 5 maladies (Grippe, COVID-19, Bronchite, Angine, Gastro-entérite)
+- `syndrome_fébrile` est partagé par 4 maladies (Grippe, COVID-19, Angine, Gastro-entérite)
 - `syndrome_allergique` est partagé par 2 maladies (Allergie saisonnière, Asthme allergique)
 - `syndrome_oculaire` est partagé par 2 maladies (Allergie saisonnière, Conjonctivite)
 
@@ -79,7 +79,7 @@ Voir [arbre_dependance.md](arbre_dependance.md) pour la visualisation complète.
 |---|---------|-----------|--------------------|-----------------------|
 | 1 | **Grippe** | Respiratoire/Virale | syndrome_respiratoire + syndrome_grippal + syndrome_fébrile | Fatigue intense, courbatures, ¬perte_odorat |
 | 2 | **COVID-19** | Respiratoire/Virale | syndrome_respiratoire + syndrome_grippal + syndrome_fébrile | Perte odorat/goût |
-| 3 | **Bronchite** | Respiratoire | syndrome_respiratoire + syndrome_fébrile | Toux productive (glaires) |
+| 3 | **Bronchite** | Respiratoire | syndrome_respiratoire | Toux productive (glaires) + Fièvre légère |
 | 4 | **Rhume** | Respiratoire | syndrome_respiratoire (uniquement) | ¬fièvre_élevée, ¬syndrome_grippal |
 | 5 | **Angine** | ORL | syndrome_inflammatoire_gorge + syndrome_fébrile | Douleur gorge intense |
 | 6 | **Allergie saisonnière** | Allergique | syndrome_allergique + syndrome_oculaire | Éternuements, yeux qui piquent, ¬difficultés_respiratoires |
@@ -95,7 +95,7 @@ Ces syndromes sont le **ciment** qui connecte toutes les règles en un arbre glo
 | Syndrome | Définition | Utilisé par (maladies) | Nb | Règle type |
 |----------|------------|------------------------|----|----|
 | **syndrome_respiratoire** | Atteinte voies respiratoires | Grippe, COVID-19, Bronchite, Rhume, Asthme | **5** | fievre_legere + toux → syndrome_respiratoire |
-| **syndrome_fébrile** | État fébrile/fiévreux | Grippe, COVID-19, Bronchite, Angine, Gastro-entérite | **5** | fievre_elevee + frissons → syndrome_febrile |
+| **syndrome_fébrile** | État fébrile/fiévreux | Grippe, COVID-19, Angine, Gastro-entérite | **4** | fievre_elevee + frissons → syndrome_febrile |
 | **syndrome_grippal** | État grippal généralisé | Grippe, COVID-19 | **2** | fatigue_intense + courbatures + fievre_elevee → syndrome_grippal |
 | **syndrome_allergique** | Réaction allergique | Allergie, Asthme | **2** | eternuement + nez_qui_coule_clair → syndrome_allergique |
 | **syndrome_oculaire** | Atteinte oculaire | Allergie, Conjonctivite | **2** | yeux_rouges + yeux_qui_piquent → syndrome_oculaire |
@@ -174,8 +174,8 @@ R14: syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_febrile ∧ fatigue
 % COVID-19: 3 syndromes + discriminant unique
 R15: syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_febrile ∧ perte_odorat → covid19
 
-% Bronchite: 2 syndromes + discriminant
-R16: syndrome_respiratoire ∧ syndrome_febrile ∧ toux_productive → bronchite
+% Bronchite: 1 syndrome + discriminants
+R16: syndrome_respiratoire ∧ fievre_legere ∧ toux_productive → bronchite
 
 % Rhume: 1 syndrome (exclusion des autres)
 R17: syndrome_respiratoire ∧ ¬syndrome_febrile ∧ ¬syndrome_grippal → rhume
