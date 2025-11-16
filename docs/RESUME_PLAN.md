@@ -14,8 +14,10 @@
 TP2/
 ├── base_connaissances.pl    # Faits et règles (symptômes → syndromes → maladies)
 ├── main.pl                  # Moteur d'inférence + interface utilisateur
-└── tests.pl                 # Cas de test (minimum 3)
+└── tests.pl                 # Tests unitaires pour validation du code
 ```
+
+**Note**: Les 3 cas de test distincts demandés dans l'énoncé (scénarios de démonstration avec raisonnement) seront documentés dans le rapport final.
 
 ### Méthode d'Inférence
 **Chaînage arrière (backward chaining)**: Le système part de l'hypothèse de maladie et remonte aux symptômes pour valider ou réfuter le diagnostic.
