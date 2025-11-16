@@ -18,7 +18,6 @@
 7. [Interface Utilisateur](#interface-utilisateur)
 8. [Exemple de Session Utilisateur](#exemple-de-session-utilisateur)
 9. [Les 23 Règles du Système](#les-23-règles-du-système)
-10. [Contraintes Respectées](#contraintes-respectées)
 
 ---
 
@@ -232,61 +231,33 @@ Syndromes identifiés: syndrome_respiratoire
 
 ### Niveau 1 → 2: Symptômes → Syndromes (13 règles)
 
-**Syndrome Respiratoire** (3 règles - flexibilité):
-- R1: Fièvre légère + Toux → Respiratoire
-- R2: Fièvre élevée + Toux → Respiratoire
-- R3: Nez bouché + Gorge irritée → Respiratoire
-
-**Syndrome Fébrile** (2 règles):
-- R4: Fièvre élevée + Frissons → Fébrile
-- R5: Fièvre élevée → Fébrile
-
-**Syndrome Grippal** (1 règle):
-- R6: Fatigue intense + Courbatures + Fièvre élevée → Grippal
-
-**Syndrome Allergique** (2 règles):
-- R7: Éternuements + Nez clair → Allergique
-- R8: Éternuements → Allergique
-
-**Syndrome Oculaire** (1 règle):
-- R9: Yeux rouges + Yeux qui piquent → Oculaire
-
-**Syndrome Digestif** (1 règle):
-- R10: Diarrhée + Vomissements → Digestif
-
-**Syndrome Neurologique** (1 règle):
-- R11: Mal tête intense + Photophobie → Neurologique
-
-**Syndrome ORL** (2 règles):
-- R12: Mal gorge intense + Difficulté avaler → ORL
-- R13: Mal gorge intense → ORL
-
----
+| Syndrome | Règles |
+|----------|--------|
+| **Respiratoire (3)** | R1: Fièvre légère + Toux → Respiratoire <br> R2: Fièvre élevée + Toux → Respiratoire <br> R3: Nez bouché + Gorge irritée → Respiratoire |
+| **Fébrile (2)** | R4: Fièvre élevée + Frissons → Fébrile <br> R5: Fièvre élevée → Fébrile |
+| **Grippal (1)** | R6: Fatigue intense + Courbatures + Fièvre élevée → Grippal |
+| **Allergique (2)** | R7: Éternuements + Nez clair → Allergique <br> R8: Éternuements → Allergique |
+| **Oculaire (1)** | R9: Yeux rouges + Yeux qui piquent → Oculaire |
+| **Digestif (1)** | R10: Diarrhée + Vomissements → Digestif |
+| **Neurologique (1)** | R11: Mal tête intense + Photophobie → Neurologique |
+| **ORL (2)** | R12: Mal gorge intense + Difficulté avaler → ORL <br> R13: Mal gorge intense → ORL |
 
 ### Niveau 2 → 3: Syndromes → Maladies (10 règles)
 
-- **R14: Grippe** = Respiratoire + Grippal + Fébrile + Fatigue intense (sans perte odorat)
-- **R15: COVID-19** = Respiratoire + Grippal + Fébrile + Perte odorat
-- **R16: Bronchite** = Respiratoire + Fébrile + Toux productive
-- **R17: Rhume** = Respiratoire (sans Fébrile, sans Grippal)
-- **R18: Angine** = ORL + Fébrile
-- **R19: Allergie saisonnière** = Allergique + Oculaire (sans difficultés respiratoires)
-- **R20: Asthme** = Respiratoire + Allergique + Difficultés respiratoires + Wheezing
-- **R21: Migraine** = Neurologique
-- **R22: Gastro-entérite** = Digestif + Fébrile
-- **R23: Conjonctivite** = Oculaire + Sécrétions purulentes
+| Maladie | Règle |
+|---------|-------|
+| **Grippe** | R14: Respiratoire + Grippal + Fébrile + Fatigue intense (sans perte odorat) |
+| **COVID-19** | R15: Respiratoire + Grippal + Fébrile + Perte odorat |
+| **Bronchite** | R16: Respiratoire + Fébrile + Toux productive |
+| **Rhume** | R17: Respiratoire (sans Fébrile, sans Grippal) |
+| **Angine** | R18: ORL + Fébrile |
+| **Allergie saisonnière** | R19: Allergique + Oculaire (sans difficultés respiratoires) |
+| **Asthme** | R20: Respiratoire + Allergique + Difficultés respiratoires + Wheezing |
+| **Migraine** | R21: Neurologique |
+| **Gastro-entérite** | R22: Digestif + Fébrile |
+| **Conjonctivite** | R23: Oculaire + Sécrétions purulentes |
 
-**Principe**: Les discriminants (conditions négatives et positives spécifiques) évitent les faux positifs entre maladies similaires.
-
----
-
-## Contraintes Respectées
-
-- Maximum 30 règles (23 règles créées)
-- Arbre de dépendance global interconnecté (5/8 syndromes partagés)
-- Chaînage arrière implémenté
-- Interface simple avec 3 choix de réponse
-- Rapport maximum 8 pages
+**Note**: Les discriminants (conditions négatives et positives spécifiques) évitent les faux positifs entre maladies similaires.
 
 ---
 
