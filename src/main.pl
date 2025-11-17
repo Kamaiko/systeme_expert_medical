@@ -399,4 +399,7 @@ start :-
     nl,
     write('-------------------------------------------------------'), nl,
     write('Session terminee.'), nl,
-    nl.
+    nl,
+
+    % Fermeture automatique du programme
+    halt.
