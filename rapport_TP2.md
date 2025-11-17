@@ -666,17 +666,7 @@ Question: Avez-vous un mal de tete intense?
 2. Non
 Votre reponse: 2
 
-Question: Avez-vous des secretions purulentes aux yeux?
-1. Oui
-2. Non
-Votre reponse: 2
-
-Question: Avez-vous un sifflement respiratoire (wheezing)?
-1. Oui
-2. Non
-Votre reponse: 2
-
-Question: Avez-vous de la diarrhee?
+Question: Avez-vous les yeux rouges?
 1. Oui
 2. Non
 Votre reponse: 2
@@ -690,6 +680,21 @@ Question: Est-elle elevee (temperature >38.5°C)?
 1. Oui
 2. Non
 Votre reponse: 1
+
+Question: Avez-vous de la toux?
+1. Oui
+2. Non
+Votre reponse: 2
+
+Question: Eternuez-vous frequemment?
+1. Oui
+2. Non
+Votre reponse: 2
+
+Question: Avez-vous de la diarrhee?
+1. Oui
+2. Non
+Votre reponse: 2
 
 Question: Avez-vous un mal de gorge intense?
 1. Oui
@@ -721,10 +726,10 @@ Session terminee.
 
 - **`covid19`** : `perte_odorat` → **Non** → Rejetée ✗
 - **`migraine`** : `mal_tete_intense` → **Non** → Rejetée ✗
-- **`conjonctivite`** : `secretions_purulentes` → **Non** → Rejetée ✗
-- **`asthme`** : `wheezing` → **Non** → Rejetée ✗
+- **`conjonctivite`** : `yeux_rouges` → **Non** → Rejetée ✗
+- **`asthme`** : Teste `syndrome_respiratoire` (fievre_elevee=oui, toux=non) → R1/R2 échouent → R3 non testé car toux=non → Rejetée ✗
 - **`gastro_enterite`** : `diarrhee` → **Non** → Rejetée ✗
-- **`grippe`** : Teste `syndrome_respiratoire`, `syndrome_grippal`, `syndrome_febrile`... → Conditions manquantes → Rejetée ✗
+- **`grippe`** : Nécessite `syndrome_grippal` (fatigue_intense non testée) → Rejetée ✗
 - **`angine`** : Testée en 7ème position
 
 **2. Vérification de l'hypothèse Angine (R15) :**
@@ -736,10 +741,7 @@ Session terminee.
 
 **Condition 2** : `syndrome_febrile`
 - **R4** : `fievre_elevee`
-  - `verifier_symptome(fievre_elevee)` → **Cascade fièvre déclenchée**
-    - Question principale : "Avez-vous de la fièvre?" → **Oui**
-    - Sous-question : "Est-elle élevée?" → **Oui**
-    - Enregistrement : `fievre=oui`, `fievre_elevee=oui`, `fievre_legere=non`
+  - `fievre_elevee` → **Déjà en cache** (oui, vérifié lors du test asthme)
 - **syndrome_febrile = VRAI** ✓
 
 **3. Conclusion :**
@@ -748,15 +750,16 @@ Session terminee.
 
 **4. Statistiques :**
 
-- **Nombre de questions posées** : **8** (7 principales + 1 sous-question cascade)
-- **Dont questions d'élimination** : 5 (perte odorat, mal tête, sécrétions, wheezing, diarrhée)
+- **Nombre de questions posées** : **8** (7 principales + 1 sous-question cascade fièvre)
+- **Dont questions d'élimination** : 6 (perte odorat, mal tête, yeux rouges, toux, éternuements, diarrhée)
 - **Règles activées** : R10 (syndrome ORL), R4 (syndrome fébrile), R15 (diagnostic Angine)
 - **Syndromes déduits** : 2 (ORL, fébrile)
 - **Efficacité** : **Typique** – Position intermédiaire dans l'ordre de test
 
 **Analyse** : Ce scénario met en évidence :
 - **Stratégie de backward chaining** : Le système teste d'abord les maladies à discriminants uniques (covid19, migraine, etc.) avant d'arriver à Angine
-- **Questions d'élimination** : Les 5 premières questions éliminent rapidement les pathologies peu probables
+- **Questions d'élimination** : Les 6 premières questions éliminent rapidement les pathologies peu probables (covid19, migraine, conjonctivite, asthme, gastro-entérite, grippe)
+- **Réutilisation du cache** : `fievre_elevee` est vérifiée lors du test asthme puis réutilisée pour `syndrome_febrile`, évitant une re-question
 - **Interconnexion via `syndrome_febrile`** : Ce syndrome est partagé par 4 maladies (Grippe, COVID-19, Angine, Gastro-entérite), illustrant l'interconnexion de l'arbre de décision
 
 ---

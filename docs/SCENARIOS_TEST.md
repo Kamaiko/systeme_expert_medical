@@ -130,21 +130,21 @@ Question 2: Avez-vous un mal de tête intense?
 Question 3: Avez-vous les yeux rouges?
 → Réponse: 2 (Non)
 
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
-→ Réponse: 2 (Non)
-
-Question 5: Avez-vous de la diarrhée?
-→ Réponse: 2 (Non)
-
-Question 6: Avez-vous de la fièvre?
+Question 4: Avez-vous de la fièvre?
 → Réponse: 1 (Oui)
   → Sous-question: Est-elle élevée (>38.5°C)?
   → Réponse: 1 (Oui)
 
-Question 7: Avez-vous de la toux?
+Question 5: Avez-vous de la toux?
 → Réponse: 1 (Oui)
   → Sous-question: Est-elle productive (avec crachats/expectorations)?
   → Réponse: 2 (Non)
+
+Question 6: Éternuez-vous fréquemment?
+→ Réponse: 2 (Non)
+
+Question 7: Avez-vous de la diarrhée?
+→ Réponse: 2 (Non)
 
 Question 8: Ressentez-vous une fatigue intense?
 → Réponse: 1 (Oui)
@@ -155,15 +155,27 @@ Question 9: Avez-vous des courbatures (douleurs musculaires)?
 
 ### Déduction Interne
 ```
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → yeux_rouges = non → Rejetée
+4. asthme → syndrome_respiratoire (fievre_elevee + toux) ✓
+            mais syndrome_allergique (eternuement = non) ✗ → Rejetée
+5. gastro_enterite → diarrhee = non → Rejetée
+
+6. grippe → Testée:
+
 Symptômes confirmés:
-- perte_odorat = non (élimine COVID)
-- fievre_elevee = oui
-- toux = oui
+- perte_odorat = non (en cache)
+- fievre_elevee = oui (en cache)
+- toux = oui (en cache)
+- eternuement = non (en cache)
+- diarrhee = non (en cache)
 - fatigue_intense = oui
 - courbatures = oui
 
 Syndromes déduits:
-- R2: fievre_elevee ∧ toux → syndrome_respiratoire
+- R2: fievre_elevee ∧ toux → syndrome_respiratoire (vérifié pour asthme, réutilisé)
 - R4: fievre_elevee → syndrome_febrile
 - R5: fatigue_intense ∧ courbatures ∧ fievre_elevee → syndrome_grippal
 
@@ -179,7 +191,7 @@ Diagnostic: Grippe
 
 **Nombre de questions**: 9 principales (dont 2 avec cascades = 11 réponses totales)
 
-**Note**: Questions d'élimination (1-5) testent covid19, migraine, conjonctivite, asthme, gastro-entérite avant d'arriver à grippe.
+**Note**: Questions 1-3 éliminent covid19, migraine, conjonctivite. Questions 4-6 testent asthme (qui échoue sur syndrome_allergique). Question 7 élimine gastro-entérite. Questions 8-9 confirment grippe via syndrome_grippal.
 
 ---
 
