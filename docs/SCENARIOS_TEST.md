@@ -6,14 +6,15 @@
 
 ## 🎯 Comment Utiliser ces Scénarios
 
-1. Lancer SWI-Prolog: `swipl -s main.pl`
-2. Exécuter: `?- start.`
-3. Suivre les réponses indiquées dans chaque scénario
-4. Vérifier que:
+1. Lancer le système: `swipl run.pl`
+2. Suivre les réponses indiquées dans chaque scénario
+3. Vérifier que:
    - L'ordre des questions correspond (±1-2 questions acceptables)
    - Le nombre de questions est proche de l'attendu
    - Le diagnostic final est correct
-   - Les syndromes identifiés sont corrects
+   - Les recommandations médicales sont affichées
+
+**Note**: Le système affiche maintenant des **recommandations médicales** pour chaque diagnostic au lieu des syndromes identifiés (implémentation finale).
 
 ---
 
@@ -52,7 +53,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Migraine
-Syndromes identifiés: Syndrome neurologique
 ```
 
 **Nombre de questions**: 3 ✅ (optimal)
@@ -108,7 +108,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: COVID-19
-Syndromes identifiés: Syndrome respiratoire, Syndrome fébrile, Syndrome grippal
 ```
 
 **Nombre de questions**: 7 (5 principales + 2 cascades) ✅
@@ -176,7 +175,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Grippe
-Syndromes identifiés: Syndrome respiratoire, Syndrome fébrile, Syndrome grippal
 ```
 
 **Nombre de questions**: 9 (7 principales + 2 cascades)
@@ -224,7 +222,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Conjonctivite
-Syndromes identifiés: Syndrome oculaire
 ```
 
 **Nombre de questions**: 5 ✅
@@ -284,7 +281,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Asthme
-Syndromes identifiés: Syndrome respiratoire, Syndrome allergique
 ```
 
 **Nombre de questions**: 8 ✅
@@ -341,7 +337,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Gastro-entérite
-Syndromes identifiés: Syndrome digestif, Syndrome fébrile
 ```
 
 **Nombre de questions**: 7 (6 principales + 1 cascade) ✅
@@ -397,7 +392,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Angine
-Syndromes identifiés: Syndrome ORL, Syndrome fébrile
 ```
 
 **Nombre de questions**: 7 (6 principales + 1 cascade) ✅
@@ -464,7 +458,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Bronchite
-Syndromes identifiés: Syndrome respiratoire
 ```
 
 **Nombre de questions**: 9 (7 principales + 2 cascades) ✅
@@ -526,7 +519,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Allergie saisonnière
-Syndromes identifiés: Syndrome allergique, Syndrome oculaire
 ```
 
 **Nombre de questions**: 9 ✅
@@ -594,7 +586,6 @@ Règle maladie activée:
 ```
 === DIAGNOSTIC ===
 Diagnostic: Rhume
-Syndromes identifiés: Syndrome respiratoire
 ```
 
 **Nombre de questions**: 10 ✅
@@ -626,11 +617,11 @@ Syndromes identifiés: Syndrome respiratoire
 
 Pour chaque scénario testé:
 - [ ] Diagnostic final correct
-- [ ] Syndromes identifiés corrects
-- [ ] Nombre de questions raisonnable (4-10)
+- [ ] Recommandations médicales affichées
+- [ ] Nombre de questions raisonnable (3-10)
 - [ ] Aucune question posée 2 fois
 - [ ] Cascades fonctionnent (fièvre, toux)
-- [ ] Affichage en français correct
+- [ ] Affichage en français correct (sans accents)
 - [ ] Aucune erreur runtime
 
 **Si tous les scénarios passent → Implémentation validée ✅**

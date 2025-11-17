@@ -378,8 +378,12 @@ Ce tableau montre comment les syndromes sont **partagés** par plusieurs maladie
 ├──────────────────────────────────────────────────────────────────────┤
 │ === DIAGNOSTIC ===                                                   │
 │ Diagnostic: Grippe                                                   │
-│ Syndromes identifiés: syndrome_respiratoire, syndrome_febrile,      │
-│                       syndrome_grippal                               │
+│                                                                       │
+│ RECOMMANDATIONS:                                                     │
+│   - Repos au lit pendant 3-5 jours                                   │
+│   - Hydratation abondante (eau, tisanes)                             │
+│   - Paracetamol pour fievre et douleurs                              │
+│   - Consultation si symptomes persistent >7 jours                    │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 

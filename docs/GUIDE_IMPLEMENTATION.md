@@ -529,28 +529,29 @@ collecter_syndromes(Syndromes) :-
 % Afficher diagnostic final
 afficher_diagnostic(Maladie) :-
     nl,
+    write('======================================================='), nl,
     write('=== DIAGNOSTIC ==='), nl,
+    write('======================================================='), nl,
+    nl,
     traduire_maladie(Maladie, NomFrancais),
     format('Diagnostic: ~w~n', [NomFrancais]),
-    collecter_syndromes(Syndromes),
-    (   Syndromes \= [] ->
-        (
-            write('Syndromes identifiés: '),
-            afficher_liste_syndromes(Syndromes),
-            nl
-        )
-    ;   true
-    ).
+    nl,
+    afficher_recommandations(Maladie),
+    nl.
 
-% Afficher liste de syndromes traduits
-afficher_liste_syndromes([]).
-afficher_liste_syndromes([S]) :-
-    traduire_syndrome(S, NomFrancais),
-    write(NomFrancais), !.
-afficher_liste_syndromes([S|Rest]) :-
-    traduire_syndrome(S, NomFrancais),
-    format('~w, ', [NomFrancais]),
-    afficher_liste_syndromes(Rest).
+% Afficher recommandations medicales
+afficher_recommandations(Maladie) :-
+    recommandation(Maladie, Recommandations),
+    write('-------------------------------------------------------'), nl,
+    write('RECOMMANDATIONS:'), nl,
+    write('-------------------------------------------------------'), nl,
+    afficher_liste_recommandations(Recommandations).
+
+% Afficher liste de recommandations
+afficher_liste_recommandations([]).
+afficher_liste_recommandations([R|Rest]) :-
+    format('  - ~w~n', [R]),
+    afficher_liste_recommandations(Rest).
 
 % Si aucun diagnostic trouvé
 afficher_aucun_diagnostic :-
