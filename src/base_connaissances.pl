@@ -1,174 +1,15 @@
-/**
- * BASE DE CONNAISSANCES - Système Expert de Diagnostic Médical
- *
- * Architecture 3 niveaux: Symptômes → Syndromes → Maladies
- * Équipe TP2 - IFT2003 - Novembre 2025
- *
- * Contenu:
- *   - 20 règles d'inférence (10 symptômes→syndromes + 10 syndromes→maladies)
- *   - 10 maladies: Grippe, COVID-19, Bronchite, Rhume, Angine,
- *                  Allergie, Asthme, Migraine, Gastro-entérite, Conjonctivite
- *   - 8 syndromes intermédiaires (respiratoire, fébrile, grippal, etc.)
- *   - Recommandations médicales pour chaque diagnostic
- */
+/** <module> Base de Connaissances
 
-% =============================================================================
-% Projet: TP2 - IFT2003 Intelligence Artificielle 1
-% Architecture: 3 niveaux (Symptômes → Syndromes → Maladies)
-% Total: 20 règles (10 symptômes→syndromes + 10 syndromes→maladies)
-% =============================================================================
+Définition des 20 règles d'inférence du système expert
+(architecture 3 niveaux: Symptômes → Syndromes → Maladies).
 
-% -----------------------------------------------------------------------------
-% NIVEAU 1 → NIVEAU 2: Règles Symptômes → Syndromes (10 règles)
-% -----------------------------------------------------------------------------
-
-% Syndrome Respiratoire (3 règles pour flexibilité)
-% R1: Fièvre légère ∧ Toux → Respiratoire
-% R2: Fièvre élevée ∧ Toux → Respiratoire
-% R3: Nez bouché ∧ Gorge irritée → Respiratoire
-
-% Syndrome Fébrile (1 règle - SIMPLIFIÉ)
-% R4: Fièvre élevée → Fébrile
-% Note: Frissons ne sont plus obligatoires (règle souple)
-
-% Syndrome Grippal (1 règle stricte)
-% R5: Fatigue intense ∧ Courbatures ∧ Fièvre élevée → Grippal
-
-% Syndrome Allergique (1 règle - SIMPLIFIÉ)
-% R6: Éternuements → Allergique
-% Note: Nez clair n'est plus obligatoire (règle souple)
-
-% Syndrome Oculaire (1 règle)
-% R7: Yeux rouges ∧ Yeux qui piquent → Oculaire
-
-% Syndrome Digestif (1 règle)
-% R8: Diarrhée ∧ Vomissements → Digestif
-
-% Syndrome Neurologique (1 règle)
-% R9: Mal tête intense ∧ Photophobie → Neurologique
-
-% Syndrome ORL (1 règle - SIMPLIFIÉ)
-% R10: Mal gorge intense → ORL
-% Note: Difficulté avaler n'est plus obligatoire (règle souple)
-
-% -----------------------------------------------------------------------------
-% NIVEAU 2 → NIVEAU 3: Règles Syndromes → Maladies (10 règles)
-% -----------------------------------------------------------------------------
-
-% R11: Grippe = Respiratoire ∧ Grippal ∧ Fébrile ∧ ¬Perte odorat
-% R12: COVID-19 = Respiratoire ∧ Grippal ∧ Fébrile ∧ Perte odorat
-% R13: Bronchite = Respiratoire ∧ Fièvre légère ∧ Toux productive
-% R14: Rhume = Respiratoire ∧ ¬Fébrile ∧ ¬Grippal
-% R15: Angine = ORL ∧ Fébrile
-% R16: Allergie saisonnière = Allergique ∧ Oculaire ∧ ¬Difficultés respiratoires
-% R17: Asthme = Respiratoire ∧ Allergique ∧ Wheezing ∧ Difficultés respiratoires
-% R18: Migraine = Neurologique
-% R19: Gastro-entérite = Digestif ∧ Fébrile
-% R20: Conjonctivite = Oculaire ∧ Sécrétions purulentes
-
-% -----------------------------------------------------------------------------
-% SYMPTÔMES DE BASE (21 questions + 2 cascades)
-% -----------------------------------------------------------------------------
-% COVID/Unique: perte_odorat
-%
-% Fièvre (avec CASCADE):
-%   - fievre (question principale)
-%     → Si OUI: fievre_elevee (sous-question "Est-elle élevée >38.5°C?")
-%       → Si OUI: enregistre fievre_elevee=oui, fievre_legere=non
-%       → Si NON: enregistre fievre_elevee=non, fievre_legere=oui
-%     → Si NON: enregistre fievre_elevee=non, fievre_legere=non
-%   - frissons
-%
-% Respiratoires (avec CASCADE pour toux):
-%   - toux (question principale)
-%     → Si OUI: toux_productive (sous-question "Est-elle productive?")
-%       → Si OUI: enregistre toux_productive=oui
-%       → Si NON: enregistre toux_productive=non
-%     → Si NON: enregistre toux_productive=non
-%   - nez_bouche
-%   - difficultes_respiratoires
-%   - wheezing
-%
-% Gorge (ORL): gorge_irritee, mal_gorge_intense, difficulte_avaler
-% Nasaux/Allergiques: eternuement, nez_qui_coule_clair
-% Oculaires: yeux_rouges, yeux_qui_piquent, secretions_purulentes
-% Systémiques/Grippaux: fatigue_intense, courbatures
-% Neurologiques: mal_tete_intense, photophobie
-% Digestifs: diarrhee, vomissements
-% -----------------------------------------------------------------------------
-
-% =============================================================================
-% ORDRE THÉMATIQUE DES QUESTIONS (Backward Chaining)
-% =============================================================================
-% IMPORTANT: Avec backward chaining, l'ordre exact dépend de quelle maladie
-% est testée. Cependant, pour favoriser un flow naturel par thèmes, organiser
-% les clauses de syndromes pour que les symptômes d'un même thème soient
-% vérifiés ensemble.
-%
-% Organisation thématique recommandée:
-%
-%   Thème 1: COVID/Unique
-%   1. perte_odorat
-%
-%   Thème 2: Fièvre et frissons
-%   2. fievre → 2a. fievre_elevee (cascade si oui)
-%   3. frissons
-%
-%   Thème 3: Respiratoires
-%   4. toux → 4a. toux_productive (cascade si oui)
-%   5. nez_bouche
-%   6. difficultes_respiratoires
-%   7. wheezing
-%
-%   Thème 4: Gorge (ORL)
-%   8. gorge_irritee
-%   9. mal_gorge_intense
-%   10. difficulte_avaler
-%
-%   Thème 5: Nasaux/Allergiques
-%   11. eternuement
-%   12. nez_qui_coule_clair
-%
-%   Thème 6: Oculaires
-%   13. yeux_rouges
-%   14. yeux_qui_piquent
-%   15. secretions_purulentes
-%
-%   Thème 7: Systémiques/Grippaux
-%   16. fatigue_intense
-%   17. courbatures
-%
-%   Thème 8: Neurologiques
-%   18. mal_tete_intense
-%   19. photophobie
-%
-%   Thème 9: Digestifs
-%   20. diarrhee
-%   21. vomissements
-%
-% Le backward chaining posera uniquement les questions nécessaires selon
-% l'hypothèse testée, mais cet ordre thématique améliore l'expérience
-% utilisateur en regroupant les questions liées.
-% =============================================================================
-
-% =============================================================================
-% CHANGEMENTS DEPUIS VERSION 23 RÈGLES
-% =============================================================================
-% ❌ Supprimé R4 ancien: syndrome_febrile nécessitait frissons
-%    → Maintenant R4: fievre_elevee suffit (règle souple)
-%
-% ❌ Supprimé R7 ancien: syndrome_allergique nécessitait nez_qui_coule_clair
-%    → Maintenant R6: eternuement suffit (règle souple)
-%
-% ❌ Supprimé R12 ancien: syndrome_orl nécessitait difficulte_avaler
-%    → Maintenant R10: mal_gorge_intense suffit (règle souple)
-%
-% Total: 20 règles (réduit de 23) - Conforme limite 20-30 règles de l'énoncé
-% =============================================================================
-
-% =============================================================================
-% IMPLEMENTATION DES REGLES
-% =============================================================================
+@author   Équipe 6
+@course   TP2 - IFT2003 Intelligence Artificielle 1
+@date     Novembre 2025
+@brief    - 20 règles (R1-R10: symptômes→syndromes, R11-R20: syndromes→maladies)
+          - 8 syndromes intermédiaires, 10 maladies diagnosticables
+          - 2 cascades: fièvre (légère/élevée), toux (productive/non)
+*/
 
 % -----------------------------------------------------------------------------
 % NIVEAU 1 → NIVEAU 2: Symptomes → Syndromes (10 regles)
@@ -177,17 +18,17 @@
 % R1: Fievre legere ∧ Toux → Respiratoire
 syndrome_respiratoire :-
     verifier_symptome(fievre_legere),
-    verifier_symptome(toux), !.
+    verifier_symptome(toux).
 
 % R2: Fievre elevee ∧ Toux → Respiratoire
 syndrome_respiratoire :-
     verifier_symptome(fievre_elevee),
-    verifier_symptome(toux), !.
+    verifier_symptome(toux).
 
 % R3: Nez bouche ∧ Gorge irritee → Respiratoire
 syndrome_respiratoire :-
     verifier_symptome(nez_bouche),
-    verifier_symptome(gorge_irritee), !.
+    verifier_symptome(gorge_irritee).
 
 % R4: Fievre elevee → Febrile (SIMPLIFIE)
 syndrome_febrile :-

@@ -1,43 +1,17 @@
-/**
- * TESTS - Système Expert de Diagnostic Médical
- *
- * Équipe TP2 - IFT2003 - Novembre 2025
- *
- * Contenu:
- *   - 18 tests unitaires (100% couverture des 20 règles)
- *   - 8 tests syndromes (R1-R10)
- *   - 10 tests maladies (R11-R20)
- *
- * Utilisation:
- *   swipl -g "consult('tests.pl'), test_all, halt"
- */
+/** <module> Tests Unitaires
 
-% =============================================================================
-% Projet: TP2 - IFT2003 Intelligence Artificielle 1
-% Tests unitaires: 18 tests (8 syndromes + 10 maladies)
-% =============================================================================
+Suite de tests automatisés couvrant les 20 règles du système
+(8 syndromes + 10 maladies).
+
+@author   Équipe 6
+@course   TP2 - IFT2003 Intelligence Artificielle 1
+@date     Novembre 2025
+@brief    - 18 tests unitaires (100% de couverture)
+          - Usage: swipl -g "consult('src/tests.pl'), test_all, halt"
+*/
 
 :- consult('base_connaissances.pl').
 :- consult('main.pl').
-
-% -----------------------------------------------------------------------------
-% INSTRUCTIONS
-% -----------------------------------------------------------------------------
-% Pour tester manuellement :
-%   1. Charger ce fichier: ?- consult('tests.pl').
-%   2. Lancer: ?- start.
-%   3. Suivre les scenarios dans SCENARIOS_TEST.md
-%
-% Pour tester une regle syndromes:
-%   ?- reinitialiser, assert(connu(fievre_elevee, oui)),
-%      assert(connu(toux, oui)), syndrome_respiratoire.
-%   Expected: true
-%
-% Pour tester une regle maladie:
-%   ?- reinitialiser, assert(connu(mal_tete_intense, oui)),
-%      assert(connu(photophobie, oui)), migraine.
-%   Expected: true
-% -----------------------------------------------------------------------------
 
 % Test rapide - Migraine (devrait poser 3 questions)
 % Scenario: perte_odorat=2, mal_tete_intense=1, photophobie=1

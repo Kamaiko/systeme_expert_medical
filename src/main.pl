@@ -1,22 +1,15 @@
-/**
- * MAIN - Système Expert de Diagnostic Médical
- *
- * Moteur d'inférence (backward chaining) + Interface utilisateur
- * Équipe TP2 - IFT2003 - Novembre 2025
- *
- * Fonctionnalités:
- *   - Backward chaining avec ordre optimisé (covid19 → migraine → ... → rhume)
- *   - Cache des réponses (évite redondances)
- *   - 2 cascades conditionnelles (fièvre, toux)
- *   - Affichage diagnostic avec justification des symptômes
- */
+/** <module> Moteur d'Inférence
 
-% =============================================================================
-% Projet: TP2 - IFT2003 Intelligence Artificielle 1
-% Moteur d'inference (backward chaining) + Interface utilisateur
-% =============================================================================
+Implémentation du backward chaining et de l'interface utilisateur
+pour le diagnostic médical interactif.
 
-% Chargement de la base de connaissances
+@author   Équipe 6
+@course   TP2 - IFT2003 Intelligence Artificielle 1
+@date     Novembre 2025
+@brief    - Backward chaining avec cache (évite questions redondantes)
+          - Gestion de 2 cascades conditionnelles
+*/
+
 :- consult('base_connaissances.pl').
 
 % -----------------------------------------------------------------------------
@@ -121,12 +114,8 @@ poser_question_simple(Symptome, Reponse) :-
 % GESTION CASCADES - Fievre et Toux
 % -----------------------------------------------------------------------------
 
-% CASCADE FIEVRE
-% Q: "Avez-vous de la fievre?"
-%   → Si OUI: "Est-elle elevee (>38.5°C)?"
-%     → Si OUI: fievre=oui, fievre_elevee=oui, fievre_legere=non
-%     → Si NON: fievre=oui, fievre_elevee=non, fievre_legere=oui
-%   → Si NON: fievre=non, fievre_elevee=non, fievre_legere=non
+% CASCADE FIEVRE: Q1 "Avez-vous de la fievre?" → Si OUI: Q2 "Est-elle elevee?"
+% Enregistre: fievre, fievre_elevee, fievre_legere (selon reponses)
 
 poser_question_fievre :-
     traduire_symptome(fievre, TexteFievre),
@@ -169,12 +158,8 @@ poser_question_fievre :-
         )
     ).
 
-% CASCADE TOUX
-% Q: "Avez-vous de la toux?"
-%   → Si OUI: "Est-elle productive (avec crachats)?"
-%     → Si OUI: toux=oui, toux_productive=oui
-%     → Si NON: toux=oui, toux_productive=non
-%   → Si NON: toux=non, toux_productive=non
+% CASCADE TOUX: Q1 "Avez-vous de la toux?" → Si OUI: Q2 "Est-elle productive?"
+% Enregistre: toux, toux_productive (selon reponses)
 
 poser_question_toux :-
     traduire_symptome(toux, TexteToux),
@@ -306,19 +291,12 @@ collecter_syndromes(Syndromes) :-
 collecter_symptomes_positifs(Symptomes) :-
     findall(S, connu(S, oui), Symptomes).
 
-% Formater la liste de symptômes en français
-formater_symptomes_justification([], "").
-formater_symptomes_justification([S], Texte) :-
+% Afficher liste de symptômes en français (format puces)
+afficher_liste_symptomes([]).
+afficher_liste_symptomes([S|Rest]) :-
     traduire_symptome(S, TexteFrancais),
-    atom_concat(TexteFrancais, "", Texte).
-formater_symptomes_justification([S1, S2], Texte) :-
-    traduire_symptome(S1, T1),
-    traduire_symptome(S2, T2),
-    atomic_list_concat([T1, " et ", T2], Texte).
-formater_symptomes_justification([S1, S2, S3 | Rest], Texte) :-
-    traduire_symptome(S1, T1),
-    formater_symptomes_justification([S2, S3 | Rest], Reste),
-    atomic_list_concat([T1, ", ", Reste], Texte).
+    format('  - ~w~n', [TexteFrancais]),
+    afficher_liste_symptomes(Rest).
 
 % Afficher diagnostic final
 afficher_diagnostic(Maladie) :-
@@ -328,9 +306,9 @@ afficher_diagnostic(Maladie) :-
     write('======================================================='), nl,
     nl,
     traduire_maladie(Maladie, NomFrancais),
+    format('Diagnostic: ~w base sur les symptomes suivants:~n~n', [NomFrancais]),
     collecter_symptomes_positifs(Symptomes),
-    formater_symptomes_justification(Symptomes, Justification),
-    format('Diagnostic: ~w, car vous presentez ~w.~n', [NomFrancais, Justification]),
+    afficher_liste_symptomes(Symptomes),
     nl,
     afficher_recommandations(Maladie),
     nl.
