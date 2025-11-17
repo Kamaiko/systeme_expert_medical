@@ -412,5 +412,5 @@ start :-
     write('Session terminee.'), nl,
     nl,
 
-    % Fermeture automatique du programme
-    halt.
+    % Fermeture automatique du programme (code 0 = succes)
+    halt(0).
