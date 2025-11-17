@@ -31,10 +31,6 @@ Le système repose sur une implémentation en Prolog, langage particulièrement 
 
 La base de connaissances développée comprend **20 règles d'inférence** structurées en trois niveaux hiérarchiques : les symptômes observés déclenchent des syndromes intermédiaires, qui à leur tour permettent d'identifier la maladie finale. Cette organisation garantit une interconnexion forte entre les règles, évitant la création de sous-arbres de décision isolés, conformément aux exigences du projet.
 
-Il convient de souligner que ce système a une vocation strictement **pédagogique et démonstrative**. Il ne prétend en aucun cas remplacer une consultation médicale professionnelle ni fournir des diagnostics médicaux fiables. Les recommandations fournies sont à titre informatif uniquement.
-
-\newpage
-
 # I. Méthodologie Adoptée
 
 ## 1.1 Architecture Globale du Système Expert
