@@ -4,10 +4,17 @@ Systeme expert qui diagnostique 10 maladies courantes a partir de symptomes, uti
 
 ## Utilisation
 
-### Lancer le systeme
+### Lancement rapide (recommande)
 
 ```bash
-cd c:\DevTools\Projects\Ecole\IFT-2003_IA1\TP2
+swipl start.pl
+```
+
+Cette commande charge automatiquement le systeme et lance le diagnostic.
+
+### Lancement manuel
+
+```bash
 swipl
 ```
 
@@ -127,17 +134,31 @@ Le systeme peut diagnostiquer 10 maladies:
 
 === TESTS UNITAIRES ===
 
+--- Tests Syndromes ---
 ✓ R1: syndrome_respiratoire OK
 ✓ R4: syndrome_febrile OK
 ✓ R9: syndrome_neurologique OK
-✓ R18: migraine OK
+
+--- Tests Maladies (10/10) ---
 ✓ R11: grippe OK
 ✓ R12: covid19 OK
+✓ R13: bronchite OK
 ✓ R14: rhume OK
+✓ R15: angine OK
+✓ R16: allergie OK
+✓ R17: asthme OK
+✓ R18: migraine OK
+✓ R19: gastro_enterite OK
+✓ R20: conjonctivite OK
 
 === FIN DES TESTS ===
-TOUS LES TESTS PASSES!
+TOUS LES TESTS PASSES! (13 tests)
 ```
+
+**Couverture complete**:
+- 3 syndromes testes
+- **10/10 maladies testees** (100% de couverture)
+- Tous les edge cases valides
 
 #### Tests interactifs guides
 
@@ -216,10 +237,9 @@ covid19 :-
 
 ## Documentation
 
-- **[CORRECTIONS_UX.md](CORRECTIONS_UX.md)** - Details des corrections UX appliquees
-- **[docs/RESUME_PLAN.md](docs/RESUME_PLAN.md)** - Plan detaille du projet
-- **[docs/GUIDE_IMPLEMENTATION.md](docs/GUIDE_IMPLEMENTATION.md)** - Guide d'implementation
-- **[BRIEFING_PROCHAINE_SESSION.md](BRIEFING_PROCHAINE_SESSION.md)** - Contexte du projet
+- **[docs/RESUME_PLAN.md](docs/RESUME_PLAN.md)** - Plan detaille du projet (20 regles, architecture)
+- **[docs/GUIDE_IMPLEMENTATION.md](docs/GUIDE_IMPLEMENTATION.md)** - Guide d'implementation technique
+- **[docs/Enonce TP2.pdf](docs/Enonce%20TP2.pdf)** - Enonce officiel du TP
 
 ## Informations projet
 
@@ -238,4 +258,21 @@ covid19 :-
 
 ---
 
-**Systeme pret a l'emploi!** Lancez `?- start.` et testez les diagnostics.
+## Fichiers du projet
+
+```
+TP2/
+├── start.pl                 # Lancement rapide (swipl start.pl)
+├── main.pl                  # Moteur inference + interface
+├── base_connaissances.pl    # 20 regles + recommandations
+├── tests.pl                 # 13 tests unitaires
+├── README.md                # Documentation utilisateur
+└── docs/                    # Documentation projet
+    ├── RESUME_PLAN.md
+    ├── GUIDE_IMPLEMENTATION.md
+    └── Enonce TP2.pdf
+```
+
+---
+
+**Systeme pret a l'emploi!** Lancez `swipl start.pl` pour commencer.

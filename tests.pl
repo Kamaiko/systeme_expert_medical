@@ -141,6 +141,22 @@ test_maladie_covid19 :-
         write('✗ R12: ECHEC')
     ), nl.
 
+% Test unitaire - Bronchite R13
+test_maladie_bronchite :-
+    reinitialiser,
+    % Cascade fievre legere
+    assert(connu(fievre, oui)),
+    assert(connu(fievre_elevee, non)),
+    assert(connu(fievre_legere, oui)),
+    % Cascade toux productive
+    assert(connu(toux, oui)),
+    assert(connu(toux_productive, oui)),
+    (bronchite ->
+        write('✓ R13: bronchite OK')
+    ;
+        write('✗ R13: ECHEC')
+    ), nl.
+
 % Test unitaire - Rhume R14
 test_maladie_rhume :-
     reinitialiser,
@@ -163,16 +179,109 @@ test_maladie_rhume :-
         write('✗ R14: ECHEC')
     ), nl.
 
+% Test unitaire - Angine R15
+test_maladie_angine :-
+    reinitialiser,
+    % Syndrome ORL (R10: mal_gorge_intense)
+    assert(connu(mal_gorge_intense, oui)),
+    % Syndrome febrile (R4: fievre_elevee)
+    assert(connu(fievre, oui)),
+    assert(connu(fievre_elevee, oui)),
+    assert(connu(fievre_legere, non)),
+    (angine ->
+        write('✓ R15: angine OK')
+    ;
+        write('✗ R15: ECHEC')
+    ), nl.
+
+% Test unitaire - Allergie saisonniere R16
+test_maladie_allergie :-
+    reinitialiser,
+    % Syndrome allergique (R6: eternuement)
+    assert(connu(eternuement, oui)),
+    % Syndrome oculaire (R7: yeux_rouges + yeux_qui_piquent)
+    assert(connu(yeux_rouges, oui)),
+    assert(connu(yeux_qui_piquent, oui)),
+    % Negation difficultes respiratoires
+    assert(connu(difficultes_respiratoires, non)),
+    (allergie ->
+        write('✓ R16: allergie OK')
+    ;
+        write('✗ R16: ECHEC')
+    ), nl.
+
+% Test unitaire - Asthme R17
+test_maladie_asthme :-
+    reinitialiser,
+    % Syndrome respiratoire (R1: fievre_legere + toux)
+    assert(connu(fievre, oui)),
+    assert(connu(fievre_elevee, non)),
+    assert(connu(fievre_legere, oui)),
+    assert(connu(toux, oui)),
+    assert(connu(toux_productive, non)),
+    % Syndrome allergique (R6: eternuement)
+    assert(connu(eternuement, oui)),
+    % Wheezing + difficultes respiratoires
+    assert(connu(wheezing, oui)),
+    assert(connu(difficultes_respiratoires, oui)),
+    (asthme ->
+        write('✓ R17: asthme OK')
+    ;
+        write('✗ R17: ECHEC')
+    ), nl.
+
+% Test unitaire - Gastro-enterite R19
+test_maladie_gastro :-
+    reinitialiser,
+    % Syndrome digestif (R8: diarrhee + vomissements)
+    assert(connu(diarrhee, oui)),
+    assert(connu(vomissements, oui)),
+    % Syndrome febrile (R4: fievre_elevee)
+    assert(connu(fievre, oui)),
+    assert(connu(fievre_elevee, oui)),
+    assert(connu(fievre_legere, non)),
+    (gastro_enterite ->
+        write('✓ R19: gastro_enterite OK')
+    ;
+        write('✗ R19: ECHEC')
+    ), nl.
+
+% Test unitaire - Conjonctivite R20
+test_maladie_conjonctivite :-
+    reinitialiser,
+    % Syndrome oculaire (R7: yeux_rouges + yeux_qui_piquent)
+    assert(connu(yeux_rouges, oui)),
+    assert(connu(yeux_qui_piquent, oui)),
+    % Secretions purulentes
+    assert(connu(secretions_purulentes, oui)),
+    (conjonctivite ->
+        write('✓ R20: conjonctivite OK')
+    ;
+        write('✗ R20: ECHEC')
+    ), nl.
+
 % Lancer tous les tests unitaires (SANS interaction)
 test_all :-
     write('=== TESTS UNITAIRES ==='), nl, nl,
+
+    write('--- Tests Syndromes ---'), nl,
     test_syndrome_resp_r1,
     test_syndrome_febrile,
     test_syndrome_neuro,
-    test_maladie_migraine,
+    nl,
+
+    write('--- Tests Maladies (10/10) ---'), nl,
     test_maladie_grippe,
     test_maladie_covid19,
+    test_maladie_bronchite,
     test_maladie_rhume,
+    test_maladie_angine,
+    test_maladie_allergie,
+    test_maladie_asthme,
+    test_maladie_migraine,
+    test_maladie_gastro,
+    test_maladie_conjonctivite,
     nl,
+
     write('=== FIN DES TESTS ==='), nl,
-    write('TOUS LES TESTS PASSES!'), nl.
+    write('TOUS LES TESTS PASSES! (13 tests)'), nl.
