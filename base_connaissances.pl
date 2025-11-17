@@ -154,3 +154,122 @@
 %
 % Total: 20 règles (réduit de 23) - Conforme limite 20-30 règles de l'énoncé
 % =============================================================================
+
+% =============================================================================
+% IMPLEMENTATION DES REGLES
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% NIVEAU 1 → NIVEAU 2: Symptomes → Syndromes (10 regles)
+% -----------------------------------------------------------------------------
+
+% R1: Fievre legere ∧ Toux → Respiratoire
+syndrome_respiratoire :-
+    verifier_symptome(fievre_legere),
+    verifier_symptome(toux).
+
+% R2: Fievre elevee ∧ Toux → Respiratoire
+syndrome_respiratoire :-
+    verifier_symptome(fievre_elevee),
+    verifier_symptome(toux).
+
+% R3: Nez bouche ∧ Gorge irritee → Respiratoire
+syndrome_respiratoire :-
+    verifier_symptome(nez_bouche),
+    verifier_symptome(gorge_irritee).
+
+% R4: Fievre elevee → Febrile (SIMPLIFIE)
+syndrome_febrile :-
+    verifier_symptome(fievre_elevee).
+
+% R5: Fatigue intense ∧ Courbatures ∧ Fievre elevee → Grippal
+syndrome_grippal :-
+    verifier_symptome(fatigue_intense),
+    verifier_symptome(courbatures),
+    verifier_symptome(fievre_elevee).
+
+% R6: Eternuements → Allergique (SIMPLIFIE)
+syndrome_allergique :-
+    verifier_symptome(eternuement).
+
+% R7: Yeux rouges ∧ Yeux qui piquent → Oculaire
+syndrome_oculaire :-
+    verifier_symptome(yeux_rouges),
+    verifier_symptome(yeux_qui_piquent).
+
+% R8: Diarrhee ∧ Vomissements → Digestif
+syndrome_digestif :-
+    verifier_symptome(diarrhee),
+    verifier_symptome(vomissements).
+
+% R9: Mal tete intense ∧ Photophobie → Neurologique
+syndrome_neurologique :-
+    verifier_symptome(mal_tete_intense),
+    verifier_symptome(photophobie).
+
+% R10: Mal gorge intense → ORL (SIMPLIFIE)
+syndrome_orl :-
+    verifier_symptome(mal_gorge_intense).
+
+% -----------------------------------------------------------------------------
+% NIVEAU 2 → NIVEAU 3: Syndromes → Maladies (10 regles)
+% -----------------------------------------------------------------------------
+
+% R11: Grippe = Respiratoire ∧ Grippal ∧ Febrile ∧ ¬Perte odorat
+grippe :-
+    syndrome_respiratoire,
+    syndrome_grippal,
+    syndrome_febrile,
+    \+ verifier_symptome(perte_odorat).
+
+% R12: COVID-19 = Perte odorat ∧ Respiratoire ∧ Grippal ∧ Febrile
+% NOTE: perte_odorat EN PREMIER (discriminant unique) pour optimiser backward chaining
+covid19 :-
+    verifier_symptome(perte_odorat),
+    syndrome_respiratoire,
+    syndrome_grippal,
+    syndrome_febrile.
+
+% R13: Bronchite = Respiratoire ∧ Fievre legere ∧ Toux productive
+bronchite :-
+    syndrome_respiratoire,
+    verifier_symptome(fievre_legere),
+    verifier_symptome(toux_productive).
+
+% R14: Rhume = Respiratoire ∧ ¬Febrile ∧ ¬Grippal
+rhume :-
+    syndrome_respiratoire,
+    \+ syndrome_febrile,
+    \+ syndrome_grippal.
+
+% R15: Angine = ORL ∧ Febrile
+angine :-
+    syndrome_orl,
+    syndrome_febrile.
+
+% R16: Allergie saisonniere = Allergique ∧ Oculaire ∧ ¬Difficultes respiratoires
+allergie :-
+    syndrome_allergique,
+    syndrome_oculaire,
+    \+ verifier_symptome(difficultes_respiratoires).
+
+% R17: Asthme = Respiratoire ∧ Allergique ∧ Wheezing ∧ Difficultes respiratoires
+asthme :-
+    syndrome_respiratoire,
+    syndrome_allergique,
+    verifier_symptome(wheezing),
+    verifier_symptome(difficultes_respiratoires).
+
+% R18: Migraine = Neurologique
+migraine :-
+    syndrome_neurologique.
+
+% R19: Gastro-enterite = Digestif ∧ Febrile
+gastro_enterite :-
+    syndrome_digestif,
+    syndrome_febrile.
+
+% R20: Conjonctivite = Oculaire ∧ Secretions purulentes
+conjonctivite :-
+    syndrome_oculaire,
+    verifier_symptome(secretions_purulentes).

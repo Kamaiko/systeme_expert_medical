@@ -1,0 +1,186 @@
+# Corrections UX - Systeme Expert Medical
+
+## Problemes identifies et corriges
+
+### ✅ 1. Sauts de ligne manquants
+
+**Avant:**
+```
+Question: Avez-vous de la fievre?
+1. Oui
+2. Non
+Votre reponse (1/2): 1Question: Est-elle elevee...
+```
+
+**Apres:**
+```
+Question: Avez-vous de la fievre?
+1. Oui
+2. Non
+Votre reponse:
+1
+
+Question: Est-elle elevee (temperature >38.5°C)?
+...
+```
+
+**Correction**: Ajoute `nl` avant et apres chaque question dans:
+- `poser_question_simple/2`
+- `poser_question_fievre/0`
+- `poser_question_toux/0`
+
+---
+
+### ✅ 2. "(1/2)" redondant
+
+**Avant:** `Votre reponse (1/2): `
+**Apres:** `Votre reponse: `
+
+**Justification**: Les options "1. Oui" et "2. Non" sont deja affichees au-dessus.
+
+---
+
+### ✅ 3. Ordre des questions incorrect
+
+**Probleme**: Pour COVID-19, le systeme posait d'abord "fievre" au lieu de "perte_odorat"
+
+**Cause**: La regle `covid19` verifie les syndromes AVANT le discriminant unique
+
+**Correction dans [base_connaissances.pl](base_connaissances.pl:227)**:
+```prolog
+% AVANT
+covid19 :-
+    syndrome_respiratoire,
+    syndrome_grippal,
+    syndrome_febrile,
+    verifier_symptome(perte_odorat).
+
+% APRES
+covid19 :-
+    verifier_symptome(perte_odorat),  % EN PREMIER!
+    syndrome_respiratoire,
+    syndrome_grippal,
+    syndrome_febrile.
+```
+
+**Resultat attendu**: La premiere question devrait etre "Avez-vous perdu l'odorat ou le gout?"
+
+---
+
+### ✅ 4. Diagnostic affiche AVANT la fin des questions
+
+**Probleme observe**:
+```
+Question: Avez-vous perdu l'odorat ou le gout?
+[...reponses...]
+=== DIAGNOSTIC ===
+Diagnostic: COVID-19
+Question: Avez-vous le nez bouche?  ← WTF?!
+```
+
+**Cause**: `collecter_syndromes/1` appelait `call(S)` qui declenchait le backtracking sur les regles syndromes alternatives, posant de nouvelles questions
+
+**Correction**: Retire l'affichage des syndromes du diagnostic final pour eviter ce probleme
+
+**Avant**:
+```prolog
+afficher_diagnostic(Maladie) :-
+    nl,
+    write('=== DIAGNOSTIC ==='), nl,
+    traduire_maladie(Maladie, NomFrancais),
+    format('Diagnostic: ~w~n', [NomFrancais]),
+    collecter_syndromes(Syndromes),  % ← Cause le probleme
+    ...
+```
+
+**Apres**:
+```prolog
+afficher_diagnostic(Maladie) :-
+    nl,
+    write('======================================================='), nl,
+    write('=== DIAGNOSTIC ==='), nl,
+    write('======================================================='), nl,
+    nl,
+    traduire_maladie(Maladie, NomFrancais),
+    format('Diagnostic: ~w~n', [NomFrancais]),
+    nl.
+```
+
+---
+
+## Comment tester les corrections
+
+### Test COVID-19 (Ordre des questions)
+
+```bash
+cd "c:\DevTools\Projects\Ecole\IFT-2003_IA1\TP2"
+swipl
+?- consult('main.pl').
+?- start.
+```
+
+**Reponses a donner** (pour COVID-19):
+1. Perte odorat: **1** (Oui) ← Devrait etre LA PREMIERE QUESTION
+2. Fievre: **1** (Oui)
+3. Fievre elevee: **1** (Oui)
+4. Toux: **1** (Oui)
+5. Toux productive: **2** (Non)
+6. Fatigue intense: **1** (Oui)
+7. Courbatures: **1** (Oui)
+
+**Diagnostic attendu**: COVID-19
+
+**Verifications**:
+- ✅ La premiere question est "Avez-vous perdu l'odorat ou le gout?"
+- ✅ Saut de ligne apres "Votre reponse: " (cursor sur nouvelle ligne)
+- ✅ Pas de "(1/2)" affiche
+- ✅ Le diagnostic s'affiche APRES toutes les questions
+- ✅ Pas de question posee apres l'affichage du diagnostic
+
+---
+
+### Test Migraine (Questions minimales)
+
+**Reponses a donner** (pour Migraine):
+1. Perte odorat: **2** (Non)
+2. Mal de tete intense: **1** (Oui)
+3. Photophobie: **1** (Oui)
+
+**Diagnostic attendu**: Migraine (en seulement 3 questions!)
+
+---
+
+### Test Rhume (Negations)
+
+**Reponses a donner** (pour Rhume):
+1. Perte odorat: **2** (Non)
+2. Mal tete intense: **2** (Non)
+3. Secretions purulentes: **2** (Non)
+4. Wheezing: **2** (Non)
+5. Diarrhee: **2** (Non)
+6. Mal gorge intense: **2** (Non)
+7. Fievre: **2** (Non)
+8. Nez bouche: **1** (Oui)
+9. Gorge irritee: **1** (Oui)
+
+**Diagnostic attendu**: Rhume
+
+---
+
+## Resume des ameliorations UX
+
+| Aspect | Avant | Apres |
+|--------|-------|-------|
+| Lisibilite questions | Pas de sauts de ligne | Espacements clairs |
+| Prompt utilisateur | `Votre reponse (1/2): ` | `Votre reponse: ` |
+| Input utilisateur | Sur meme ligne | Sur nouvelle ligne |
+| Ordre questions COVID | Fievre en premier | Perte odorat en premier |
+| Timing diagnostic | Affiche pendant questions | Affiche apres toutes questions |
+| Presentation finale | Sobre | Encadree avec separateurs |
+
+---
+
+**Date des corrections**: Session actuelle
+**Fichiers modifies**:
+- [main.pl](main.pl) - Interface et affichage
+- [base_connaissances.pl](base_connaissances.pl) - Ordre conditions COVID-19
