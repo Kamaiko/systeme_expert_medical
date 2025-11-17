@@ -58,7 +58,7 @@ Ce travail pratique s'inscrit dans une démarche pédagogique visant à concevoi
 
 Le système repose sur une implémentation en Prolog, langage particulièrement adapté à la programmation logique et au raisonnement automatique. L'architecture adoptée utilise le **chaînage arrière** (*backward chaining*), une stratégie d'inférence orientée-but qui permet de minimiser le nombre de questions posées tout en garantissant un diagnostic précis.
 
-La base de connaissances développée comprend **20 règles d'inférence** structurées en trois niveaux hiérarchiques : les symptômes observés déclenchent des syndromes intermédiaires, qui à leur tour permettent d'identifier la maladie finale. Cette organisation garantit une interconnexion forte entre les règles, évitant la création de sous-arbres de décision isolés, conformément aux exigences du projet.
+La base de connaissances développée comprend **20 règles d'inférence** structurées en trois niveaux hiérarchiques : les symptômes observés déclenchent des syndromes intermédiaires, qui à leur tour permettent d'identifier la maladie finale.
 
 # I. Méthodologie Adoptée
 
@@ -127,20 +127,20 @@ Le système expert est conçu pour diagnostiquer 10 pathologies courantes, chois
 
 | Maladie | Syndromes requis | Symptômes discriminants clés | Nb règles |
 |:--------|:-----------------|:-----------------------------|:---------:|
-| **Grippe** | Respiratoire + Grippal + Fébrile | Fatigue intense, courbatures, **sans** perte odorat | 4 |
-| **COVID-19** | Respiratoire + Grippal + Fébrile | **Perte odorat/goût** (discriminant unique) | 4 |
-| **Bronchite** | Respiratoire | **Toux productive** + Fièvre légère | 3 |
-| **Rhume** | Respiratoire seul | Nez bouché, gorge irritée, **sans** fièvre élevée ni fatigue | 3 |
-| **Angine** | ORL + Fébrile | **Mal gorge intense** + Fièvre élevée | 3 |
-| **Allergie saisonnière** | Allergique + Oculaire | Éternuements, yeux rouges, **sans** difficultés respiratoires | 4 |
-| **Asthme** | Respiratoire + Allergique | **Wheezing** + Difficultés respiratoires | 5 |
-| **Migraine** | Neurologique seul | Mal tête intense + **Photophobie** | 2 |
-| **Gastro-entérite** | Digestif + Fébrile | Diarrhée + Vomissements + Fièvre | 3 |
-| **Conjonctivite** | Oculaire | Yeux rouges + **Sécrétions purulentes** | 3 |
+| Grippe | Respiratoire + Grippal + Fébrile | Fatigue intense, courbatures, sans perte odorat | 4 |
+| COVID-19 | Respiratoire + Grippal + Fébrile | **Perte odorat/goût** (discriminant unique) | 4 |
+| Bronchite | Respiratoire | Toux productive + Fièvre légère | 3 |
+| Rhume | Respiratoire seul | Nez bouché, gorge irritée, sans fièvre élevée ni fatigue | 3 |
+| Angine | ORL + Fébrile | Mal gorge intense + Fièvre élevée | 3 |
+| Allergie saisonnière | Allergique + Oculaire | Éternuements, yeux rouges, sans difficultés respiratoires | 4 |
+| Asthme | Respiratoire + Allergique | **Wheezing** + Difficultés respiratoires | 5 |
+| Migraine | Neurologique seul | Mal tête intense + Photophobie | 2 |
+| Gastro-entérite | Digestif + Fébrile | Diarrhée + Vomissements + Fièvre | 3 |
+| Conjonctivite | Oculaire | Yeux rouges + Sécrétions purulentes | 3 |
 
 **Tableau 2** : Caractéristiques diagnostiques des 10 maladies.
 
-Les symptômes en **gras** représentent des **discriminants uniques** permettant de différencier rapidement certaines maladies (par exemple, la perte d'odorat pour COVID-19, le wheezing pour l'asthme).
+Les symptômes en gras (perte odorat, wheezing) représentent des discriminants uniques permettant de différencier rapidement certaines maladies.
 
 ### Les 8 Syndromes Intermédiaires
 
@@ -148,18 +148,16 @@ Les syndromes intermédiaires constituent le niveau central de raisonnement, agr
 
 | Syndrome | Symptômes déclencheurs | Règle(s) | Nb maladies |
 |:---------|:-----------------------|:---------|:-----------:|
-| **syndrome_respiratoire** | (Fièvre légère ∧ Toux) **OU** (Fièvre élevée ∧ Toux) **OU** (Nez bouché ∧ Gorge irritée) | R1, R2, R3 | **5** |
-| **syndrome_fébrile** | Fièvre élevée | R4 | **4** |
-| **syndrome_grippal** | Fatigue intense ∧ Courbatures ∧ Fièvre élevée | R5 | **2** |
-| **syndrome_allergique** | Éternuements | R6 | **2** |
-| **syndrome_oculaire** | Yeux rouges ∧ Yeux qui piquent | R7 | **2** |
-| **syndrome_digestif** | Diarrhée ∧ Vomissements | R8 | 1 |
-| **syndrome_neurologique** | Mal tête intense ∧ Photophobie | R9 | 1 |
-| **syndrome_orl** | Mal gorge intense | R10 | 1 |
+| syndrome_respiratoire | (Fièvre légère ∧ Toux) OU (Fièvre élevée ∧ Toux) OU (Nez bouché ∧ Gorge irritée) | R1, R2, R3 | **5** |
+| syndrome_fébrile | Fièvre élevée | R4 | **4** |
+| syndrome_grippal | Fatigue intense ∧ Courbatures ∧ Fièvre élevée | R5 | **2** |
+| syndrome_allergique | Éternuements | R6 | **2** |
+| syndrome_oculaire | Yeux rouges ∧ Yeux qui piquent | R7 | **2** |
+| syndrome_digestif | Diarrhée ∧ Vomissements | R8 | 1 |
+| syndrome_neurologique | Mal tête intense ∧ Photophobie | R9 | 1 |
+| syndrome_orl | Mal gorge intense | R10 | 1 |
 
 **Tableau 3** : Syndromes intermédiaires avec leurs conditions de déclenchement.
-
-**Note importante** : Les syndromes avec plusieurs maladies associées (en gras) créent l'**interconnexion globale** de l'arbre de décision, évitant ainsi les sous-arbres isolés.
 
 ### Les 20 Règles d'Inférence
 
@@ -171,16 +169,16 @@ Le tableau 4 présente les 10 premières règles permettant de déduire les synd
 
 | # | Règle logique | Syndrome déduit |
 |:-:|:--------------|:----------------|
-| **R1** | fièvre_légère ∧ toux → syndrome_respiratoire | Respiratoire |
-| **R2** | fièvre_élevée ∧ toux → syndrome_respiratoire | Respiratoire |
-| **R3** | nez_bouché ∧ gorge_irritée → syndrome_respiratoire | Respiratoire |
-| **R4** | fièvre_élevée → syndrome_fébrile | Fébrile |
-| **R5** | fatigue_intense ∧ courbatures ∧ fièvre_élevée → syndrome_grippal | Grippal |
-| **R6** | éternuements → syndrome_allergique | Allergique |
-| **R7** | yeux_rouges ∧ yeux_qui_piquent → syndrome_oculaire | Oculaire |
-| **R8** | diarrhée ∧ vomissements → syndrome_digestif | Digestif |
-| **R9** | mal_tête_intense ∧ photophobie → syndrome_neurologique | Neurologique |
-| **R10** | mal_gorge_intense → syndrome_orl | ORL |
+| R1 | fièvre_légère ∧ toux → syndrome_respiratoire | Respiratoire |
+| R2 | fièvre_élevée ∧ toux → syndrome_respiratoire | Respiratoire |
+| R3 | nez_bouché ∧ gorge_irritée → syndrome_respiratoire | Respiratoire |
+| R4 | fièvre_élevée → syndrome_fébrile | Fébrile |
+| R5 | fatigue_intense ∧ courbatures ∧ fièvre_élevée → syndrome_grippal | Grippal |
+| R6 | éternuements → syndrome_allergique | Allergique |
+| R7 | yeux_rouges ∧ yeux_qui_piquent → syndrome_oculaire | Oculaire |
+| R8 | diarrhée ∧ vomissements → syndrome_digestif | Digestif |
+| R9 | mal_tête_intense ∧ photophobie → syndrome_neurologique | Neurologique |
+| R10 | mal_gorge_intense → syndrome_orl | ORL |
 
 **Tableau 4** : Règles d'inférence de Niveau 1 → Niveau 2.
 
@@ -190,22 +188,22 @@ Le tableau 5 présente les 10 règles permettant de déduire les maladies finale
 
 | # | Règle logique | Maladie diagnostiquée |
 |:-:|:--------------|:----------------------|
-| **R11** | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ **¬**perte_odorat → grippe | Grippe |
-| **R12** | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ perte_odorat → covid19 | COVID-19 |
-| **R13** | syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive → bronchite | Bronchite |
-| **R14** | syndrome_respiratoire ∧ **¬**syndrome_fébrile ∧ **¬**syndrome_grippal → rhume | Rhume |
-| **R15** | syndrome_orl ∧ syndrome_fébrile → angine | Angine |
-| **R16** | syndrome_allergique ∧ syndrome_oculaire ∧ **¬**difficultés_respiratoires → allergie | Allergie saisonnière |
-| **R17** | syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires → asthme | Asthme |
-| **R18** | syndrome_neurologique → migraine | Migraine |
-| **R19** | syndrome_digestif ∧ syndrome_fébrile → gastro_entérite | Gastro-entérite |
-| **R20** | syndrome_oculaire ∧ sécrétions_purulentes → conjonctivite | Conjonctivite |
+| R11 | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ ¬perte_odorat → grippe | Grippe |
+| R12 | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ perte_odorat → covid19 | COVID-19 |
+| R13 | syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive → bronchite | Bronchite |
+| R14 | syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal → rhume | Rhume |
+| R15 | syndrome_orl ∧ syndrome_fébrile → angine | Angine |
+| R16 | syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires → allergie | Allergie saisonnière |
+| R17 | syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires → asthme | Asthme |
+| R18 | syndrome_neurologique → migraine | Migraine |
+| R19 | syndrome_digestif ∧ syndrome_fébrile → gastro_entérite | Gastro-entérite |
+| R20 | syndrome_oculaire ∧ sécrétions_purulentes → conjonctivite | Conjonctivite |
 
 **Tableau 5** : Règles d'inférence de Niveau 2 → Niveau 3.
 
 ### Justification de l'Interconnexion des Règles
 
-Conformément à la note importante de l'énoncé stipulant que *"la construction d'un arbre de dépendance (global) n'est possible que si certaines règles partagent au moins un fait commun dans leurs prémisses"*, notre architecture garantit une forte interconnexion : **5 syndromes sur 8** (62,5 %) sont partagés par au moins 2 maladies, et **8 maladies sur 10** (80 %) utilisent au moins un syndrome partagé. Le syndrome_respiratoire seul interconnecte **5 maladies** différentes, tandis que le syndrome_fébrile en interconnecte **4**. Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
+Conformément à la note importante de l'énoncé stipulant que *"la construction d'un arbre de dépendance (global) n'est possible que si certaines règles partagent au moins un fait commun dans leurs prémisses"*, notre architecture garantit une forte interconnexion : 5 syndromes sur 8 (62,5 %) sont partagés par au moins 2 maladies, et 8 maladies sur 10 (80 %) utilisent au moins un syndrome partagé. Le syndrome_respiratoire seul interconnecte 5 maladies différentes, tandis que le syndrome_fébrile en interconnecte 4. Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
 
 ## 1.3 Graphe de Dépendance de la Structure du Raisonnement
 
@@ -213,48 +211,36 @@ Conformément à la note importante de l'énoncé stipulant que *"la constructio
 
 ### Principe du Chaînage Arrière (Backward Chaining)
 
-Le moteur d'inférence développé utilise la stratégie du **chaînage arrière** (*backward chaining*), un raisonnement **orienté-but** (*goal-driven reasoning*) qui part d'une **hypothèse de diagnostic** et tente de la valider en vérifiant si les conditions nécessaires sont satisfaites.
+Le moteur d'inférence développé utilise la stratégie du **chaînage arrière** (*backward chaining*), un raisonnement orienté-but (*goal-driven reasoning*) qui part d'une hypothèse de diagnostic et tente de la valider en vérifiant si les conditions nécessaires sont satisfaites.
 
 #### Processus de Raisonnement
 
 Le mécanisme de raisonnement suit les étapes suivantes :
 
-1. **Sélection d'une hypothèse** : Le système teste séquentiellement les maladies dans un ordre optimisé (voir section suivante)
+1. Sélection d'une hypothèse : Le système teste séquentiellement les maladies dans un ordre optimisé (voir section suivante)
 
-2. **Vérification des prémisses** : Pour chaque maladie testée, le système vérifie si les syndromes requis sont présents
+2. Vérification des prémisses : Pour chaque maladie testée, le système vérifie si les syndromes requis sont présents
    - Si un syndrome requis n'est pas encore connu, le système vérifie récursivement si ce syndrome peut être déduit
-   - Si un symptôme nécessaire n'est pas connu, le système **pose une question** à l'utilisateur
+   - Si un symptôme nécessaire n'est pas connu, le système pose une question à l'utilisateur
 
-3. **Déduction récursive** : Chaque syndrome peut lui-même nécessiter la vérification de plusieurs symptômes, créant une arborescence de vérifications
+3. Déduction récursive : Chaque syndrome peut lui-même nécessiter la vérification de plusieurs symptômes, créant une arborescence de vérifications
 
-4. **Validation ou invalidation** :
-   - Si toutes les conditions sont satisfaites → **Diagnostic confirmé**
+4. Validation ou invalidation :
+   - Si toutes les conditions sont satisfaites → Diagnostic confirmé
    - Si au moins une condition n'est pas satisfaite → Passage à l'hypothèse suivante
 
-5. **Affichage du résultat** : Le premier diagnostic validé est retourné avec ses recommandations médicales
+5. Affichage du résultat : Le premier diagnostic validé est retourné avec ses recommandations médicales
 
 ### Ordre Optimisé des Hypothèses
 
-Pour minimiser le nombre de questions posées à l'utilisateur, les maladies sont testées dans un **ordre stratégique**, en privilégiant celles possédant des **symptômes discriminants uniques** :
+Pour minimiser le nombre de questions posées à l'utilisateur, les maladies sont testées dans l'ordre suivant :
 
-```prolog
-diagnostiquer(Maladie) :-
-    member(Maladie, [
-        covid19,           % Discriminant unique: perte_odorat → 2-3 questions
-        migraine,          % Discriminant: neurologique → 3 questions
-        conjonctivite,     % Discriminant: sécrétions_purulentes → 4-5 questions
-        asthme,            % Discriminants: wheezing + diff. respiratoires → 5-6 questions
-        gastro_enterite,   % Syndromes: digestif + fébrile → 5-6 questions
-        grippe,            % 3 syndromes complexes → 6-8 questions
-        angine,            % Syndromes: ORL + fébrile → 5-6 questions
-        bronchite,         % Syndromes: toux_productive + fièvre_légère → 5-7 questions
-        allergie,          % Syndromes: allergique + oculaire → 6-7 questions
-        rhume              % Diagnostic par élimination (dernier) → 7-8 questions
-    ]),
-    call(Maladie).
+```
+COVID-19 → Migraine → Conjonctivite → Asthme → Gastro-entérite
+→ Grippe → Angine → Bronchite → Allergie → Rhume
 ```
 
-**Justification de l'ordre** : Le COVID-19 est testé en premier car la présence/absence de perte d'odorat permet de confirmer/infirmer rapidement ce diagnostic (1-2 questions seulement). La Migraine vient en deuxième position grâce à des symptômes très spécifiques (mal de tête intense + photophobie). À l'inverse, le Rhume est placé en dernier car cette pathologie nécessite de vérifier de nombreuses négations (absence de fièvre, absence de fatigue intense, etc.). Cette stratégie réduit le nombre moyen de questions posées de **~10 questions** (approche naïve) à **~5-6 questions** (approche optimisée).
+Cet ordre privilégie d'abord les maladies à discriminants uniques (COVID-19, Migraine, Conjonctivite), puis les syndromes spécifiques (Asthme, Gastro-entérite), suivis des cas complexes (Grippe, Angine, Bronchite), et termine par les diagnostics d'élimination (Allergie, Rhume). Cette stratégie réduit le nombre moyen de questions de ~10 (approche naïve) à ~5-6 questions (approche optimisée).
 
 ### Mécanisme de Cache et Gestion de la Mémoire
 
@@ -288,29 +274,29 @@ verifier_symptome(Symptome) :-
     connu(Symptome, oui).
 ```
 
-**Avantage** : Quelle que soit la complexité de l'arbre de décision, chaque symptôme n'est demandé qu'**une seule fois** maximum.
+Avantage : Quelle que soit la complexité de l'arbre de décision, chaque symptôme n'est demandé qu'une seule fois maximum.
 
 ### Exemple de Trace de Raisonnement
 
 Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentiellement les hypothèses dans l'ordre optimisé :
 
-**Hypothèses éliminées** : `covid19` (perte_odorat=non), `migraine` (mal_tete_intense=non), `conjonctivite` (secretions_purulentes=non), etc.
+Hypothèses éliminées : covid19 (perte_odorat=non), migraine (mal_tete_intense=non), conjonctivite (secretions_purulentes=non), etc.
 
-**Hypothèse validée - Grippe (R11)** :
+Hypothèse validée - Grippe (R11) :
 
-- **syndrome_respiratoire** ✓ (R2 : fievre_elevee ∧ toux)
+- syndrome_respiratoire ✓ (R2 : fievre_elevee ∧ toux)
   - Questions posées : fievre_elevee, toux
 
-- **syndrome_grippal** ✓ (R5 : fatigue_intense ∧ courbatures ∧ fievre_elevee)
+- syndrome_grippal ✓ (R5 : fatigue_intense ∧ courbatures ∧ fievre_elevee)
   - fatigue_intense=oui, courbatures=oui
-  - fievre_elevee **réutilisée du cache** (pas de re-question)
+  - fievre_elevee réutilisée du cache (pas de re-question)
 
-- **syndrome_febrile** ✓ (R4 : fievre_elevee)
-  - fievre_elevee **réutilisée du cache**
+- syndrome_febrile ✓ (R4 : fievre_elevee)
+  - fievre_elevee réutilisée du cache
 
-- **¬perte_odorat** ✓ (déjà en cache=non)
+- ¬perte_odorat ✓ (déjà en cache=non)
 
-**Résultat** : DIAGNOSTIC Grippe confirmé | **7 questions posées**
+Résultat : DIAGNOSTIC Grippe confirmé | 7 questions posées
 
 Ce mécanisme illustre l'efficacité du backward chaining : seules les questions nécessaires sont posées, et le cache évite toute redondance.
 
@@ -468,30 +454,9 @@ Session terminee.
 
 ### Raisonnement Suivi
 
-**1. Hypothèses testées et éliminées :**
+Le système élimine d'abord l'hypothèse COVID-19 (perte_odorat=non), puis teste la Migraine en deuxième position selon l'ordre optimisé. Le diagnostic repose sur la règle R18 qui requiert le syndrome neurologique. Ce syndrome est établi par R9 dès confirmation de deux symptômes : mal de tête intense et photophobie. Le diagnostic est donc établi en 3 questions seulement (efficacité optimale).
 
-- **`covid19`** : Vérifie `perte_odorat` → **Non** → Hypothèse rejetée immédiatement ✗
-- **`migraine`** : Testée en deuxième position (ordre optimisé)
-
-**2. Vérification de l'hypothèse Migraine (R18) :**
-
-- **Condition requise** : `syndrome_neurologique`
-  - **R9** : `mal_tete_intense ∧ photophobie`
-    - `verifier_symptome(mal_tete_intense)` → Question posée → **Oui** ✓
-    - `verifier_symptome(photophobie)` → Question posée → **Oui** ✓
-  - **syndrome_neurologique = VRAI** ✓
-
-**3. Conclusion :**
-
-- Toutes les conditions de R18 sont satisfaites → **DIAGNOSTIC : Migraine**
-
-**4. Statistiques :**
-
-- **Nombre de questions posées** : **3** (optimal)
-- **Règles activées** : R9 (syndrome), R18 (diagnostic)
-- **Efficacité** : **Optimale** – Le discriminant unique (syndrome neurologique) permet un diagnostic en 3 questions seulement
-
-**Analyse** : Ce scénario démontre l'efficacité du backward chaining avec ordre optimisé. En testant d'abord les maladies à discriminants uniques (covid19, puis migraine), le système atteint rapidement le diagnostic correct sans explorer inutilement d'autres branches de l'arbre.
+**Règles activées** : R9 (syndrome neurologique) → R18 (diagnostic Migraine)
 
 ---
 
@@ -570,50 +535,9 @@ Session terminee.
 
 ### Raisonnement Suivi
 
-**1. Hypothèse testée : `covid19` (première dans l'ordre optimisé)**
+Le COVID-19 est testé en premier grâce à son discriminant unique (perte d'odorat). Une fois ce symptôme confirmé, le système vérifie la règle R12 qui nécessite trois syndromes additionnels. Le syndrome respiratoire (R2) est établi par les cascades fièvre et toux, générant automatiquement les sous-questions sur leur intensité. Le syndrome grippal (R5) requiert la fatigue intense et les courbatures, en réutilisant la fièvre élevée déjà en cache. Le syndrome fébrile (R4) est confirmé directement par cette même fièvre élevée déjà vérifiée. Le diagnostic est établi en 7 questions (5 principales + 2 cascades).
 
-**2. Vérification de la règle R12 :**
-
-**Condition 1** : `perte_odorat`
-- `verifier_symptome(perte_odorat)` → Question posée → **Oui** ✓
-- **Discriminant unique confirmé → Poursuite de la vérification**
-
-**Condition 2** : `syndrome_respiratoire`
-- Teste clause **R2** : `fievre_elevee ∧ toux`
-  - `verifier_symptome(fievre_elevee)` → **Cascade fièvre déclenchée**
-    - Question principale : "Avez-vous de la fièvre?" → **Oui**
-    - Sous-question : "Est-elle élevée?" → **Oui**
-    - Enregistrement : `fievre=oui`, `fievre_elevee=oui`, `fievre_legere=non`
-  - `verifier_symptome(toux)` → **Cascade toux déclenchée**
-    - Question principale : "Avez-vous de la toux?" → **Oui**
-    - Sous-question : "Est-elle productive?" → **Non**
-    - Enregistrement : `toux=oui`, `toux_productive=non`
-- **syndrome_respiratoire = VRAI** ✓
-
-**Condition 3** : `syndrome_grippal`
-- **R5** : `fatigue_intense ∧ courbatures ∧ fievre_elevee`
-  - `verifier_symptome(fatigue_intense)` → Question posée → **Oui** ✓
-  - `verifier_symptome(courbatures)` → Question posée → **Oui** ✓
-  - `fievre_elevee` → **Déjà en cache** (oui) → Pas de re-question
-- **syndrome_grippal = VRAI** ✓
-
-**Condition 4** : `syndrome_febrile`
-- **R4** : `fievre_elevee`
-  - `fievre_elevee` → **Déjà en cache** (oui)
-- **syndrome_febrile = VRAI** ✓
-
-**3. Conclusion :**
-
-- Toutes les conditions de R12 satisfaites → **DIAGNOSTIC : COVID-19**
-
-**4. Statistiques :**
-
-- **Nombre de questions posées** : **7** (5 principales + 2 sous-questions de cascades)
-- **Règles activées** : R2 (syndrome respiratoire), R4 (syndrome fébrile), R5 (syndrome grippal), R12 (diagnostic COVID-19)
-- **Syndromes déduits** : 3 (respiratoire, fébrile, grippal)
-- **Efficacité** : **Moyenne** – Complexité due aux 3 syndromes requis
-
-**Analyse** : Ce scénario illustre plusieurs aspects importants du système. La **gestion des cascades** permet aux questions fièvre et toux de déclencher automatiquement leurs sous-questions pour affiner les symptômes. La **réutilisation du cache** assure que `fievre_elevee` n'est demandée qu'une fois mais réutilisée 3 fois dans différents syndromes (R2, R5, R4), évitant toute redondance. Enfin, l'**ordre optimisé** place le discriminant unique `perte_odorat` en premier dans R12, permettant de confirmer rapidement le COVID-19 dès que ce symptôme est identifié.
+**Règles activées** : R2 (respiratoire) + R4 (fébrile) + R5 (grippal) → R12 (COVID-19)
 
 ---
 
@@ -701,41 +625,9 @@ Session terminee.
 
 ### Raisonnement Suivi
 
-**1. Hypothèses testées et éliminées séquentiellement :**
+Le système teste d'abord six hypothèses à discriminants uniques (covid19, migraine, conjonctivite, asthme, gastro-entérite, grippe) qui sont rapidement éliminées par des réponses négatives. L'Angine est testée en 7ème position et validée par la règle R15 nécessitant deux syndromes. Le syndrome ORL (R10) est confirmé dès la réponse positive au mal de gorge intense. Le syndrome fébrile (R4) est établi en réutilisant la fièvre élevée déjà vérifiée lors du test de l'asthme, évitant ainsi toute re-question. Le diagnostic est établi en 9 questions (8 principales + 1 cascade fièvre), dont 6 servent à éliminer les hypothèses précédentes.
 
-- **`covid19`** : `perte_odorat` → **Non** → Rejetée ✗
-- **`migraine`** : `mal_tete_intense` → **Non** → Rejetée ✗
-- **`conjonctivite`** : `yeux_rouges` → **Non** → Rejetée ✗
-- **`asthme`** : Teste `syndrome_respiratoire` → R1 échoue (fievre_legere=non), R2 échoue (toux=non), R3 échoue (nez_bouche=non) → Rejetée ✗
-- **`gastro_enterite`** : `diarrhee` → **Non** → Rejetée ✗
-- **`grippe`** : Nécessite `syndrome_grippal` (fatigue_intense non testée) → Rejetée ✗
-- **`angine`** : Testée en 7ème position
-
-**2. Vérification de l'hypothèse Angine (R15) :**
-
-**Condition 1** : `syndrome_orl`
-- **R10** : `mal_gorge_intense`
-  - `verifier_symptome(mal_gorge_intense)` → Question posée → **Oui** ✓
-- **syndrome_orl = VRAI** ✓
-
-**Condition 2** : `syndrome_febrile`
-- **R4** : `fievre_elevee`
-  - `fievre_elevee` → **Déjà en cache** (oui, vérifié lors du test asthme)
-- **syndrome_febrile = VRAI** ✓
-
-**3. Conclusion :**
-
-- Toutes les conditions de R15 satisfaites → **DIAGNOSTIC : Angine**
-
-**4. Statistiques :**
-
-- **Nombre de questions posées** : **9** (8 principales + 1 sous-question cascade fièvre)
-- **Dont questions d'élimination** : 6 (perte odorat, mal tête, yeux rouges, toux, nez bouché, diarrhée)
-- **Règles activées** : R10 (syndrome ORL), R4 (syndrome fébrile), R15 (diagnostic Angine)
-- **Syndromes déduits** : 2 (ORL, fébrile)
-- **Efficacité** : **Typique** – Position intermédiaire dans l'ordre de test
-
-**Analyse** : Ce scénario met en évidence la **stratégie de backward chaining** qui teste d'abord les maladies à discriminants uniques (covid19, migraine, etc.) avant d'arriver à l'Angine. Les **6 premières questions d'élimination** permettent d'écarter rapidement les pathologies peu probables (covid19, migraine, conjonctivite, asthme, gastro-entérite, grippe). La **réutilisation du cache** s'illustre par `fievre_elevee` qui est vérifiée lors du test asthme puis réutilisée pour `syndrome_febrile`, évitant toute redondance. Ce scénario montre également l'**interconnexion via `syndrome_febrile`**, syndrome partagé par 4 maladies (Grippe, COVID-19, Angine, Gastro-entérite), démontrant la structure globale de l'arbre de décision.
+**Règles activées** : R10 (ORL) + R4 (fébrile) → R15 (Angine)
 
 ---
 
@@ -773,7 +665,7 @@ Ce projet a permis de concevoir et d'implémenter avec succès un système exper
 
 ## Synthèse des Réalisations
 
-La base de connaissances comprend **20 règles d'inférence** structurées, permettant de diagnostiquer **10 maladies courantes** à partir de **23 symptômes** regroupés en **8 syndromes intermédiaires**. L'architecture garantit une forte interconnexion des règles, avec 62,5 % des syndromes partagés par plusieurs maladies, évitant ainsi la fragmentation en sous-arbres isolés.
+La base de connaissances comprend **20 règles d'inférence** structurées, permettant de diagnostiquer **10 maladies courantes** à partir de **23 symptômes** regroupés en **8 syndromes intermédiaires**.
 
 Le moteur d'inférence implémenté utilise efficacement le **backward chaining** avec un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à **3-9 questions** selon la complexité du cas. Le mécanisme de **cache des réponses** assure une expérience utilisateur fluide et cohérente en évitant de poser deux fois la même question.
 
