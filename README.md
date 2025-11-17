@@ -243,9 +243,9 @@ covid19 :-
 
 ## Documentation
 
-- **[docs/RESUME_PLAN.md](docs/RESUME_PLAN.md)** - Plan detaille du projet (20 regles, architecture)
-- **[docs/GUIDE_IMPLEMENTATION.md](docs/GUIDE_IMPLEMENTATION.md)** - Guide d'implementation technique
-- **[docs/Enonce TP2.pdf](docs/Enonce%20TP2.pdf)** - Enonce officiel du TP
+- **[docs/RESUME_PLAN.md](docs/RESUME_PLAN.md)** - Plan detaille du projet (20 regles, architecture, tests)
+- **[docs/arbre_dependance.md](docs/arbre_dependance.md)** - Graphe de dependances complet
+- **[docs/SCENARIOS_TEST.md](docs/SCENARIOS_TEST.md)** - 10 scenarios de validation
 
 ## Informations projet
 
@@ -274,9 +274,9 @@ TP2/
 ├── tests.pl                 # 18 tests unitaires (100% couverture)
 ├── README.md                # Documentation utilisateur
 └── docs/                    # Documentation projet
-    ├── RESUME_PLAN.md
-    ├── GUIDE_IMPLEMENTATION.md
-    └── Enonce TP2.pdf
+    ├── RESUME_PLAN.md       # Plan complet + tests
+    ├── arbre_dependance.md  # Graphe dependances
+    └── SCENARIOS_TEST.md    # Scenarios validation
 ```
 
 ---

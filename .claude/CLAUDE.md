@@ -56,9 +56,8 @@ TP2/
 ├── README.md                # Documentation utilisateur complète
 └── docs/
     ├── RESUME_PLAN.md       # Plan complet + section tests ✅
-    ├── GUIDE_IMPLEMENTATION.md # Guide technique détaillé ✅
-    ├── SCENARIOS_TEST.md    # 10 scénarios de test ✅
-    └── arbre_dependance.md  # Graphe complet ✅ (Alexandre)
+    ├── arbre_dependance.md  # Graphe complet ✅ (Alexandre)
+    └── SCENARIOS_TEST.md    # 10 scénarios de test ✅
 ```
 
 ### Structure Hiérarchique (3 Niveaux)
