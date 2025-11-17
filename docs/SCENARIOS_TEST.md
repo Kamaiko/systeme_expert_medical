@@ -208,25 +208,31 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 1 (Oui)
 
-Question 4: Avez-vous les yeux rouges?
+Question 4: Avez-vous les yeux qui piquent ou qui démangent?
 → Réponse: 1 (Oui)
 
-Question 5: Avez-vous les yeux qui piquent ou qui démangent?
+Question 5: Avez-vous des sécrétions purulentes aux yeux?
 → Réponse: 1 (Oui)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- secretions_purulentes = oui
-- yeux_rouges = oui
-- yeux_qui_piquent = oui
+Hypothèses testées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → Testée:
 
-Syndromes déduits:
-- R7: yeux_rouges ∧ yeux_qui_piquent → syndrome_oculaire
+Condition 1: syndrome_oculaire
+- R7: yeux_rouges ∧ yeux_qui_piquent
+  - yeux_rouges = oui (Q3)
+  - yeux_qui_piquent = oui (Q4)
+- syndrome_oculaire = VRAI ✓
+
+Condition 2: secretions_purulentes
+- secretions_purulentes = oui (Q5)
 
 Règle maladie activée:
 - R20: syndrome_oculaire ∧ secretions_purulentes → conjonctivite
