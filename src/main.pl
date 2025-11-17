@@ -367,7 +367,7 @@ afficher_aucun_diagnostic :-
     write('======================================================='), nl,
     nl,
     write('Aucun diagnostic trouve avec les symptomes fournis.'), nl,
-    write('Veuillez consulter un professionnel de sante.'), nl,
+    write('Veuillez consulter un professionnel de la sante.'), nl,
     nl.
 
 % -----------------------------------------------------------------------------
