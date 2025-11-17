@@ -400,7 +400,7 @@ Diagnostic: Gastro-entérite
 
 ---
 
-## Scénario 7: Angine (8 questions)
+## Scénario 7: Angine (9 questions)
 
 ### Profil Patient
 Patient avec mal de gorge intense et fièvre élevée.
@@ -424,7 +424,7 @@ Question 4: Avez-vous de la fièvre?
 Question 5: Avez-vous de la toux?
 → Réponse: 2 (Non)
 
-Question 6: Avez-vous eternue frequemment?
+Question 6: Avez-vous le nez bouché?
 → Réponse: 2 (Non)
 
 Question 7: Avez-vous de la diarrhée?
@@ -440,9 +440,13 @@ Hypothèses testées et éliminées:
 1. covid19 → perte_odorat = non → Rejetée
 2. migraine → mal_tete_intense = non → Rejetée
 3. conjonctivite → yeux_rouges = non → Rejetée
-4. asthme → syndrome_respiratoire (R2: fievre_elevee=oui, toux=non) échoue → Rejetée
+4. asthme → syndrome_respiratoire:
+   - R1: fievre_legere=non échoue
+   - R2: fievre_elevee=oui, toux=non échoue
+   - R3: nez_bouche=non échoue
+   → syndrome_respiratoire échoue → Rejetée
 5. gastro_enterite → syndrome_digestif (diarrhee=non) échoue → Rejetée
-6. grippe → syndrome_allergique (eternuement=non) échoue → Rejetée
+6. grippe → syndrome_respiratoire (échoue, en cache) → Rejetée
 7. angine → Testée:
 
 Condition 1: syndrome_orl
@@ -465,7 +469,7 @@ Règle maladie activée:
 Diagnostic: Angine
 ```
 
-**Nombre de questions**: 7 (6 principales + 1 cascade) ✅
+**Nombre de questions**: 9 (8 principales + 1 cascade) ✅
 
 ---
 
