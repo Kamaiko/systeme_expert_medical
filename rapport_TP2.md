@@ -30,13 +30,14 @@ mainfont: "Times New Roman"
     - [Les 10 Maladies Diagnostiquées](#les-10-maladies-diagnostiquées)
     - [Les 8 Syndromes Intermédiaires](#les-8-syndromes-intermédiaires)
     - [Les 20 Règles d'Inférence](#les-20-règles-dinférence)
-  - [1.3 Description du Moteur d'Inférence et du Mécanisme de Raisonnement](#13-description-du-moteur-dinférence-et-du-mécanisme-de-raisonnement)
+  - [1.3 Représentation Graphique de la Structure du Raisonnement](#13-représentation-graphique-de-la-structure-du-raisonnement)
+  - [1.4 Description du Moteur d'Inférence et du Mécanisme de Raisonnement](#14-description-du-moteur-dinférence-et-du-mécanisme-de-raisonnement)
     - [Principe du Chaînage Arrière](#principe-du-chaînage-arrière-backward-chaining)
     - [Ordre Optimisé des Hypothèses](#ordre-optimisé-des-hypothèses)
     - [Mécanisme de Cache et Gestion de la Mémoire](#mécanisme-de-cache-et-gestion-de-la-mémoire)
     - [Gestion des Cascades Conditionnelles](#gestion-des-cascades-conditionnelles)
     - [Exemple de Trace de Raisonnement](#exemple-de-trace-de-raisonnement)
-  - [1.4 Détails des Prédicats Utilisés dans le Code](#14-détails-des-prédicats-utilisés-dans-le-code)
+  - [1.5 Détails des Prédicats Utilisés dans le Code](#15-détails-des-prédicats-utilisés-dans-le-code)
 - [II. Les Cas de Test avec Résultats Obtenus](#ii-les-cas-de-test-avec-résultats-obtenus)
   - [Scénario 1 : Migraine (Cas Optimal)](#scénario-1--migraine-cas-optimal)
   - [Scénario 2 : COVID-19 (Cas Moyen)](#scénario-2--covid-19-cas-moyen)
@@ -45,13 +46,7 @@ mainfont: "Times New Roman"
 - [Conclusion](#conclusion)
   - [Synthèse des Réalisations](#synthèse-des-réalisations)
   - [Limites Identifiées](#limites-identifiées)
-    - [Limites Médicales](#limites-médicales)
-    - [Limites Techniques](#limites-techniques)
-    - [Limites d'Interface et d'Utilisation](#limites-dinterface-et-dutilisation)
   - [Pistes d'Amélioration](#pistes-damélioration)
-    - [Améliorations à Court Terme](#améliorations-à-court-terme)
-    - [Évolutions à Moyen Terme](#évolutions-à-moyen-terme)
-    - [Évolutions à Long Terme](#évolutions-à-long-terme)
   - [Réflexion Finale](#réflexion-finale)
 
 \newpage
@@ -221,7 +216,9 @@ Conformément à la note importante de l'énoncé stipulant que *"la constructio
 
 Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
 
-## 1.3 Description du Moteur d'Inférence et du Mécanisme de Raisonnement
+## 1.3 Représentation Graphique de la Structure du Raisonnement
+
+## 1.4 Description du Moteur d'Inférence et du Mécanisme de Raisonnement
 
 ### Principe du Chaînage Arrière (Backward Chaining)
 
@@ -365,7 +362,7 @@ Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentielle
 
 Ce mécanisme illustre l'efficacité du backward chaining : seules les questions nécessaires sont posées, et le cache évite toute redondance.
 
-## 1.4 Détails des Prédicats Utilisés dans le Code
+## 1.5 Détails des Prédicats Utilisés dans le Code
 
 Cette section présente une description exhaustive des 27 prédicats principaux implémentés dans les modules `main.pl` et `base_connaissances.pl`.
 
