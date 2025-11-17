@@ -7,7 +7,7 @@ Systeme expert qui diagnostique 10 maladies courantes a partir de symptomes, uti
 ### Lancement du systeme
 
 ```bash
-swipl src/run.pl
+swipl run.pl
 ```
 
 Cette commande charge automatiquement le systeme et lance le diagnostic.
@@ -82,8 +82,8 @@ Le systeme peut diagnostiquer 10 maladies:
 
 ```
 TP2/
+├── run.pl                   # Lancement rapide (swipl run.pl)
 ├── src/                     # Code source Prolog
-│   ├── run.pl               # Lancement rapide (swipl src/run.pl)
 │   ├── main.pl              # Moteur inference + interface
 │   ├── base_connaissances.pl # 20 regles + recommandations
 │   └── tests.pl             # 18 tests unitaires (100% couverture)
@@ -96,4 +96,4 @@ TP2/
 
 ---
 
-**Systeme pret a l'emploi!** Lancez `swipl src/run.pl` pour commencer.
+**Systeme pret a l'emploi!** Lancez `swipl run.pl` pour commencer.

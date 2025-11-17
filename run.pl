@@ -13,11 +13,11 @@
  *   swipl run.pl
  *
  * @remarks
- * - Charge automatiquement main.pl (qui charge base_connaissances.pl)
+ * - Charge automatiquement src/main.pl (qui charge src/base_connaissances.pl)
  * - Lance start/0 automatiquement via initialization/1
- * - Alternative à lancer manuellement: ?- consult('main.pl'), start.
+ * - Alternative à lancer manuellement: ?- consult('src/main.pl'), start.
  *
- * @see main.pl pour le moteur d'inférence principal
+ * @see src/main.pl pour le moteur d'inférence principal
  */
 
 % =============================================================================
@@ -25,5 +25,5 @@
 % Lancement automatique du système expert
 % =============================================================================
 
-:- consult('main.pl').
+:- consult('src/main.pl').
 :- initialization(start).
