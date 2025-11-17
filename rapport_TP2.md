@@ -35,7 +35,6 @@ mainfont: "Times New Roman"
     - [Principe du Chaînage Arrière](#principe-du-chaînage-arrière-backward-chaining)
     - [Ordre Optimisé des Hypothèses](#ordre-optimisé-des-hypothèses)
     - [Mécanisme de Cache et Gestion de la Mémoire](#mécanisme-de-cache-et-gestion-de-la-mémoire)
-    - [Gestion des Cascades Conditionnelles](#gestion-des-cascades-conditionnelles)
     - [Exemple de Trace de Raisonnement](#exemple-de-trace-de-raisonnement)
   - [1.5 Détails des Prédicats Utilisés dans le Code](#15-détails-des-prédicats-utilisés-dans-le-code)
 - [II. Les Cas de Test avec Résultats Obtenus](#ii-les-cas-de-test-avec-résultats-obtenus)
@@ -70,7 +69,7 @@ Le système expert développé repose sur une **architecture hiérarchique à tr
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    NIVEAU 1: SYMPTÔMES                      │
-│              21 symptômes + 2 cascades conditionnelles      │
+│                        23 symptômes                         │
 │   (fièvre, toux, mal de tête, photophobie, diarrhée, ...)   │
 └───────────────────────────┬─────────────────────────────────┘
                             │
@@ -103,8 +102,7 @@ Le tableau 1 présente un récapitulatif quantitatif des différentes composante
 
 | Composante | Quantité | Description |
 |:-----------|:--------:|:------------|
-| **Symptômes de base** | 21 | Observations cliniques élémentaires (fièvre, toux, mal de tête, etc.) |
-| **Cascades conditionnelles** | 2 | Questions à sous-niveaux : fièvre (élevée/légère), toux (productive/sèche) |
+| **Symptômes** | 23 | Observations cliniques élémentaires (fièvre, toux, mal de tête, fièvre élevée, fièvre légère, toux productive, etc.) |
 | **Syndromes intermédiaires** | 8 | Groupements de symptômes formant des entités cliniques cohérentes |
 | **Maladies diagnostiquées** | 10 | Pathologies courantes identifiables par le système |
 | **Règles Niveau 1→2** | 10 | Déduction des syndromes à partir des symptômes |
@@ -305,38 +303,6 @@ verifier_symptome(Symptome) :-
 
 **Avantage** : Quelle que soit la complexité de l'arbre de décision, chaque symptôme n'est demandé qu'**une seule fois** maximum.
 
-### Gestion des Cascades Conditionnelles
-
-Le système implémente **deux questions à cascades** pour affiner certains symptômes :
-
-#### Cascade 1 : Fièvre
-
-```
-Q: "Avez-vous de la fièvre?"
-  ├─ Réponse OUI → Sous-question: "Est-elle élevée (>38.5°C)?"
-  │   ├─ Réponse OUI → Enregistre: fièvre=oui, fièvre_élevée=oui, fièvre_légère=non
-  │   └─ Réponse NON → Enregistre: fièvre=oui, fièvre_élevée=non, fièvre_légère=oui
-  │
-  └─ Réponse NON → Enregistre: fièvre=non, fièvre_élevée=non, fièvre_légère=non
-```
-
-**Figure 2** : Diagramme de flux de la cascade Fièvre.
-
-#### Cascade 2 : Toux
-
-```
-Q: "Avez-vous de la toux?"
-  ├─ Réponse OUI → Sous-question: "Est-elle productive (avec crachats)?"
-  │   ├─ Réponse OUI → Enregistre: toux=oui, toux_productive=oui
-  │   └─ Réponse NON → Enregistre: toux=oui, toux_productive=non
-  │
-  └─ Réponse NON → Enregistre: toux=non, toux_productive=non
-```
-
-**Figure 3** : Diagramme de flux de la cascade Toux.
-
-**Implémentation technique** : Lorsqu'un symptôme en cascade est requis (par exemple `fievre_elevee`), le système détecte que la cascade `fievre` n'a pas encore été posée et déclenche automatiquement la séquence complète, enregistrant toutes les variantes simultanément.
-
 ### Exemple de Trace de Raisonnement
 
 Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentiellement les hypothèses dans l'ordre optimisé :
@@ -346,8 +312,7 @@ Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentielle
 **Hypothèse validée - Grippe (R11)** :
 
 - **syndrome_respiratoire** ✓ (R2 : fievre_elevee ∧ toux)
-  - Cascade fièvre déclenchée → fievre_elevee=oui
-  - Cascade toux déclenchée → toux=oui
+  - Questions posées : fievre_elevee, toux
 
 - **syndrome_grippal** ✓ (R5 : fatigue_intense ∧ courbatures ∧ fievre_elevee)
   - fatigue_intense=oui, courbatures=oui
@@ -358,7 +323,7 @@ Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentielle
 
 - **¬perte_odorat** ✓ (déjà en cache=non)
 
-**Résultat** : DIAGNOSTIC Grippe confirmé | **7 questions posées** (1 perte_odorat + 2 cascades fièvre + 2 cascades toux + 2 grippaux)
+**Résultat** : DIAGNOSTIC Grippe confirmé | **7 questions posées**
 
 Ce mécanisme illustre l'efficacité du backward chaining : seules les questions nécessaires sont posées, et le cache évite toute redondance.
 
@@ -828,9 +793,9 @@ Ce projet a permis de concevoir et d'implémenter avec succès un système exper
 
 ## Synthèse des Réalisations
 
-La base de connaissances comprend **20 règles d'inférence** structurées, permettant de diagnostiquer **10 maladies courantes** à partir de **21 symptômes** regroupés en **8 syndromes intermédiaires**. L'architecture garantit une forte interconnexion des règles, avec 62,5 % des syndromes partagés par plusieurs maladies, évitant ainsi la fragmentation en sous-arbres isolés.
+La base de connaissances comprend **20 règles d'inférence** structurées, permettant de diagnostiquer **10 maladies courantes** à partir de **23 symptômes** regroupés en **8 syndromes intermédiaires**. L'architecture garantit une forte interconnexion des règles, avec 62,5 % des syndromes partagés par plusieurs maladies, évitant ainsi la fragmentation en sous-arbres isolés.
 
-Le moteur d'inférence implémenté utilise efficacement le **backward chaining** avec un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à **3-9 questions** selon la complexité du cas. Les mécanismes de **cache des réponses** et de **gestion des cascades conditionnelles** assurent une expérience utilisateur fluide et cohérente.
+Le moteur d'inférence implémenté utilise efficacement le **backward chaining** avec un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à **3-9 questions** selon la complexité du cas. Le mécanisme de **cache des réponses** assure une expérience utilisateur fluide et cohérente en évitant de poser deux fois la même question.
 
 Les tests réalisés sur trois scénarios cliniques variés (Migraine, COVID-19, Angine) ont démontré la robustesse et la fiabilité du système, avec des diagnostics corrects accompagnés de recommandations médicales adaptées.
 
