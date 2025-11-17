@@ -1,6 +1,6 @@
 # Arbre de Dépendance Global - Système Expert Diagnostic Médical
 
-> Représentation graphique complète de l'interconnexion des règles (Version 2.0 - 8 syndromes)
+> Représentation graphique complète de l'interconnexion des règles (Version finale - 20 règles, 8 syndromes)
 
 ---
 
@@ -17,15 +17,15 @@
             │                             │                             │
             └─────────────────────────────┼─────────────────────────────┘
                                           │
-                                    [23 règles]
+                                    [20 règles]
                                           │
                                           ↓
                               SYNDROMES (Niveau 2) - 8 syndromes
                     ┌──────────────────────┼──────────────────────┐
                     │                      │                      │
-         syndrome_respiratoire    syndrome_fébrile         syndrome_grippal
+         syndrome_respiratoire    syndrome_febrile         syndrome_grippal
          syndrome_allergique      syndrome_oculaire        syndrome_digestif
-         syndrome_céphalique      syndrome_inflammatoire_gorge
+         syndrome_neurologique    syndrome_orl
                     │                      │                      │
                     └──────────────────────┼──────────────────────┘
                                           │
@@ -34,8 +34,8 @@
                     ┌──────────────────────┼──────────────────────┐
                     │                      │                      │
                 Grippe                 COVID-19                Bronchite
-                Rhume                  Angine                  Allergie
-            Asthme allergique          Migraine            Gastro-entérite
+                Rhume                  Angine                  Allergie saisonnière
+                Asthme                 Migraine            Gastro-entérite
                Conjonctivite
 ```
 
@@ -62,28 +62,42 @@
         │           │           │           │           │
         ↓           ↓           ↓           ↓           ↓
     GRIPPE      COVID-19    BRONCHITE     RHUME       ASTHME
-     (3 syn)    (3 syn)     (2 syn)      (1 syn)     (2 syn)
+     (3 syn)    (3 syn)     (symp+syn)    (1 syn)    (symp+2 syn)
 ```
 
-### Branche Fébrile (Interconnexion Majeure - 5 maladies)
+**Règles activées**:
+- **R1**: `fievre_legere ∧ toux → syndrome_respiratoire`
+- **R2**: `fievre_elevee ∧ toux → syndrome_respiratoire`
+- **R3**: `nez_bouche ∧ gorge_irritee → syndrome_respiratoire`
+
+**Maladies utilisant syndrome_respiratoire**: Grippe, COVID-19, Bronchite, Rhume, Asthme
+
+---
+
+### Branche Fébrile (Interconnexion Majeure - 4 maladies)
 
 ```
                             SYMPTÔMES
                                 │
-        ┌───────────────────────┼───────────────────┐
-        │                       │                   │
-   [fievre_elevee]          [frissons]      [fievre_legere]
-        │                       │                   │
-        └───────────┬───────────┘                   │
-                    │                               │
-                    ↓                               ↓
-         syndrome_febrile (2 règles différentes)
-                    │
-        ┌───────────┼───────────┬───────────┬───────────┐
+                        [fievre_elevee]
+                                │
+                                ↓
+                      syndrome_febrile (1 règle simplifiée)
+                                │
+        ┌───────────┬───────────┼───────────┬───────────┐
         │           │           │           │           │
-        ↓           ↓           ↓           ↓           ↓
-    GRIPPE      COVID-19    BRONCHITE     ANGINE   GASTRO-ENTÉRITE
+        ↓           ↓           ↓           ↓
+    GRIPPE      COVID-19     ANGINE    GASTRO-ENTÉRITE
 ```
+
+**Règle activée**:
+- **R4**: `fievre_elevee → syndrome_febrile`
+
+**Note**: Simplifié depuis version 23 règles (frissons n'est plus obligatoire)
+
+**Maladies utilisant syndrome_febrile**: Grippe, COVID-19, Angine, Gastro-entérite
+
+---
 
 ### Sous-branche Syndrome Grippal (2 maladies)
 
@@ -105,28 +119,40 @@
                                GRIPPE          COVID-19
 ```
 
+**Règle activée**:
+- **R5**: `fatigue_intense ∧ courbatures ∧ fievre_elevee → syndrome_grippal`
+
+**Maladies utilisant syndrome_grippal**: Grippe, COVID-19
+
+---
+
 ### Branche Allergique (2 maladies)
 
 ```
                             SYMPTÔMES
                                 │
-        ┌───────────────────────┼──────────────────────────┐
-        │                       │                          │
-   [eternuement]        [nez_qui_coule_clair]    [difficultes_respiratoires]
-        │                       │                          │
-        └───────────┬───────────┘                          │
-                    │                                      │
-                    ↓                                      │
-           syndrome_allergique ←───────────────────────────┘
-                    │
-            ┌───────┴────────┐
-            │                │
-            ↓                ↓
-    ALLERGIE SAISONNIÈRE   ASTHME ALLERGIQUE
-       (2 syn)              (2 syn)
-   (sans difficultés)    (avec difficultés
-    respiratoires)        respiratoires + wheezing)
+                          [eternuement]
+                                │
+                                ↓
+                      syndrome_allergique (1 règle simplifiée)
+                                │
+                        ┌───────┴────────┐
+                        │                │
+                        ↓                ↓
+                ALLERGIE SAISONNIÈRE   ASTHME
+                   (2 syn)          (symp+2 syn)
+                (sans difficultés)  (avec wheezing +
+                 respiratoires)     difficultés respiratoires)
 ```
+
+**Règle activée**:
+- **R6**: `eternuement → syndrome_allergique`
+
+**Note**: Simplifié depuis version 23 règles (nez_qui_coule_clair n'est plus obligatoire)
+
+**Maladies utilisant syndrome_allergique**: Allergie saisonnière, Asthme
+
+---
 
 ### Branche Oculaire (2 maladies)
 
@@ -141,14 +167,20 @@
                                            │
                                            ↓
                                   syndrome_oculaire
-                                  (2 règles différentes)
                                            │
                                    ┌───────┴───────┐
                                    │               │
                                    ↓               ↓
                            ALLERGIE SAISONNIÈRE   CONJONCTIVITE
-                               (2 syn)              (1 syn)
+                               (2 syn)              (symp+syn)
 ```
+
+**Règles activées**:
+- **R7**: `yeux_rouges ∧ yeux_qui_piquent → syndrome_oculaire`
+
+**Maladies utilisant syndrome_oculaire**: Allergie saisonnière, Conjonctivite
+
+---
 
 ### Branche Digestive (1 maladie)
 
@@ -157,18 +189,26 @@
                                 │
         ┌───────────────────────┼───────────────────┐
         │                       │                   │
-    [diarrhee]            [vomissements]      [fievre_legere]
+    [diarrhee]            [vomissements]      [fievre_elevee]
         │                       │                   │
-        └───────────┬───────────┴───────────────────┘
-                    │
-                    ↓
-            syndrome_digestif
-           (2 règles différentes)
-                    │
-                    ↓
-            GASTRO-ENTÉRITE
-                (2 syn: digestif + fébrile)
+        └───────────┬───────────┘                   │
+                    │                               │
+                    ↓                               │
+            syndrome_digestif                       │
+                    │                               │
+                    └───────────┬───────────────────┘
+                                │
+                                ↓
+                        GASTRO-ENTÉRITE
+                        (2 syn: digestif + fébrile)
 ```
+
+**Règle activée**:
+- **R8**: `diarrhee ∧ vomissements → syndrome_digestif`
+
+**Maladies utilisant syndrome_digestif**: Gastro-entérite
+
+---
 
 ### Branche Neurologique (1 maladie)
 
@@ -177,17 +217,24 @@
                                 │
         ┌───────────────────────┼───────────────────┐
         │                       │                   │
-  [mal_tete_intense]       [photophobie]       [¬diarrhee]
+  [mal_tete_intense]       [photophobie]           │
         │                       │                   │
         └───────────┬───────────┘                   │
                     │                               │
                     ↓                               │
-          syndrome_cephalique ←─────────────────────┘
-                    │                      (discriminant négatif)
-                    ↓
-                MIGRAINE
-               (1 syn)
+          syndrome_neurologique                     │
+                    │                               │
+                    ↓                               │
+                MIGRAINE                            │
+               (1 syn)                              │
 ```
+
+**Règle activée**:
+- **R9**: `mal_tete_intense ∧ photophobie → syndrome_neurologique`
+
+**Maladies utilisant syndrome_neurologique**: Migraine
+
+---
 
 ### Branche ORL (1 maladie)
 
@@ -196,17 +243,26 @@
                                 │
         ┌───────────────────────┼──────────────────────┐
         │                       │                      │
-  [mal_gorge_intense]   [difficulte_avaler]      [fievre_elevee]
+  [mal_gorge_intense]     [fievre_elevee]             │
         │                       │                      │
         └───────────┬───────────┘                      │
                     │                                  │
                     ↓                                  │
-     syndrome_inflammatoire_gorge ←────────────────────┘
-                    │
-                    ↓
-                 ANGINE
-              (2 syn: inflammatoire_gorge + fébrile)
+             syndrome_orl (1 règle simplifiée)        │
+                    │                                  │
+                    └──────────┬───────────────────────┘
+                               │
+                               ↓
+                           ANGINE
+                        (2 syn: orl + fébrile)
 ```
+
+**Règle activée**:
+- **R10**: `mal_gorge_intense → syndrome_orl`
+
+**Note**: Simplifié depuis version 23 règles (difficulte_avaler n'est plus obligatoire)
+
+**Maladies utilisant syndrome_orl**: Angine
 
 ---
 
@@ -217,16 +273,17 @@ Ce tableau montre comment les syndromes sont **partagés** par plusieurs maladie
 | Syndrome | Grippe | COVID | Bronchite | Rhume | Angine | Allergie | Asthme | Migraine | Gastro | Conjonctivite | **Total** |
 |----------|--------|-------|-----------|-------|--------|----------|--------|----------|--------|---------------|-----------|
 | **syndrome_respiratoire** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | **5** |
-| **syndrome_fébrile** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | **5** |
+| **syndrome_febrile** | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | **4** |
 | **syndrome_grippal** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | **2** |
 | **syndrome_allergique** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | **2** |
 | **syndrome_oculaire** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | **2** |
 | **syndrome_digestif** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | **1** |
-| **syndrome_céphalique** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | **1** |
-| **syndrome_inflammatoire_gorge** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | **1** |
+| **syndrome_neurologique** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | **1** |
+| **syndrome_orl** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | **1** |
 
 **Observation clé - Interconnexion Renforcée**:
-- ✅ **2 syndromes** partagés par **5 maladies** chacun (respiratoire, fébrile)
+- ✅ **1 syndrome** partagé par **5 maladies** (respiratoire)
+- ✅ **1 syndrome** partagé par **4 maladies** (fébrile)
 - ✅ **3 syndromes** partagés par **2 maladies** chacun (grippal, allergique, oculaire)
 - ✅ **5/8 syndromes** sont partagés (62.5% de partage)
 - ✅ **8/10 maladies** utilisent au moins 1 syndrome partagé
@@ -235,29 +292,71 @@ Ce tableau montre comment les syndromes sont **partagés** par plusieurs maladie
 
 ---
 
-## Flux de Raisonnement - Exemple Complet
+## Les 20 Règles d'Inférence (Version Finale)
 
-### Cas Patient: Grippe
+### Niveau 1 → 2: Symptômes → Syndromes (10 règles)
+
+| # | Règle | Syndrome produit |
+|---|-------|------------------|
+| **R1** | `fievre_legere ∧ toux → syndrome_respiratoire` | Respiratoire |
+| **R2** | `fievre_elevee ∧ toux → syndrome_respiratoire` | Respiratoire |
+| **R3** | `nez_bouche ∧ gorge_irritee → syndrome_respiratoire` | Respiratoire |
+| **R4** | `fievre_elevee → syndrome_febrile` | Fébrile (SIMPLIFIÉ) |
+| **R5** | `fatigue_intense ∧ courbatures ∧ fievre_elevee → syndrome_grippal` | Grippal |
+| **R6** | `eternuement → syndrome_allergique` | Allergique (SIMPLIFIÉ) |
+| **R7** | `yeux_rouges ∧ yeux_qui_piquent → syndrome_oculaire` | Oculaire |
+| **R8** | `diarrhee ∧ vomissements → syndrome_digestif` | Digestif |
+| **R9** | `mal_tete_intense ∧ photophobie → syndrome_neurologique` | Neurologique |
+| **R10** | `mal_gorge_intense → syndrome_orl` | ORL (SIMPLIFIÉ) |
+
+### Niveau 2 → 3: Syndromes → Maladies (10 règles)
+
+| # | Règle | Maladie produite |
+|---|-------|------------------|
+| **R11** | `syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_febrile ∧ ¬perte_odorat → grippe` | Grippe |
+| **R12** | `syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_febrile ∧ perte_odorat → covid19` | COVID-19 |
+| **R13** | `syndrome_respiratoire ∧ fievre_legere ∧ toux_productive → bronchite` | Bronchite |
+| **R14** | `syndrome_respiratoire ∧ ¬syndrome_febrile ∧ ¬syndrome_grippal → rhume` | Rhume |
+| **R15** | `syndrome_orl ∧ syndrome_febrile → angine` | Angine |
+| **R16** | `syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultes_respiratoires → allergie` | Allergie saisonnière |
+| **R17** | `syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultes_respiratoires → asthme` | Asthme |
+| **R18** | `syndrome_neurologique → migraine` | Migraine |
+| **R19** | `syndrome_digestif ∧ syndrome_febrile → gastro_enterite` | Gastro-entérite |
+| **R20** | `syndrome_oculaire ∧ secretions_purulentes → conjonctivite` | Conjonctivite |
+
+---
+
+## Flux de Raisonnement - Exemple Complet (Grippe)
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│ ÉTAPE 1: Collecte Symptômes                                          │
+│ ÉTAPE 1: Collecte Symptômes (Backward Chaining)                     │
 ├──────────────────────────────────────────────────────────────────────┤
-│ Q: Avez-vous de la fièvre élevée ?    → Réponse: 1 (Oui)            │
-│ Q: Avez-vous de la toux ?             → Réponse: 1 (Oui)            │
-│ Q: Avez-vous des frissons ?           → Réponse: 1 (Oui)            │
-│ Q: Avez-vous des courbatures ?        → Réponse: 1 (Oui)            │
-│ Q: Ressentez-vous une fatigue intense ? → Réponse: 1 (Oui)          │
-│ Q: Avez-vous perdu l'odorat ?         → Réponse: 2 (Non)            │
+│ Le moteur teste l'hypothèse "grippe" et vérifie ses conditions:     │
+│                                                                       │
+│ Q: Avez-vous perdu l'odorat ou le goût?  → 2 (Non)                  │
+│    [¬perte_odorat = VRAI → continue grippe, élimine COVID]          │
+│                                                                       │
+│ Q: Avez-vous de la fièvre?                → 1 (Oui)                  │
+│    → Q: Est-elle élevée (>38.5°C)?       → 1 (Oui)                  │
+│    [fievre_elevee = OUI]                                             │
+│                                                                       │
+│ Q: Avez-vous de la toux?                  → 1 (Oui)                  │
+│    [toux = OUI → R2 activable: syndrome_respiratoire]               │
+│                                                                       │
+│ Q: Ressentez-vous une fatigue intense?    → 1 (Oui)                  │
+│ Q: Avez-vous des courbatures?             → 1 (Oui)                  │
+│    [fatigue_intense ∧ courbatures ∧ fievre_elevee                   │
+│     → R5 activable: syndrome_grippal]                                │
 └──────────────────────────────────────────────────────────────────────┘
                               ↓
 ┌──────────────────────────────────────────────────────────────────────┐
 │ ÉTAPE 2: Déduction Syndromes (Niveau 1→2)                           │
 ├──────────────────────────────────────────────────────────────────────┤
-│ Règle R2: fievre_elevee ∧ toux → syndrome_respiratoire  [ACTIVÉE]   │
-│ Règle R4: fievre_elevee ∧ frissons → syndrome_febrile   [ACTIVÉE]   │
-│ Règle R6: fatigue_intense ∧ courbatures ∧ fievre_elevee             │
-│           → syndrome_grippal                             [ACTIVÉE]   │
+│ R2: fievre_elevee ∧ toux → syndrome_respiratoire      [ACTIVÉE]     │
+│ R4: fievre_elevee → syndrome_febrile                   [ACTIVÉE]     │
+│ R5: fatigue_intense ∧ courbatures ∧ fievre_elevee                   │
+│     → syndrome_grippal                                 [ACTIVÉE]     │
 │                                                                       │
 │ Résultat: syndrome_respiratoire = VRAI                               │
 │           syndrome_febrile = VRAI                                    │
@@ -267,96 +366,122 @@ Ce tableau montre comment les syndromes sont **partagés** par plusieurs maladie
 ┌──────────────────────────────────────────────────────────────────────┐
 │ ÉTAPE 3: Diagnostic Maladie (Niveau 2→3)                            │
 ├──────────────────────────────────────────────────────────────────────┤
-│ Règle R14: syndrome_respiratoire ∧ syndrome_grippal ∧               │
-│            syndrome_febrile ∧ fatigue_intense ∧ ¬perte_odorat       │
-│            → grippe                                                  │
-│            VRAI ∧ VRAI ∧ VRAI ∧ VRAI ∧ VRAI = VRAI     [ACTIVÉE]    │
+│ R11: syndrome_respiratoire ∧ syndrome_grippal ∧                     │
+│      syndrome_febrile ∧ ¬perte_odorat → grippe                      │
+│      VRAI ∧ VRAI ∧ VRAI ∧ VRAI = VRAI              [DIAGNOSTIQUÉ]   │
 │                                                                       │
-│ Règle R15: syndrome_respiratoire ∧ syndrome_grippal ∧               │
-│            syndrome_febrile ∧ perte_odorat → covid19                │
-│            VRAI ∧ VRAI ∧ VRAI ∧ FAUX = FAUX            [REJETÉE]    │
-│                                                                       │
-│ Résultat: maladie = GRIPPE (unique)                                  │
+│ Résultat: maladie = GRIPPE                                           │
 └──────────────────────────────────────────────────────────────────────┘
                               ↓
 ┌──────────────────────────────────────────────────────────────────────┐
-│ ÉTAPE 4: Justification et Affichage                                 │
+│ ÉTAPE 4: Affichage                                                   │
 ├──────────────────────────────────────────────────────────────────────┤
-│ DIAGNOSTIC: GRIPPE, car vous présentez fièvre et toux               │
+│ === DIAGNOSTIC ===                                                   │
+│ Diagnostic: Grippe                                                   │
+│ Syndromes identifiés: syndrome_respiratoire, syndrome_febrile,      │
+│                       syndrome_grippal                               │
 └──────────────────────────────────────────────────────────────────────┘
 ```
+
+**Total questions posées**: 6 (optimisé grâce au backward chaining)
 
 ---
 
 ## Validation de l'Arbre Global
 
-### Test 1: Connectivité Visuelle
+### Test 1: Connectivité des Maladies
 
-Sur l'arbre ci-dessus, **tous les chemins** depuis les symptômes vers les maladies passent par au moins un syndrome **partagé** (sauf 3 maladies à syndrome unique, ce qui est acceptable):
+Sur l'arbre ci-dessus, **tous les chemins** depuis les symptômes vers les maladies passent par au moins un syndrome:
 
-✅ **Grippe**: 3 syndromes dont 2 partagés (respiratoire × 5, fébrile × 5, grippal × 2)
-✅ **COVID-19**: 3 syndromes dont 2 partagés (respiratoire × 5, fébrile × 5, grippal × 2)
-✅ **Bronchite**: 2 syndromes partagés (respiratoire × 5, fébrile × 5)
+✅ **Grippe**: 3 syndromes dont 2 partagés (respiratoire × 5, fébrile × 4, grippal × 2)
+✅ **COVID-19**: 3 syndromes dont 2 partagés (respiratoire × 5, fébrile × 4, grippal × 2)
+✅ **Bronchite**: 1 syndrome partagé + symptômes discriminants (respiratoire × 5)
 ✅ **Rhume**: 1 syndrome partagé (respiratoire × 5)
-✅ **Angine**: 2 syndromes dont 1 partagé (fébrile × 5, inflammatoire_gorge × 1)
+✅ **Angine**: 2 syndromes dont 1 partagé (orl × 1, fébrile × 4)
 ✅ **Allergie**: 2 syndromes partagés (allergique × 2, oculaire × 2)
-✅ **Asthme**: 2 syndromes partagés (allergique × 2, respiratoire × 5)
-⚠️ **Migraine**: 1 syndrome unique (céphalique × 1) - acceptable
-✅ **Gastro**: 2 syndromes dont 1 partagé (digestif × 1, fébrile × 5)
-✅ **Conjonctivite**: 1 syndrome partagé (oculaire × 2)
+✅ **Asthme**: 2 syndromes partagés + symptômes discriminants (respiratoire × 5, allergique × 2)
+✅ **Migraine**: 1 syndrome unique (neurologique × 1) - acceptable car très spécifique
+✅ **Gastro**: 2 syndromes dont 1 partagé (digestif × 1, fébrile × 4)
+✅ **Conjonctivite**: 1 syndrome partagé + symptôme discriminant (oculaire × 2)
 
 **Résultat**: 9/10 maladies utilisent au moins 1 syndrome partagé ✅
 
 ---
 
-### Test 2: Partage de Faits Communs
+### Test 2: Partage de Syndromes
 
-Liste des règles qui partagent des syndromes:
+**Syndromes partagés par plusieurs maladies**:
 
-**Groupe 1 - syndrome_respiratoire** (5 règles partagent ce syndrome):
-- R14: ... syndrome_respiratoire ... → grippe
-- R15: ... syndrome_respiratoire ... → covid19
-- R16: syndrome_respiratoire ∧ syndrome_febrile ∧ toux_productive → bronchite
-- R17: syndrome_respiratoire ∧ ¬syndrome_febrile ∧ ¬syndrome_grippal → rhume
-- R20: syndrome_allergique ∧ syndrome_respiratoire ... → asthme_allergique
+1. **syndrome_respiratoire** (5 maladies): Grippe, COVID-19, Bronchite, Rhume, Asthme
+2. **syndrome_febrile** (4 maladies): Grippe, COVID-19, Angine, Gastro-entérite
+3. **syndrome_grippal** (2 maladies): Grippe, COVID-19
+4. **syndrome_allergique** (2 maladies): Allergie saisonnière, Asthme
+5. **syndrome_oculaire** (2 maladies): Allergie saisonnière, Conjonctivite
 
-**Groupe 2 - syndrome_fébrile** (5 règles partagent ce syndrome):
-- R14: ... syndrome_febrile ... → grippe
-- R15: ... syndrome_febrile ... → covid19
-- R16: syndrome_respiratoire ∧ syndrome_febrile ∧ toux_productive → bronchite
-- R18: syndrome_inflammatoire_gorge ∧ syndrome_febrile ... → angine
-- R22: syndrome_digestif ∧ syndrome_febrile ∧ diarrhee → gastro_enterite
+**Syndromes uniques** (maladies très spécifiques):
+- **syndrome_digestif** (1 maladie): Gastro-entérite
+- **syndrome_neurologique** (1 maladie): Migraine
+- **syndrome_orl** (1 maladie): Angine
 
-**Groupe 3 - syndrome_grippal** (2 règles):
-- R14: ... syndrome_grippal ... → grippe
-- R15: ... syndrome_grippal ... → covid19
-
-**Groupe 4 - syndrome_allergique** (2 règles):
-- R19: syndrome_allergique ∧ syndrome_oculaire ... → allergie_saisonniere
-- R20: syndrome_allergique ∧ syndrome_respiratoire ... → asthme_allergique
-
-**Groupe 5 - syndrome_oculaire** (2 règles):
-- R19: syndrome_allergique ∧ syndrome_oculaire ... → allergie_saisonniere
-- R23: syndrome_oculaire ∧ secretions_purulentes ... → conjonctivite
-
-✅ **Critère satisfait**: 10 règles sur 10 au niveau 2→3 utilisent au moins 1 syndrome, et 5 syndromes sont partagés (100% de couverture syndromes)
+✅ **Critère satisfait**: 5 syndromes partagés sur 8 (62.5%) créent une forte interconnexion
 
 ---
 
 ### Test 3: Absence de Sous-Arbres Isolés
 
 **Arbre principal interconnecté**:
-- Symptômes fébriles + respiratoires + grippaux → 3 syndromes partagés → 5 maladies
-- Symptômes allergiques + oculaires → 2 syndromes partagés → 3 maladies (allergie, asthme, conjonctivite)
+- Branche respiratoire-fébrile-grippale → 3 syndromes partagés → 5 maladies principales
+- Branche allergique-oculaire → 2 syndromes partagés → 3 maladies
 
 **Arbres secondaires connectés via syndromes partagés**:
-- Digestif connecté au principal via syndrome_fébrile (partagé avec 4 autres maladies)
-- ORL connecté au principal via syndrome_fébrile (partagé avec 4 autres maladies)
+- Digestif connecté au principal via **syndrome_febrile** (partagé avec 3 autres maladies)
+- ORL connecté au principal via **syndrome_febrile** (partagé avec 3 autres maladies)
 
-**Seule exception**:
-- Neurologique (migraine) utilise 1 syndrome unique → acceptable comme cas spécialisé
+**Seule exception acceptable**:
+- Neurologique (Migraine) utilise 1 syndrome unique → acceptable car symptômes très spécifiques et sans confusion possible
 
 ✅ **Critère satisfait**: Pas de fragmentation significative, arbre global interconnecté
+
+---
+
+## Ordre de Test des Maladies (Backward Chaining Optimisé)
+
+Le moteur teste les maladies dans cet ordre pour minimiser le nombre de questions:
+
+```prolog
+% Ordre optimisé: discriminants uniques d'abord
+member(Maladie, [
+    covid19,           % perte_odorat unique → 2-3 questions
+    migraine,          % neurologique unique → 3 questions
+    conjonctivite,     % secretions_purulentes unique → 4-5 questions
+    asthme,            % wheezing + difficultés respiratoires → 5-6 questions
+    gastro_enterite,   % digestif + fébrile → 5-6 questions
+    grippe,            % 3 syndromes (complexe) → 6-8 questions
+    angine,            % ORL + fébrile → 5-6 questions
+    bronchite,         % toux_productive + fievre_legere → 5-7 questions
+    allergie,          % allergique + oculaire → 6-7 questions
+    rhume              % Diagnostic par élimination (dernier) → 7-8 questions
+])
+```
+
+**Résultat attendu**: Moyenne de **4-6 questions** par diagnostic
+
+---
+
+## Changements depuis Version 23 Règles
+
+### Règles supprimées (simplification)
+
+❌ **Ancienne R4**: `fievre_elevee ∧ frissons → syndrome_febrile`
+   → **Nouvelle R4**: `fievre_elevee → syndrome_febrile` (frissons optionnel)
+
+❌ **Ancienne R6**: `eternuement ∧ nez_qui_coule_clair → syndrome_allergique`
+   → **Nouvelle R6**: `eternuement → syndrome_allergique` (nez clair optionnel)
+
+❌ **Ancienne R10**: `mal_gorge_intense ∧ difficulte_avaler → syndrome_orl`
+   → **Nouvelle R10**: `mal_gorge_intense → syndrome_orl` (difficulté avaler optionnelle)
+
+**Justification**: Conditions minimales suffisantes (règles souples) pour améliorer la détection
 
 ---
 
@@ -378,48 +503,4 @@ Liste des règles qui partagent des syndromes:
 
 ---
 
-## Notes d'Implémentation
-
-### Priorité d'Évaluation des Règles
-
-Le système doit tester les maladies dans cet ordre pour optimiser les questions:
-
-**Ordre prioritaire**:
-1. **Maladies à 3 syndromes** (grippe, covid) - plus spécifiques
-2. **Maladies à 2 syndromes** (bronchite, angine, allergie, asthme, gastro) - moyennement spécifiques
-3. **Maladies à 1 syndrome** (rhume, migraine, conjonctivite) - moins spécifiques
-
-### Gestion de "Je ne sais pas"
-
-Si l'utilisateur répond "3. Je ne sais pas" à une question critique:
-
-**Comportement AND-only strict**:
-- Symptôme inconnu = condition NON satisfaite
-- Syndrome/maladie associé(e) NON généré(e)
-- Passage à la branche suivante
-
-**Exemple**:
-```
-Q: Avez-vous perdu l'odorat ? → 3. Je ne sais pas
-Résultat: perte_odorat = FAUX (par défaut)
-Impact: COVID-19 ne sera pas diagnostiqué (règle R15 échoue)
-        GRIPPE reste possible (règle R14 avec ¬perte_odorat satisfait)
-```
-
-**Cas limites**:
-- Trop d'incertitudes → "Diagnostic impossible, consultez un médecin"
-- Seule maladie possible malgré incertitudes → Diagnostic avec mention "sous réserve"
-
----
-
-## Améliorations Futures (Hors Scope TP)
-
-1. **Facteurs de certitude** : Remplacer booléens par scores de confiance [0-1]
-2. **Règles de contradiction** : Rejeter diagnostics incohérents
-3. **Arbitrage multi-maladies** : Poser question discriminante si ex æquo
-4. **Logique floue** : Gérer "Je ne sais pas" sans bloquer diagnostic
-5. **Probabilités bayésiennes** : Calculer probabilité a posteriori par maladie
-
----
-
-*Ce document sert de référence visuelle pour l'implémentation Prolog et le rapport final*
+*Document mis à jour selon RESUME_PLAN.md - Version finale avec 20 règles et 8 syndromes*
