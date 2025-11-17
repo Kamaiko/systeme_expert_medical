@@ -91,8 +91,6 @@ L'implémentation se décompose en trois modules Prolog principaux :
 2. **main.pl** : Implémente le moteur d'inférence (backward chaining), la gestion du cache et l'interface utilisateur
 3. **tests.pl** : Suite de 18 tests unitaires validant l'intégralité des règles (8 syndromes + 10 maladies)
 
-\newpage
-
 ## 1.2 Présentation des Maladies et Construction de la Base de Faits et Règles
 
 ### Les 10 Maladies Diagnostiquées
@@ -187,8 +185,6 @@ Conformément à la note importante de l'énoncé stipulant que *"la constructio
 - Le syndrome_fébrile seul interconnecte **4 maladies** différentes
 
 Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
-
-\newpage
 
 ## 1.3 Représentation Graphique de la Structure du Raisonnement
 
@@ -335,8 +331,6 @@ Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentielle
 **Résultat** : DIAGNOSTIC Grippe confirmé | **7 questions posées** (1 perte_odorat + 2 cascades fièvre + 2 cascades toux + 2 grippaux)
 
 Ce mécanisme illustre l'efficacité du backward chaining : seules les questions nécessaires sont posées, et le cache évite toute redondance.
-
-\newpage
 
 ## 1.5 Détails des Prédicats Utilisés dans le Code
 
