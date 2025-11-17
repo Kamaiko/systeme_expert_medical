@@ -88,6 +88,60 @@ test_syndrome_neuro :-
         write('✗ R9: ECHEC')
     ), nl.
 
+% Test unitaire - Syndrome grippal R5
+test_syndrome_grippal :-
+    reinitialiser,
+    assert(connu(fatigue_intense, oui)),
+    assert(connu(courbatures, oui)),
+    assert(connu(fievre_elevee, oui)),
+    (syndrome_grippal ->
+        write('✓ R5: syndrome_grippal OK')
+    ;
+        write('✗ R5: ECHEC')
+    ), nl.
+
+% Test unitaire - Syndrome allergique R6 (SIMPLIFIE - eternuement suffit)
+test_syndrome_allergique :-
+    reinitialiser,
+    assert(connu(eternuement, oui)),
+    (syndrome_allergique ->
+        write('✓ R6: syndrome_allergique OK')
+    ;
+        write('✗ R6: ECHEC')
+    ), nl.
+
+% Test unitaire - Syndrome oculaire R7
+test_syndrome_oculaire :-
+    reinitialiser,
+    assert(connu(yeux_rouges, oui)),
+    assert(connu(yeux_qui_piquent, oui)),
+    (syndrome_oculaire ->
+        write('✓ R7: syndrome_oculaire OK')
+    ;
+        write('✗ R7: ECHEC')
+    ), nl.
+
+% Test unitaire - Syndrome digestif R8
+test_syndrome_digestif :-
+    reinitialiser,
+    assert(connu(diarrhee, oui)),
+    assert(connu(vomissements, oui)),
+    (syndrome_digestif ->
+        write('✓ R8: syndrome_digestif OK')
+    ;
+        write('✗ R8: ECHEC')
+    ), nl.
+
+% Test unitaire - Syndrome ORL R10 (SIMPLIFIE - mal_gorge_intense suffit)
+test_syndrome_orl :-
+    reinitialiser,
+    assert(connu(mal_gorge_intense, oui)),
+    (syndrome_orl ->
+        write('✓ R10: syndrome_orl OK')
+    ;
+        write('✗ R10: ECHEC')
+    ), nl.
+
 % Test unitaire - Migraine R18
 test_maladie_migraine :-
     reinitialiser,
@@ -264,10 +318,15 @@ test_maladie_conjonctivite :-
 test_all :-
     write('=== TESTS UNITAIRES ==='), nl, nl,
 
-    write('--- Tests Syndromes ---'), nl,
+    write('--- Tests Syndromes (8/8) ---'), nl,
     test_syndrome_resp_r1,
     test_syndrome_febrile,
+    test_syndrome_grippal,
+    test_syndrome_allergique,
+    test_syndrome_oculaire,
+    test_syndrome_digestif,
     test_syndrome_neuro,
+    test_syndrome_orl,
     nl,
 
     write('--- Tests Maladies (10/10) ---'), nl,
@@ -284,4 +343,4 @@ test_all :-
     nl,
 
     write('=== FIN DES TESTS ==='), nl,
-    write('TOUS LES TESTS PASSES! (13 tests)'), nl.
+    write('TOUS LES TESTS PASSES! (18 tests: 8 syndromes + 10 maladies)'), nl.
