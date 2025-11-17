@@ -11,7 +11,7 @@
 
 ---
 
-## Scénario 1: Migraine ⭐ (Optimal - 3 questions)
+## Scénario 1: Migraine (3 questions)
 
 ### Profil Patient
 Patient avec céphalées intenses et sensibilité lumière.
@@ -48,11 +48,11 @@ Règle maladie activée:
 Diagnostic: Migraine
 ```
 
-**Nombre de questions**: 3 ✅ (optimal)
+**Nombre de questions**: 3 ✅
 
 ---
 
-## Scénario 2: COVID-19 ⭐ (Optimal - 7 questions)
+## Scénario 2: COVID-19 (7 questions)
 
 ### Profil Patient
 Patient avec symptômes grippaux + perte odorat (discriminant unique).
