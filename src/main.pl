@@ -107,17 +107,6 @@ lire_reponse(Reponse) :-
     ).
 
 % Poser question simple (pas de cascade)
-% Cas special: eternuement (forme verbale)
-poser_question_simple(eternuement, Reponse) :-
-    nl,
-    write('Question: Eternuez-vous frequemment?'), nl,
-    write('1. Oui'), nl,
-    write('2. Non'), nl,
-    write('Votre reponse: '),
-    lire_reponse(Reponse),
-    nl, !.
-
-% Cas general: Avez-vous...
 poser_question_simple(Symptome, Reponse) :-
     traduire_symptome(Symptome, TexteFrancais),
     nl,
