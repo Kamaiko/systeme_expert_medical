@@ -177,17 +177,17 @@
 % R1: Fievre legere ∧ Toux → Respiratoire
 syndrome_respiratoire :-
     verifier_symptome(fievre_legere),
-    verifier_symptome(toux).
+    verifier_symptome(toux), !.
 
 % R2: Fievre elevee ∧ Toux → Respiratoire
 syndrome_respiratoire :-
     verifier_symptome(fievre_elevee),
-    verifier_symptome(toux).
+    verifier_symptome(toux), !.
 
 % R3: Nez bouche ∧ Gorge irritee → Respiratoire
 syndrome_respiratoire :-
     verifier_symptome(nez_bouche),
-    verifier_symptome(gorge_irritee).
+    verifier_symptome(gorge_irritee), !.
 
 % R4: Fievre elevee → Febrile (SIMPLIFIE)
 syndrome_febrile :-
