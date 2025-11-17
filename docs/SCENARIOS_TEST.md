@@ -140,7 +140,7 @@ Question 5: Avez-vous de la toux?
   → Sous-question: Est-elle productive (avec crachats/expectorations)?
   → Réponse: 2 (Non)
 
-Question 6: Éternuez-vous fréquemment?
+Question 6: Avez-vous eternue frequemment?
 → Réponse: 2 (Non)
 
 Question 7: Avez-vous de la diarrhée?
@@ -261,7 +261,7 @@ Question 3: Avez-vous des sécrétions purulentes aux yeux?
 Question 4: Avez-vous un sifflement respiratoire (wheezing)?
 → Réponse: 1 (Oui)
 
-Question 5: Éternuez-vous fréquemment?
+Question 5: Avez-vous eternue frequemment?
 → Réponse: 1 (Oui)
 
 Question 6: Avez-vous le nez bouché?
@@ -500,7 +500,7 @@ Question 4: Avez-vous un sifflement respiratoire (wheezing)?
 Question 5: Avez-vous de la diarrhée?
 → Réponse: 2 (Non)
 
-Question 6: Éternuez-vous fréquemment?
+Question 6: Avez-vous eternue frequemment?
 → Réponse: 1 (Oui)
 
 Question 7: Avez-vous les yeux rouges?
@@ -561,7 +561,7 @@ Question 4: Avez-vous un sifflement respiratoire (wheezing)?
 Question 5: Avez-vous de la diarrhée?
 → Réponse: 2 (Non)
 
-Question 6: Éternuez-vous fréquemment?
+Question 6: Avez-vous eternue frequemment?
 → Réponse: 2 (Non)
 
 Question 7: Avez-vous de la fièvre?
