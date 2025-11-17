@@ -114,7 +114,7 @@ Diagnostic: COVID-19
 
 ---
 
-## Scénario 3: Grippe (6-7 questions)
+## Scénario 3: Grippe (9 questions)
 
 ### Profil Patient
 Patient avec symptômes grippaux complets SANS perte odorat.
@@ -127,7 +127,7 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 2 (Non)
 
 Question 4: Avez-vous un sifflement respiratoire (wheezing)?
@@ -143,13 +143,13 @@ Question 6: Avez-vous de la fièvre?
 
 Question 7: Avez-vous de la toux?
 → Réponse: 1 (Oui)
-  → Sous-question: Est-elle productive?
+  → Sous-question: Est-elle productive (avec crachats/expectorations)?
   → Réponse: 2 (Non)
 
 Question 8: Ressentez-vous une fatigue intense?
 → Réponse: 1 (Oui)
 
-Question 9: Avez-vous des courbatures?
+Question 9: Avez-vous des courbatures (douleurs musculaires)?
 → Réponse: 1 (Oui)
 ```
 
@@ -177,7 +177,9 @@ Règle maladie activée:
 Diagnostic: Grippe
 ```
 
-**Nombre de questions**: 9 (7 principales + 2 cascades)
+**Nombre de questions**: 9 principales (dont 2 avec cascades = 11 réponses totales)
+
+**Note**: Questions d'élimination (1-5) testent covid19, migraine, conjonctivite, asthme, gastro-entérite avant d'arriver à grippe.
 
 ---
 
