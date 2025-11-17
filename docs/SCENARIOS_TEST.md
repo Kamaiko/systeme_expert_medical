@@ -8,13 +8,6 @@
 
 1. Lancer le système: `swipl run.pl`
 2. Suivre les réponses indiquées dans chaque scénario
-3. Vérifier que:
-   - L'ordre des questions correspond (±1-2 questions acceptables)
-   - Le nombre de questions est proche de l'attendu
-   - Le diagnostic final est correct
-   - Les recommandations médicales sont affichées
-
-**Note**: Le système affiche maintenant des **recommandations médicales** pour chaque diagnostic au lieu des syndromes identifiés (implémentation finale).
 
 ---
 
