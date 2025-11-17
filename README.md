@@ -7,7 +7,7 @@ Systeme expert qui diagnostique 10 maladies courantes a partir de symptomes, uti
 ### Lancement rapide (recommande)
 
 ```bash
-swipl start.pl
+swipl run.pl
 ```
 
 Cette commande charge automatiquement le systeme et lance le diagnostic.
@@ -268,7 +268,7 @@ covid19 :-
 
 ```
 TP2/
-├── start.pl                 # Lancement rapide (swipl start.pl)
+├── run.pl                   # Lancement rapide (swipl run.pl)
 ├── main.pl                  # Moteur inference + interface
 ├── base_connaissances.pl    # 20 regles + recommandations
 ├── tests.pl                 # 18 tests unitaires (100% couverture)
@@ -281,4 +281,4 @@ TP2/
 
 ---
 
-**Systeme pret a l'emploi!** Lancez `swipl start.pl` pour commencer.
+**Systeme pret a l'emploi!** Lancez `swipl run.pl` pour commencer.
