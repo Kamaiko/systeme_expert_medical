@@ -328,7 +328,7 @@ Diagnostic: Asthme
 
 ---
 
-## Scénario 6: Gastro-entérite (8 questions)
+## Scénario 6: Gastro-entérite (9 questions)
 
 ### Profil Patient
 Patient avec diarrhée, vomissements et fièvre.
@@ -352,10 +352,13 @@ Question 4: Avez-vous de la fièvre?
 Question 5: Avez-vous de la toux?
 → Réponse: 2 (Non)
 
-Question 6: Avez-vous de la diarrhée?
+Question 6: Avez-vous le nez bouché?
+→ Réponse: 2 (Non)
+
+Question 7: Avez-vous de la diarrhée?
 → Réponse: 1 (Oui)
 
-Question 7: Avez-vous des vomissements?
+Question 8: Avez-vous des vomissements?
 → Réponse: 1 (Oui)
 ```
 
@@ -365,13 +368,17 @@ Hypothèses testées et éliminées:
 1. covid19 → perte_odorat = non → Rejetée
 2. migraine → mal_tete_intense = non → Rejetée
 3. conjonctivite → yeux_rouges = non → Rejetée
-4. asthme → syndrome_respiratoire (R2: fievre_elevee=oui, toux=non) échoue → Rejetée
+4. asthme → syndrome_respiratoire:
+   - R1: fievre_legere=non (car fievre_elevee=oui) échoue
+   - R2: fievre_elevee=oui, toux=non échoue
+   - R3: nez_bouche=non échoue
+   → syndrome_respiratoire échoue → Rejetée
 5. gastro_enterite → Testée:
 
 Condition 1: syndrome_digestif
 - R8: diarrhee ∧ vomissements
-  - diarrhee = oui (Q6)
-  - vomissements = oui (Q7)
+  - diarrhee = oui (Q7)
+  - vomissements = oui (Q8)
 - syndrome_digestif = VRAI ✓
 
 Condition 2: syndrome_febrile
@@ -389,7 +396,7 @@ Règle maladie activée:
 Diagnostic: Gastro-entérite
 ```
 
-**Nombre de questions**: 7 (6 principales + 1 cascade) ✅
+**Nombre de questions**: 9 (8 principales + 1 cascade) ✅
 
 ---
 
