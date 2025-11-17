@@ -108,6 +108,84 @@ afficher_diagnostic(Maladie) :-
 
 ---
 
+### ✅ 5. Pas de saut de ligne avant sous-questions cascades
+
+**Probleme observe**:
+```
+Question: Avez-vous de la fievre?
+1. Oui
+2. Non
+Votre reponse:
+1
+Question: Est-elle elevee (temperature >38.5°C)?  ← Pas de saut de ligne!
+1. Oui
+2. Non
+```
+
+**Cause**: Manquait `nl` avant la sous-question dans les cascades
+
+**Correction dans [main.pl:132](main.pl#L132) et [main.pl:180](main.pl#L180)**:
+```prolog
+(   ReponseFievre = oui ->
+    (
+        % Sous-question: fievre elevee?
+        nl,  % ← Ajoute ici!
+        format('Question: Est-elle elevee (temperature >38.5°C)?~n', []),
+        ...
+```
+
+**Apres**:
+```
+Question: Avez-vous de la fievre?
+1. Oui
+2. Non
+Votre reponse:
+1
+
+Question: Est-elle elevee (temperature >38.5°C)?  ← Saut de ligne present! ✓
+1. Oui
+2. Non
+```
+
+---
+
+### ✅ 6. Reponse tapee invisible
+
+**Probleme observe**:
+```
+Question: Avez-vous perdu l'odorat ou le gout?
+1. Oui
+2. Non
+Votre reponse:
+                    ← L'utilisateur tape "2" mais ne le voit PAS!
+Question: Avez-vous un mal de tete intense?
+```
+
+**Cause**: `get_single_char/1` ne fait pas d'echo du caractere tape
+
+**Correction dans [main.pl:84-88](main.pl#L84)**:
+```prolog
+lire_reponse(Reponse) :-
+    get_single_char(Code),
+    % Afficher la reponse tapee pour feedback visuel
+    char_code(Char, Code),
+    write(Char), nl,
+    ...
+```
+
+**Apres**:
+```
+Question: Avez-vous perdu l'odorat ou le gout?
+1. Oui
+2. Non
+Votre reponse:
+2                    ← Maintenant VISIBLE! ✓
+
+Question: Avez-vous un mal de tete intense?
+```
+
+---
+
 ## Comment tester les corrections
 
 ### Test COVID-19 (Ordre des questions)
@@ -174,6 +252,8 @@ swipl
 | Lisibilite questions | Pas de sauts de ligne | Espacements clairs |
 | Prompt utilisateur | `Votre reponse (1/2): ` | `Votre reponse: ` |
 | Input utilisateur | Sur meme ligne | Sur nouvelle ligne |
+| Reponse visible | Non (pas d'echo) | **Oui** (affichage du caractere tape) |
+| Cascades sous-questions | Pas de saut de ligne | Saut de ligne avant sous-question |
 | Ordre questions COVID | Fievre en premier | Perte odorat en premier |
 | Timing diagnostic | Affiche pendant questions | Affiche apres toutes questions |
 | Presentation finale | Sobre | Encadree avec separateurs |

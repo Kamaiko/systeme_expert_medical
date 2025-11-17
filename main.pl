@@ -83,11 +83,14 @@ traduire_syndrome(syndrome_orl, "Syndrome ORL").
 % Utilise get_single_char pour meilleure UX (pas besoin de point ni Enter)
 lire_reponse(Reponse) :-
     get_single_char(Code),
+    % Afficher la reponse tapee pour feedback visuel
+    char_code(Char, Code),
+    write(Char), nl,
     (   Code = 49 -> Reponse = oui      % 49 = code ASCII de '1'
     ;   Code = 50 -> Reponse = non      % 50 = code ASCII de '2'
     ;   (
             write('Reponse invalide. Veuillez entrer 1 ou 2.'), nl,
-            write('Votre reponse (1/2): '),
+            write('Votre reponse: '),
             lire_reponse(Reponse)
         )
     ).
@@ -126,6 +129,7 @@ poser_question_fievre :-
     (   ReponseFievre = oui ->
         (
             % Sous-question: fievre elevee?
+            nl,
             format('Question: Est-elle elevee (temperature >38.5°C)?~n', []),
             write('1. Oui'), nl,
             write('2. Non'), nl,
@@ -173,6 +177,7 @@ poser_question_toux :-
     (   ReponseToux = oui ->
         (
             % Sous-question: toux productive?
+            nl,
             format('Question: Est-elle productive (avec crachats/expectorations)?~n', []),
             write('1. Oui'), nl,
             write('2. Non'), nl,
