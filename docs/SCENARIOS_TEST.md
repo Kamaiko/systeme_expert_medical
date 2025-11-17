@@ -248,7 +248,7 @@ Diagnostic: Conjonctivite
 
 ---
 
-## Scénario 5: Asthme (6-7 questions)
+## Scénario 5: Asthme (10 questions)
 
 ### Profil Patient
 Patient allergique avec difficultés respiratoires et wheezing.
@@ -259,16 +259,16 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 → Réponse: 2 (Non)
 
 Question 2: Avez-vous un mal de tête intense?
-→ Réponse: 2 (Non)
-
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
-→ Réponse: 2 (Non)
-
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
 → Réponse: 1 (Oui)
 
-Question 5: Avez-vous eternue frequemment?
-→ Réponse: 1 (Oui)
+Question 3: Avez-vous sensible a la lumiere (photophobie)?
+→ Réponse: 2 (Non)
+
+Question 4: Avez-vous les yeux rouges?
+→ Réponse: 2 (Non)
+
+Question 5: Avez-vous de la fievre?
+→ Réponse: 2 (Non)
 
 Question 6: Avez-vous le nez bouché?
 → Réponse: 1 (Oui)
@@ -276,22 +276,41 @@ Question 6: Avez-vous le nez bouché?
 Question 7: Avez-vous la gorge irritée?
 → Réponse: 1 (Oui)
 
-Question 8: Avez-vous des difficultés à respirer?
+Question 8: Avez-vous eternue frequemment?
+→ Réponse: 1 (Oui)
+
+Question 9: Avez-vous un sifflement respiratoire (wheezing)?
+→ Réponse: 1 (Oui)
+
+Question 10: Avez-vous des difficultés à respirer?
 → Réponse: 1 (Oui)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- wheezing = oui
-- eternuement = oui
-- nez_bouche = oui
-- gorge_irritee = oui
-- difficultes_respiratoires = oui
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = oui, photophobie = non → Rejetée
+3. conjonctivite → yeux_rouges = non → Rejetée
+4. asthme → Testée:
 
-Syndromes déduits:
-- R3: nez_bouche ∧ gorge_irritee → syndrome_respiratoire
-- R6: eternuement → syndrome_allergique
+Condition 1: syndrome_respiratoire
+- R3: nez_bouche ∧ gorge_irritee
+  - fievre = non (donc R1 et R2 échouent)
+  - nez_bouche = oui (Q6)
+  - gorge_irritee = oui (Q7)
+- syndrome_respiratoire = VRAI ✓
+
+Condition 2: syndrome_allergique
+- R6: eternuement
+  - eternuement = oui (Q8)
+- syndrome_allergique = VRAI ✓
+
+Condition 3: wheezing
+- wheezing = oui (Q9)
+
+Condition 4: difficultes_respiratoires
+- difficultes_respiratoires = oui (Q10)
 
 Règle maladie activée:
 - R17: syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultes_respiratoires → asthme
@@ -303,7 +322,9 @@ Règle maladie activée:
 Diagnostic: Asthme
 ```
 
-**Nombre de questions**: 8 ✅
+**Nombre de questions**: 10 ✅
+
+**Note**: Questions 1-4 éliminent covid19, migraine, conjonctivite. Question 5 élimine les clauses R1/R2 de syndrome_respiratoire (nécessitent fièvre). Questions 6-10 confirment asthme via R3 (nez+gorge), R6 (éternuement), wheezing et difficultés respiratoires.
 
 ---
 
