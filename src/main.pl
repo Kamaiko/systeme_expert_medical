@@ -26,30 +26,30 @@ reinitialiser :-
 % TRADUCTIONS - Symptomes (SANS ACCENTS)
 % -----------------------------------------------------------------------------
 
-traduire_symptome(perte_odorat, "perdu l'odorat ou le gout").
-traduire_symptome(fievre, "de la fievre").
-traduire_symptome(fievre_elevee, "une fievre elevee (>38.5°C)").
-traduire_symptome(fievre_legere, "une fievre legere").
-traduire_symptome(frissons, "des frissons").
-traduire_symptome(toux, "de la toux").
-traduire_symptome(toux_productive, "une toux productive (avec crachats/expectorations)").
-traduire_symptome(nez_bouche, "le nez bouche").
-traduire_symptome(difficultes_respiratoires, "des difficultes a respirer").
-traduire_symptome(wheezing, "un sifflement respiratoire (wheezing)").
-traduire_symptome(gorge_irritee, "la gorge irritee").
-traduire_symptome(mal_gorge_intense, "un mal de gorge intense").
-traduire_symptome(difficulte_avaler, "de la difficulte a avaler").
-traduire_symptome(eternuement, "eternue frequemment").
-traduire_symptome(nez_qui_coule_clair, "le nez qui coule (ecoulement clair)").
-traduire_symptome(yeux_rouges, "les yeux rouges").
-traduire_symptome(yeux_qui_piquent, "les yeux qui piquent ou qui demangent").
-traduire_symptome(secretions_purulentes, "des secretions purulentes aux yeux").
-traduire_symptome(fatigue_intense, "ressenti une fatigue intense").
-traduire_symptome(courbatures, "des courbatures (douleurs musculaires)").
-traduire_symptome(mal_tete_intense, "un mal de tete intense").
-traduire_symptome(photophobie, "sensible a la lumiere (photophobie)").
-traduire_symptome(diarrhee, "de la diarrhee").
-traduire_symptome(vomissements, "des vomissements").
+traduire_symptome(perte_odorat, "Perte de gout ou odorat").
+traduire_symptome(fievre, "Fievre").
+traduire_symptome(fievre_elevee, "Fievre elevee (>38.5°C)").
+traduire_symptome(fievre_legere, "Fievre legere").
+traduire_symptome(frissons, "Frissons").
+traduire_symptome(toux, "Toux").
+traduire_symptome(toux_productive, "Toux productive").
+traduire_symptome(nez_bouche, "Nez bouche").
+traduire_symptome(difficultes_respiratoires, "Difficultes respiratoires").
+traduire_symptome(wheezing, "Sifflement respiratoire (wheezing)").
+traduire_symptome(gorge_irritee, "Gorge irritee").
+traduire_symptome(mal_gorge_intense, "Mal de gorge intense").
+traduire_symptome(difficulte_avaler, "Difficulte a avaler").
+traduire_symptome(eternuement, "Eternuements frequents").
+traduire_symptome(nez_qui_coule_clair, "Nez qui coule (ecoulement clair)").
+traduire_symptome(yeux_rouges, "Yeux rouges").
+traduire_symptome(yeux_qui_piquent, "Yeux qui piquent").
+traduire_symptome(secretions_purulentes, "Secretions purulentes aux yeux").
+traduire_symptome(fatigue_intense, "Fatigue intense").
+traduire_symptome(courbatures, "Courbatures").
+traduire_symptome(mal_tete_intense, "Mal de tete intense").
+traduire_symptome(photophobie, "Sensibilite a la lumiere (photophobie)").
+traduire_symptome(diarrhee, "Diarrhee").
+traduire_symptome(vomissements, "Vomissements").
 
 % -----------------------------------------------------------------------------
 % TRADUCTIONS - Maladies (SANS ACCENTS)
@@ -306,9 +306,11 @@ afficher_diagnostic(Maladie) :-
     write('======================================================='), nl,
     nl,
     traduire_maladie(Maladie, NomFrancais),
-    format('Diagnostic: ~w base sur les symptomes suivants:~n~n', [NomFrancais]),
+    format('~w~n~n', [NomFrancais]),
+    write('Base sur les symptomes suivants:'), nl,
     collecter_symptomes_positifs(Symptomes),
     afficher_liste_symptomes(Symptomes),
+    nl,
     nl,
     afficher_recommandations(Maladie),
     nl.

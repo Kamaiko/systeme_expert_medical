@@ -56,9 +56,9 @@ Les systèmes experts représentent une branche fondamentale de l'intelligence a
 
 Ce travail pratique s'inscrit dans une démarche pédagogique visant à concevoir et développer un système expert de diagnostic médical simplifié. L'objectif principal est de créer un outil interactif capable d'identifier une maladie parmi 10 pathologies courantes (Grippe, COVID-19, Bronchite, Rhume, Angine, Allergie saisonnière, Asthme, Migraine, Gastro-entérite, Conjonctivite) en posant une série de questions ciblées à l'utilisateur.
 
-Le système repose sur une implémentation en Prolog, langage particulièrement adapté à la programmation logique et au raisonnement automatique. L'architecture adoptée utilise le **chaînage arrière** (*backward chaining*), une stratégie d'inférence orientée-but qui permet de minimiser le nombre de questions posées tout en garantissant un diagnostic précis.
+Le système repose sur une implémentation en Prolog, langage particulièrement adapté à la programmation logique et au raisonnement automatique. L'architecture adoptée utilise le chaînage arrière pour minimiser le nombre de questions posées tout en garantissant un diagnostic précis.
 
-La base de connaissances développée comprend **20 règles d'inférence** structurées en trois niveaux hiérarchiques : les symptômes observés déclenchent des syndromes intermédiaires, qui à leur tour permettent d'identifier la maladie finale.
+La base de connaissances développée comprend 20 règles d'inférence structurées en trois niveaux hiérarchiques : les symptômes observés déclenchent des syndromes intermédiaires, qui à leur tour permettent d'identifier la maladie finale.
 
 # I. Méthodologie Adoptée
 
@@ -203,102 +203,25 @@ Le tableau 5 présente les 10 règles permettant de déduire les maladies finale
 
 ### Justification de l'Interconnexion des Règles
 
-Conformément à la note importante de l'énoncé stipulant que *"la construction d'un arbre de dépendance (global) n'est possible que si certaines règles partagent au moins un fait commun dans leurs prémisses"*, notre architecture garantit une forte interconnexion : 5 syndromes sur 8 (62,5 %) sont partagés par au moins 2 maladies, et 8 maladies sur 10 (80 %) utilisent au moins un syndrome partagé. Le syndrome_respiratoire seul interconnecte 5 maladies différentes, tandis que le syndrome_fébrile en interconnecte 4. Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
+Notre architecture garantit une forte interconnexion : 5 syndromes sur 8 (62,5 %) sont partagés par au moins 2 maladies, et 8 maladies sur 10 (80 %) utilisent au moins un syndrome partagé.
 
 ## 1.3 Graphe de Dépendance de la Structure du Raisonnement
 
 ## 1.4 Description du Moteur d'Inférence et du Mécanisme de Raisonnement
 
-### Principe du Chaînage Arrière (Backward Chaining)
+Le système utilise le **chaînage arrière** (backward chaining), une stratégie d'inférence orientée-but qui part d'une hypothèse de diagnostic et tente de la valider en vérifiant récursivement si les conditions nécessaires sont satisfaites. Cette approche se distingue du chaînage avant (forward chaining) qui partirait des symptômes pour déduire progressivement les conclusions possibles. Le backward chaining est particulièrement adapté à notre contexte diagnostique car il minimise le nombre de questions posées à l'utilisateur en ne vérifiant que les symptômes strictement nécessaires à la validation de l'hypothèse courante.
 
-Le moteur d'inférence développé utilise la stratégie du **chaînage arrière** (*backward chaining*), un raisonnement orienté-but (*goal-driven reasoning*) qui part d'une hypothèse de diagnostic et tente de la valider en vérifiant si les conditions nécessaires sont satisfaites.
+### Principe du Raisonnement Orienté-But
 
-#### Processus de Raisonnement
+Le moteur d'inférence implémente un processus de validation séquentielle des hypothèses. Pour chaque maladie testée, le système vérifie si les syndromes requis (niveau 2) sont présents. Si un syndrome n'est pas encore connu, le système tente de le déduire en vérifiant récursivement les symptômes qui le composent (niveau 1). Lorsqu'un symptôme nécessaire n'a pas encore été vérifié, le système pose une question à l'utilisateur et enregistre la réponse en mémoire. Ce processus récursif crée une arborescence de vérifications qui s'arrête dès que toutes les conditions d'une maladie sont satisfaites, retournant ainsi le diagnostic avec ses recommandations médicales. Si une hypothèse échoue, le système passe immédiatement à l'hypothèse suivante dans l'ordre prédéfini.
 
-Le mécanisme de raisonnement suit les étapes suivantes :
+### Stratégie d'Optimisation par Ordre de Test
 
-1. Sélection d'une hypothèse : Le système teste séquentiellement les maladies dans un ordre optimisé (voir section suivante)
+L'efficacité du backward chaining repose en grande partie sur l'ordre dans lequel les hypothèses sont testées. Le système privilégie d'abord les maladies possédant des symptômes discriminants uniques (identifiés en gras dans le Tableau 2), permettant une élimination ou validation rapide en 2-4 questions. Suivent ensuite les maladies à syndromes spécifiques nécessitant des combinaisons particulières de symptômes, puis les cas complexes impliquant plusieurs syndromes interconnectés, et enfin les diagnostics d'élimination testés en dernier. Cette stratégie réduit le nombre moyen de questions de environ 10-15 (approche naïve testant les maladies aléatoirement) à 3-9 questions selon la complexité du cas clinique.
 
-2. Vérification des prémisses : Pour chaque maladie testée, le système vérifie si les syndromes requis sont présents
-   - Si un syndrome requis n'est pas encore connu, le système vérifie récursivement si ce syndrome peut être déduit
-   - Si un symptôme nécessaire n'est pas connu, le système pose une question à l'utilisateur
+### Mécanisme de Cache des Réponses
 
-3. Déduction récursive : Chaque syndrome peut lui-même nécessiter la vérification de plusieurs symptômes, créant une arborescence de vérifications
-
-4. Validation ou invalidation :
-   - Si toutes les conditions sont satisfaites → Diagnostic confirmé
-   - Si au moins une condition n'est pas satisfaite → Passage à l'hypothèse suivante
-
-5. Affichage du résultat : Le premier diagnostic validé est retourné avec ses recommandations médicales
-
-### Ordre Optimisé des Hypothèses
-
-Pour minimiser le nombre de questions posées à l'utilisateur, les maladies sont testées dans l'ordre suivant :
-
-```
-COVID-19 → Migraine → Conjonctivite → Asthme → Gastro-entérite
-→ Grippe → Angine → Bronchite → Allergie → Rhume
-```
-
-Cet ordre privilégie d'abord les maladies à discriminants uniques (COVID-19, Migraine, Conjonctivite), puis les syndromes spécifiques (Asthme, Gastro-entérite), suivis des cas complexes (Grippe, Angine, Bronchite), et termine par les diagnostics d'élimination (Allergie, Rhume). Cette stratégie réduit le nombre moyen de questions de ~10 (approche naïve) à ~5-6 questions (approche optimisée).
-
-### Mécanisme de Cache et Gestion de la Mémoire
-
-Un aspect crucial du système est la **gestion du cache des réponses** pour éviter de poser plusieurs fois la même question à l'utilisateur.
-
-#### Base de Faits Dynamique
-
-```prolog
-:- dynamic connu/2.  % connu(Symptome, Reponse)
-```
-
-Le prédicat `connu/2` stocke en mémoire les réponses déjà obtenues sous la forme `connu(symptome, oui)` ou `connu(symptome, non)`.
-
-#### Algorithme de Vérification avec Cache
-
-Le prédicat `verifier_symptome/1` implémente une logique à trois clauses :
-
-```prolog
-% Cas 1: Symptôme déjà connu comme VRAI
-verifier_symptome(Symptome) :-
-    connu(Symptome, oui), !.
-
-% Cas 2: Symptôme déjà connu comme FAUX
-verifier_symptome(Symptome) :-
-    connu(Symptome, non), !, fail.
-
-% Cas 3: Symptôme non encore vérifié → poser question
-verifier_symptome(Symptome) :-
-    \+ connu(Symptome, _),
-    poser_question_et_enregistrer(Symptome),
-    connu(Symptome, oui).
-```
-
-Avantage : Quelle que soit la complexité de l'arbre de décision, chaque symptôme n'est demandé qu'une seule fois maximum.
-
-### Exemple de Trace de Raisonnement
-
-Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentiellement les hypothèses dans l'ordre optimisé :
-
-Hypothèses éliminées : covid19 (perte_odorat=non), migraine (mal_tete_intense=non), conjonctivite (secretions_purulentes=non), etc.
-
-Hypothèse validée - Grippe (R11) :
-
-- syndrome_respiratoire ✓ (R2 : fievre_elevee ∧ toux)
-  - Questions posées : fievre_elevee, toux
-
-- syndrome_grippal ✓ (R5 : fatigue_intense ∧ courbatures ∧ fievre_elevee)
-  - fatigue_intense=oui, courbatures=oui
-  - fievre_elevee réutilisée du cache (pas de re-question)
-
-- syndrome_febrile ✓ (R4 : fievre_elevee)
-  - fievre_elevee réutilisée du cache
-
-- ¬perte_odorat ✓ (déjà en cache=non)
-
-Résultat : DIAGNOSTIC Grippe confirmé | 7 questions posées
-
-Ce mécanisme illustre l'efficacité du backward chaining : seules les questions nécessaires sont posées, et le cache évite toute redondance.
+Un aspect crucial du système est la gestion de la mémoire pour éviter de poser plusieurs fois la même question. Étant donné que notre architecture utilise des syndromes partagés entre plusieurs maladies (par exemple, le syndrome_febrile intervient dans 4 maladies différentes, et fievre_elevee est nécessaire à 3 syndromes), le risque de redemander un symptôme déjà vérifié est élevé sans mécanisme de cache. Le système utilise donc une base de faits dynamique (le prédicat connu/2) qui stocke toutes les réponses obtenues sous la forme connu(symptome, oui) ou connu(symptome, non). Avant de poser une question, le prédicat verifier_symptome/1 consulte d'abord ce cache : si le symptôme est déjà connu comme vrai, la vérification réussit immédiatement ; si déjà connu comme faux, elle échoue sans interaction ; sinon, la question est posée et la réponse est enregistrée en mémoire. Ce mécanisme garantit que chaque symptôme n'est demandé qu'une seule fois maximum, quelle que soit la complexité de l'arbre de décision et le nombre de règles qui le référencent. Par exemple, lors du diagnostic d'une Grippe, le symptôme fievre_elevee est vérifié pour le syndrome_respiratoire (R2), puis réutilisé directement du cache pour syndrome_grippal (R5) et syndrome_febrile (R4), évitant ainsi deux questions redondantes.
 
 ## 1.5 Détails des Prédicats Utilisés dans le Code
 
@@ -306,80 +229,80 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 
 ### Prédicats du Moteur Principal (main.pl)
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `start/0` | 0 | **Point d'entrée principal** du système. Affiche la bannière d'accueil, réinitialise le cache, lance le processus de diagnostic et affiche le résultat final. |
-| `diagnostiquer/1` | 1 | **Moteur de backward chaining**. Teste séquentiellement les 10 maladies dans un ordre optimisé. Retourne la première maladie dont toutes les conditions sont satisfaites. |
-| `reinitialiser/0` | 0 | **Efface le cache** des réponses (`connu/2`) pour permettre une nouvelle session de diagnostic indépendante. |
+| Prédicat | Description |
+|:---------|:------------|
+| `start/0` | **Point d'entrée principal** du système. Affiche la bannière d'accueil, réinitialise le cache, lance le processus de diagnostic et affiche le résultat final. |
+| `diagnostiquer/1` | **Moteur de backward chaining**. Teste séquentiellement les 10 maladies dans un ordre optimisé. Retourne la première maladie dont toutes les conditions sont satisfaites. |
+| `reinitialiser/0` | **Efface le cache** des réponses (`connu/2`) pour permettre une nouvelle session de diagnostic indépendante. |
 
 **Tableau 6a** : Prédicats principaux du système (1/3).
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `verifier_symptome/1` | 1 | **Vérification de symptôme avec cache**. Trois clauses : (1) retourne succès si symptôme déjà connu=oui, (2) échoue si déjà connu=non, (3) pose question si inconnu. Évite de redemander la même question. |
-| `poser_question_et_enregistrer/1` | 1 | **Dispatch de questions**. Détecte si le symptôme fait partie d'une cascade (fièvre, toux) et déclenche la séquence appropriée, sinon pose question simple. |
-| `poser_question_simple/2` | 2 | **Question Oui/Non standard**. Affiche la question en français, propose les options 1=Oui / 2=Non, lit la réponse et la retourne. |
-| `poser_question_fievre/0` | 0 | **Gestion cascade fièvre**. Pose la question principale "Avez-vous de la fièvre?", puis si oui, pose "Est-elle élevée?". Enregistre simultanément `fievre`, `fievre_elevee` et `fievre_legere` dans le cache selon les réponses. |
-| `poser_question_toux/0` | 0 | **Gestion cascade toux**. Pose la question principale "Avez-vous de la toux?", puis si oui, pose "Est-elle productive?". Enregistre simultanément `toux` et `toux_productive` dans le cache. |
-| `lire_reponse/1` | 1 | **Lecture et validation de l'entrée utilisateur**. Utilise `get_single_char/1` pour une lecture immédiate (sans Enter). Valide que la réponse est '1' ou '2', redemande sinon. Convertit en `oui`/`non`. |
+| Prédicat | Description |
+|:---------|:------------|
+| `verifier_symptome/1` | **Vérification de symptôme avec cache**. Trois clauses : (1) retourne succès si symptôme déjà connu=oui, (2) échoue si déjà connu=non, (3) pose question si inconnu. Évite de redemander la même question. |
+| `poser_question_et_enregistrer/1` | **Dispatch de questions**. Détecte si le symptôme fait partie d'une cascade (fièvre, toux) et déclenche la séquence appropriée, sinon pose question simple. |
+| `poser_question_simple/2` | **Question Oui/Non standard**. Affiche la question en français, propose les options 1=Oui / 2=Non, lit la réponse et la retourne. |
+| `poser_question_fievre/0` | **Gestion cascade fièvre**. Pose la question principale "Avez-vous de la fièvre?", puis si oui, pose "Est-elle élevée?". Enregistre simultanément `fievre`, `fievre_elevee` et `fievre_legere` dans le cache selon les réponses. |
+| `poser_question_toux/0` | **Gestion cascade toux**. Pose la question principale "Avez-vous de la toux?", puis si oui, pose "Est-elle productive?". Enregistre simultanément `toux` et `toux_productive` dans le cache. |
+| `lire_reponse/1` | **Lecture et validation de l'entrée utilisateur**. Utilise `get_single_char/1` pour une lecture immédiate (sans Enter). Valide que la réponse est '1' ou '2', redemande sinon. Convertit en `oui`/`non`. |
 
 **Tableau 6b** : Prédicats de vérification et d'interrogation (2/3).
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `afficher_diagnostic/1` | 1 | **Affichage du diagnostic final**. Formate et affiche le nom de la maladie en français avec bannière, puis appelle `afficher_recommandations/1`. |
-| `afficher_recommandations/1` | 1 | **Affichage des recommandations médicales**. Récupère la liste de recommandations depuis `recommandation/2` et l'affiche formatée sous forme de liste à puces. |
-| `afficher_liste_recommandations/1` | 1 | **Affichage itératif de liste**. Prédicat récursif qui affiche chaque recommandation précédée d'un tiret. |
-| `collecter_syndromes/1` | 1 | **Collecte des syndromes détectés**. Utilise `findall/3` pour identifier tous les syndromes qui sont actuellement vrais (utilisé pour debug/trace, non affiché par défaut). |
-| `afficher_aucun_diagnostic/0` | 0 | **Message d'échec diagnostique**. Affiché si aucune des 10 maladies ne correspond aux symptômes fournis. Recommande une consultation médicale. |
+| Prédicat | Description |
+|:---------|:------------|
+| `afficher_diagnostic/1` | **Affichage du diagnostic final**. Formate et affiche le nom de la maladie en français avec bannière, puis appelle `afficher_recommandations/1`. |
+| `afficher_recommandations/1` | **Affichage des recommandations médicales**. Récupère la liste de recommandations depuis `recommandation/2` et l'affiche formatée sous forme de liste à puces. |
+| `afficher_liste_recommandations/1` | **Affichage itératif de liste**. Prédicat récursif qui affiche chaque recommandation précédée d'un tiret. |
+| `collecter_syndromes/1` | **Collecte des syndromes détectés**. Utilise `findall/3` pour identifier tous les syndromes qui sont actuellement vrais (utilisé pour debug/trace, non affiché par défaut). |
+| `afficher_aucun_diagnostic/0` | **Message d'échec diagnostique**. Affiché si aucune des 10 maladies ne correspond aux symptômes fournis. Recommande une consultation médicale. |
 
 **Tableau 6c** : Prédicats d'affichage des résultats (3/3).
 
 ### Prédicats de Traduction (main.pl)
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `traduire_symptome/2` | 2 | **Mapping Prolog → Français pour symptômes**. Base de 21 faits associant chaque atome Prolog (ex: `perte_odorat`) à sa question en français (ex: "perdu l'odorat ou le goût"). Format sans accents pour compatibilité. |
-| `traduire_maladie/2` | 2 | **Mapping Prolog → Français pour maladies**. Base de 10 faits associant chaque maladie Prolog (ex: `covid19`) à son nom français (ex: "COVID-19"). |
-| `traduire_syndrome/2` | 2 | **Mapping Prolog → Français pour syndromes**. Base de 8 faits associant chaque syndrome Prolog (ex: `syndrome_respiratoire`) à son nom français (ex: "Syndrome respiratoire"). |
+| Prédicat | Description |
+|:---------|:------------|
+| `traduire_symptome/2` | **Mapping Prolog → Français pour symptômes**. Base de 21 faits associant chaque atome Prolog (ex: `perte_odorat`) à sa question en français (ex: "perdu l'odorat ou le goût"). Format sans accents pour compatibilité. |
+| `traduire_maladie/2` | **Mapping Prolog → Français pour maladies**. Base de 10 faits associant chaque maladie Prolog (ex: `covid19`) à son nom français (ex: "COVID-19"). |
+| `traduire_syndrome/2` | **Mapping Prolog → Français pour syndromes**. Base de 8 faits associant chaque syndrome Prolog (ex: `syndrome_respiratoire`) à son nom français (ex: "Syndrome respiratoire"). |
 
 **Tableau 7** : Prédicats de traduction français.
 
 ### Prédicats de la Base de Connaissances (base_connaissances.pl)
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `syndrome_respiratoire/0` | 0 | **Déduction syndrome respiratoire**. 3 clauses alternatives (R1, R2, R3) : fièvre+toux (légère ou élevée) OU nez_bouché+gorge_irritée. |
-| `syndrome_febrile/0` | 0 | **Déduction syndrome fébrile**. 1 clause (R4) : fièvre_élevée suffit (règle simplifiée). |
-| `syndrome_grippal/0` | 0 | **Déduction syndrome grippal**. 1 clause (R5) : fatigue_intense ∧ courbatures ∧ fièvre_élevée. |
-| `syndrome_allergique/0` | 0 | **Déduction syndrome allergique**. 1 clause (R6) : éternuements suffisent (règle simplifiée). |
-| `syndrome_oculaire/0` | 0 | **Déduction syndrome oculaire**. 1 clause (R7) : yeux_rouges ∧ yeux_qui_piquent. |
-| `syndrome_digestif/0` | 0 | **Déduction syndrome digestif**. 1 clause (R8) : diarrhée ∧ vomissements. |
-| `syndrome_neurologique/0` | 0 | **Déduction syndrome neurologique**. 1 clause (R9) : mal_tête_intense ∧ photophobie. |
-| `syndrome_orl/0` | 0 | **Déduction syndrome ORL**. 1 clause (R10) : mal_gorge_intense suffit (règle simplifiée). |
+| Prédicat | Description |
+|:---------|:------------|
+| `syndrome_respiratoire/0` | **Déduction syndrome respiratoire**. 3 clauses alternatives (R1, R2, R3) : fièvre+toux (légère ou élevée) OU nez_bouché+gorge_irritée. |
+| `syndrome_febrile/0` | **Déduction syndrome fébrile**. 1 clause (R4) : fièvre_élevée suffit (règle simplifiée). |
+| `syndrome_grippal/0` | **Déduction syndrome grippal**. 1 clause (R5) : fatigue_intense ∧ courbatures ∧ fièvre_élevée. |
+| `syndrome_allergique/0` | **Déduction syndrome allergique**. 1 clause (R6) : éternuements suffisent (règle simplifiée). |
+| `syndrome_oculaire/0` | **Déduction syndrome oculaire**. 1 clause (R7) : yeux_rouges ∧ yeux_qui_piquent. |
+| `syndrome_digestif/0` | **Déduction syndrome digestif**. 1 clause (R8) : diarrhée ∧ vomissements. |
+| `syndrome_neurologique/0` | **Déduction syndrome neurologique**. 1 clause (R9) : mal_tête_intense ∧ photophobie. |
+| `syndrome_orl/0` | **Déduction syndrome ORL**. 1 clause (R10) : mal_gorge_intense suffit (règle simplifiée). |
 
 **Tableau 8** : Prédicats de déduction des syndromes (Règles R1-R10).
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `grippe/0` | 0 | **Règle R11**. Diagnostic Grippe : syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ ¬perte_odorat. |
-| `covid19/0` | 0 | **Règle R12**. Diagnostic COVID-19 : perte_odorat ∧ syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile. Discriminant unique en premier pour optimisation. |
-| `bronchite/0` | 0 | **Règle R13**. Diagnostic Bronchite : syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive. |
-| `rhume/0` | 0 | **Règle R14**. Diagnostic Rhume : syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal. |
-| `angine/0` | 0 | **Règle R15**. Diagnostic Angine : syndrome_orl ∧ syndrome_fébrile. |
-| `allergie/0` | 0 | **Règle R16**. Diagnostic Allergie saisonnière : syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires. |
-| `asthme/0` | 0 | **Règle R17**. Diagnostic Asthme : syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires. |
-| `migraine/0` | 0 | **Règle R18**. Diagnostic Migraine : syndrome_neurologique. |
-| `gastro_enterite/0` | 0 | **Règle R19**. Diagnostic Gastro-entérite : syndrome_digestif ∧ syndrome_fébrile. |
-| `conjonctivite/0` | 0 | **Règle R20**. Diagnostic Conjonctivite : syndrome_oculaire ∧ sécrétions_purulentes. |
+| Prédicat | Description |
+|:---------|:------------|
+| `grippe/0` | **Règle R11**. Diagnostic Grippe : syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ ¬perte_odorat. |
+| `covid19/0` | **Règle R12**. Diagnostic COVID-19 : perte_odorat ∧ syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile. Discriminant unique en premier pour optimisation. |
+| `bronchite/0` | **Règle R13**. Diagnostic Bronchite : syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive. |
+| `rhume/0` | **Règle R14**. Diagnostic Rhume : syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal. |
+| `angine/0` | **Règle R15**. Diagnostic Angine : syndrome_orl ∧ syndrome_fébrile. |
+| `allergie/0` | **Règle R16**. Diagnostic Allergie saisonnière : syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires. |
+| `asthme/0` | **Règle R17**. Diagnostic Asthme : syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires. |
+| `migraine/0` | **Règle R18**. Diagnostic Migraine : syndrome_neurologique. |
+| `gastro_enterite/0` | **Règle R19**. Diagnostic Gastro-entérite : syndrome_digestif ∧ syndrome_fébrile. |
+| `conjonctivite/0` | **Règle R20**. Diagnostic Conjonctivite : syndrome_oculaire ∧ sécrétions_purulentes. |
 
 **Tableau 9** : Prédicats de diagnostic des maladies (Règles R11-R20).
 
 ### Prédicat de Recommandations (base_connaissances.pl)
 
-| Prédicat | Arité | Description |
-|:---------|:-----:|:------------|
-| `recommandation/2` | 2 | **Base de recommandations médicales**. 10 faits associant chaque maladie à une liste de 4-5 conseils pratiques (repos, hydratation, consultation, traitements). Format sans accents. **Attention** : informations à titre indicatif uniquement, ne remplacent pas un avis médical. |
+| Prédicat | Description |
+|:---------|:------------|
+| `recommandation/2` | **Base de recommandations médicales**. 10 faits associant chaque maladie à une liste de 4-5 conseils pratiques (repos, hydratation, consultation, traitements). Format sans accents. **Attention** : informations à titre indicatif uniquement, ne remplacent pas un avis médical. |
 
 **Tableau 10** : Prédicat de recommandations médicales.
 
@@ -436,8 +359,11 @@ Votre reponse: 1
 === DIAGNOSTIC ===
 =======================================================
 
-Diagnostic: Migraine, car vous presentez un mal de tete intense
-et une photophobie.
+Migraine
+
+Base sur les symptomes suivants:
+  - Mal de tete intense
+  - Sensibilite a la lumiere (photophobie)
 
 -------------------------------------------------------
 RECOMMANDATIONS:
@@ -517,8 +443,14 @@ Votre reponse: 1
 === DIAGNOSTIC ===
 =======================================================
 
-Diagnostic: COVID-19, car vous presentez une perte d'odorat, une fievre
-elevee, de la toux, une fatigue intense et des courbatures.
+COVID-19
+
+Base sur les symptomes suivants:
+  - Perte de gout ou odorat
+  - Fievre elevee (>38.5°C)
+  - Toux
+  - Fatigue intense
+  - Courbatures
 
 -------------------------------------------------------
 RECOMMANDATIONS:
@@ -608,8 +540,11 @@ Votre reponse: 1
 === DIAGNOSTIC ===
 =======================================================
 
-Diagnostic: Angine, car vous presentez une fievre elevee
-et un mal de gorge intense.
+Angine
+
+Base sur les symptomes suivants:
+  - Fievre elevee (>38.5°C)
+  - Mal de gorge intense
 
 -------------------------------------------------------
 RECOMMANDATIONS:
@@ -629,68 +564,28 @@ Le système teste d'abord six hypothèses à discriminants uniques (covid19, mig
 
 **Règles activées** : R10 (ORL) + R4 (fébrile) → R15 (Angine)
 
----
-
-## Synthèse Comparative des Trois Scénarios
-
-| Critère | Migraine | COVID-19 | Angine |
-|:--------|:--------:|:--------:|:------:|
-| **Nombre de questions** | 3 | 7 | 9 |
-| **Dont cascades** | 0 | 2 | 1 |
-| **Syndromes déduits** | 1 | 3 | 2 |
-| **Règles activées** | 2 | 4 | 3 |
-| **Position test** | 2ème | 1ère | 7ème |
-| **Efficacité** | Optimale | Moyenne | Typique |
-| **Type de pathologie** | Neurologique | Respiratoire complexe | ORL + Fébrile |
-
-**Tableau 12** : Comparaison des trois scénarios de test.
-
-**Observations générales :**
-
-1. **Variabilité du nombre de questions** : Entre 3 (optimal) et 9 (cas d'éliminations multiples), démontrant l'adaptabilité du backward chaining
-
-2. **Impact de l'ordre optimisé** : Les maladies testées en premier (covid19, migraine) nécessitent moins de questions que celles testées plus tard (angine)
-
-3. **Efficacité du cache** : Aucune question n'est jamais posée deux fois, même dans les scénarios complexes
-
-4. **Gestion des cascades** : Les sous-questions (fièvre élevée, toux productive) permettent d'affiner le diagnostic sans alourdir l'arborescence
-
-5. **Validation complète** : Les trois scénarios couvrent différentes branches de l'arbre de décision, démontrant la robustesse du système sur des profils cliniques variés
-
 \newpage
 
 # Conclusion
 
-Ce projet a permis de concevoir et d'implémenter avec succès un système expert de diagnostic médical fonctionnel, reposant sur une architecture hiérarchique à trois niveaux et utilisant le chaînage arrière comme stratégie d'inférence. Le système développé répond pleinement aux objectifs pédagogiques fixés, en démontrant les principes fondamentaux des systèmes experts : modélisation des connaissances sous forme de règles logiques, mécanisme de raisonnement automatique et interface d'interaction avec l'utilisateur.
+Ce projet a permis de concevoir et d'implémenter avec succès un système expert de diagnostic médical fonctionnel, reposant sur une architecture hiérarchique à trois niveaux. Le système répond pleinement aux objectifs pédagogiques fixés, en démontrant les principes fondamentaux des systèmes experts : modélisation des connaissances sous forme de règles logiques, mécanisme de raisonnement automatique et interface d'interaction avec l'utilisateur.
 
 ## Synthèse des Réalisations
 
-La base de connaissances comprend **20 règles d'inférence** structurées, permettant de diagnostiquer **10 maladies courantes** à partir de **23 symptômes** regroupés en **8 syndromes intermédiaires**.
+La base de connaissances comprend 20 règles d'inférence structurées, permettant de diagnostiquer 10 maladies courantes à partir de 23 symptômes regroupés en 8 syndromes intermédiaires.
 
-Le moteur d'inférence implémenté utilise efficacement le **backward chaining** avec un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à **3-9 questions** selon la complexité du cas. Le mécanisme de **cache des réponses** assure une expérience utilisateur fluide et cohérente en évitant de poser deux fois la même question.
+Le moteur d'inférence implémenté utilise un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à 3-9 questions selon la complexité du cas. Le mécanisme de cache des réponses assure une expérience utilisateur fluide et cohérente en évitant de poser deux fois la même question.
 
 Les tests réalisés sur trois scénarios cliniques variés (Migraine, COVID-19, Angine) ont démontré la robustesse et la fiabilité du système, avec des diagnostics corrects accompagnés de recommandations médicales adaptées.
 
 ## Limites Identifiées
 
-Malgré ses qualités techniques, le système présente plusieurs limites importantes qu'il convient de souligner. D'un point de vue médical, la **simplification diagnostique** est excessive : les maladies réelles nécessitent des examens cliniques approfondis, des analyses biologiques et l'expertise d'un professionnel de santé, éléments absents de notre système. De plus, l'**absence de gestion des comorbidités** limite la réalité clinique où plusieurs pathologies peuvent coexister. Le format **questions binaires** (Oui/Non) ne permet pas de capturer les nuances importantes comme l'intensité des symptômes, leur durée d'évolution ou leur caractère intermittent. Les **recommandations génériques** fournies ne tiennent pas compte du profil individuel du patient (âge, antécédents, traitements en cours).
-
-Sur le plan technique, la **base de connaissances restreinte** à 10 maladies constitue une limitation majeure, alors que le diagnostic différentiel d'une simple fièvre peut impliquer des dizaines de pathologies. Le **système statique** ne s'améliore pas avec l'usage, contrairement aux systèmes modernes utilisant le machine learning. L'**absence de gestion de l'incertitude** (coefficients de confiance, probabilités bayésiennes) rend impossible l'expression de diagnostics différentiels pondérés. Le système ne dispose pas de **mécanisme d'explication** permettant d'expliquer à l'utilisateur pourquoi certaines questions sont posées ou comment le diagnostic a été établi.
-
-Enfin, l'**interface textuelle austère** limite l'accessibilité, l'absence de **persistance des données** empêche le suivi longitudinal des patients, et les **règles n'ont pas été validées** par des professionnels de santé, demeurant des approximations basées sur des connaissances générales.
+Le système présente plusieurs limites inhérentes à sa nature pédagogique. La base de connaissances restreinte (10 maladies, 20 règles) ne reflète pas la complexité diagnostique réelle où des dizaines de pathologies peuvent partager des symptômes similaires. Le format questions binaires (Oui/Non) ne capture pas les nuances cliniques importantes comme l'intensité, la durée ou l'évolution des symptômes. L'absence de gestion de l'incertitude empêche l'expression de diagnostics différentiels pondérés par des coefficients de confiance. Enfin, les règles n'ont pas été validées par des professionnels de santé et les recommandations fournies demeurent génériques, ne tenant pas compte du profil individuel du patient.
 
 ## Pistes d'Amélioration
 
-Plusieurs pistes d'amélioration peuvent être envisagées pour renforcer le système. À court terme, l'implémentation de la **logique floue** permettrait d'associer des degrés de certitude aux diagnostics (ex: "Grippe 85%"), tandis que l'**élargissement de la base de connaissances** à 20-30 maladies couvrirait davantage de spécialités médicales. L'ajout de **questions graduées** (échelles 0-10 pour l'intensité, durées précises) et d'un **historique patient** persistant améliorerait significativement la précision diagnostique et permettrait le suivi longitudinal. Un **module explicatif** montrant l'arbre de décision parcouru renforcerait la transparence du raisonnement.
-
-À moyen terme, la combinaison de **chaînage mixte** (forward et backward) permettrait de gérer des diagnostics différentiels multiples, tandis que l'intégration d'**apprentissage automatique** (réseaux bayésiens, arbres de décision) ajusterait dynamiquement les poids des règles selon des données cliniques réelles. Le développement d'une **interface web/mobile moderne** améliorerait l'accessibilité, et la connexion à des **ontologies médicales standardisées** (SNOMED-CT, CIM-10) garantirait l'interopérabilité avec les systèmes de santé existants. La **gestion avancée des comorbidités** permettrait de retourner plusieurs diagnostics simultanés avec leurs interactions.
-
-À plus long terme, une **validation clinique rigoureuse** en collaboration avec des professionnels de santé s'impose, incluant des tests sur corpus réels et le calcul de métriques de performance (sensibilité, spécificité, VPP, VPN). L'**intégration avec les dossiers médicaux électroniques** (DME), l'accès aux résultats de laboratoire et la prescription assistée transformeraient le système en véritable outil d'aide à la décision clinique. Enfin, la **détection automatique des urgences** (red flags) avec recommandations d'orientation selon la gravité, et la **personnalisation avancée** tenant compte du profil complet du patient (âge, antécédents, traitements en cours, allergies) constitueraient des évolutions majeures vers un système cliniquement opérationnel.
+Plusieurs améliorations significatives pourraient renforcer le système. L'implémentation de la logique floue permettrait d'associer des degrés de certitude aux diagnostics plutôt qu'un résultat binaire. L'ajout de questions graduées (échelles d'intensité, durées précises) capturerait mieux les nuances cliniques. Un module explicatif montrant l'arbre de décision parcouru renforcerait la transparence du raisonnement pour l'utilisateur. L'intégration d'apprentissage automatique (réseaux bayésiens) permettrait d'ajuster dynamiquement les poids des règles selon des données cliniques réelles. Enfin, une validation clinique rigoureuse en collaboration avec des professionnels de santé s'imposerait avant toute utilisation réelle, incluant des tests sur corpus réels et le calcul de métriques de performance (sensibilité, spécificité).
 
 ## Réflexion Finale
 
-Ce projet a été une excellente introduction aux systèmes experts et à leurs applications dans le domaine médical. Il a permis de comprendre concrètement les défis de la **représentation des connaissances**, de la **modélisation du raisonnement expert** et de la **gestion de l'incertitude**.
-
-Bien que notre système soit volontairement simplifié à des fins pédagogiques, il illustre les principes fondamentaux qui sous-tendent les véritables systèmes d'aide à la décision clinique utilisés dans les hôpitaux modernes. Ces systèmes, nettement plus sophistiqués, intègrent des dizaines de milliers de règles, des bases de données médicales massives et des algorithmes d'apprentissage profond, mais reposent sur les mêmes fondations logiques que notre implémentation.
-
-L'intelligence artificielle médicale est un domaine en pleine expansion, avec des perspectives prometteuses pour améliorer l'accès aux soins, réduire les erreurs diagnostiques et assister les professionnels de santé. Toutefois, il est crucial de maintenir l'humain au centre du processus décisionnel : ces outils doivent être conçus comme des **assistants** augmentant les capacités du médecin, jamais comme des **substituts** à son expertise et à son jugement clinique.
+Ce projet a permis de comprendre concrètement les défis de la représentation des connaissances et de la modélisation du raisonnement expert. Bien que volontairement simplifié à des fins pédagogiques, notre système illustre les principes fondamentaux qui sous-tendent les véritables systèmes d'aide à la décision clinique utilisés dans les hôpitaux modernes. L'intelligence artificielle médicale offre des perspectives prometteuses pour améliorer l'accès aux soins et assister les professionnels de santé. Toutefois, il est crucial de maintenir l'humain au centre du processus décisionnel : ces outils doivent être conçus comme des assistants augmentant les capacités du médecin, jamais comme des substituts à son expertise et à son jugement clinique.
