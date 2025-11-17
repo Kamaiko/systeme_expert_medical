@@ -328,7 +328,7 @@ Diagnostic: Asthme
 
 ---
 
-## Scénario 6: Gastro-entérite (5-6 questions)
+## Scénario 6: Gastro-entérite (8 questions)
 
 ### Profil Patient
 Patient avec diarrhée, vomissements et fièvre.
@@ -341,34 +341,43 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 2 (Non)
 
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
-→ Réponse: 2 (Non)
-
-Question 5: Avez-vous de la diarrhée?
-→ Réponse: 1 (Oui)
-
-Question 6: Avez-vous des vomissements?
-→ Réponse: 1 (Oui)
-
-Question 7: Avez-vous de la fièvre?
+Question 4: Avez-vous de la fièvre?
 → Réponse: 1 (Oui)
   → Sous-question: Est-elle élevée (>38.5°C)?
   → Réponse: 1 (Oui)
+
+Question 5: Avez-vous de la toux?
+→ Réponse: 2 (Non)
+
+Question 6: Avez-vous de la diarrhée?
+→ Réponse: 1 (Oui)
+
+Question 7: Avez-vous des vomissements?
+→ Réponse: 1 (Oui)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- diarrhee = oui
-- vomissements = oui
-- fievre_elevee = oui
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → yeux_rouges = non → Rejetée
+4. asthme → syndrome_respiratoire (R2: fievre_elevee=oui, toux=non) échoue → Rejetée
+5. gastro_enterite → Testée:
 
-Syndromes déduits:
-- R8: diarrhee ∧ vomissements → syndrome_digestif
-- R4: fievre_elevee → syndrome_febrile
+Condition 1: syndrome_digestif
+- R8: diarrhee ∧ vomissements
+  - diarrhee = oui (Q6)
+  - vomissements = oui (Q7)
+- syndrome_digestif = VRAI ✓
+
+Condition 2: syndrome_febrile
+- R4: fievre_elevee
+  - fievre_elevee = oui (Q4, en cache)
+- syndrome_febrile = VRAI ✓
 
 Règle maladie activée:
 - R19: syndrome_digestif ∧ syndrome_febrile → gastro_enterite
@@ -384,7 +393,7 @@ Diagnostic: Gastro-entérite
 
 ---
 
-## Scénario 7: Angine (5-6 questions)
+## Scénario 7: Angine (8 questions)
 
 ### Profil Patient
 Patient avec mal de gorge intense et fièvre élevée.
@@ -397,33 +406,47 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 2 (Non)
 
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
-→ Réponse: 2 (Non)
-
-Question 5: Avez-vous de la diarrhée?
-→ Réponse: 2 (Non)
-
-Question 6: Avez-vous de la fièvre?
+Question 4: Avez-vous de la fièvre?
 → Réponse: 1 (Oui)
   → Sous-question: Est-elle élevée (>38.5°C)?
   → Réponse: 1 (Oui)
 
-Question 7: Avez-vous un mal de gorge intense?
+Question 5: Avez-vous de la toux?
+→ Réponse: 2 (Non)
+
+Question 6: Avez-vous eternue frequemment?
+→ Réponse: 2 (Non)
+
+Question 7: Avez-vous de la diarrhée?
+→ Réponse: 2 (Non)
+
+Question 8: Avez-vous un mal de gorge intense?
 → Réponse: 1 (Oui)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- mal_gorge_intense = oui
-- fievre_elevee = oui
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → yeux_rouges = non → Rejetée
+4. asthme → syndrome_respiratoire (R2: fievre_elevee=oui, toux=non) échoue → Rejetée
+5. gastro_enterite → syndrome_digestif (diarrhee=non) échoue → Rejetée
+6. grippe → syndrome_allergique (eternuement=non) échoue → Rejetée
+7. angine → Testée:
 
-Syndromes déduits:
-- R10: mal_gorge_intense → syndrome_orl
-- R4: fievre_elevee → syndrome_febrile
+Condition 1: syndrome_orl
+- R10: mal_gorge_intense
+  - mal_gorge_intense = oui (Q8)
+- syndrome_orl = VRAI ✓
+
+Condition 2: syndrome_febrile
+- R4: fievre_elevee
+  - fievre_elevee = oui (Q4, en cache)
+- syndrome_febrile = VRAI ✓
 
 Règle maladie activée:
 - R15: syndrome_orl ∧ syndrome_febrile → angine
@@ -439,7 +462,7 @@ Diagnostic: Angine
 
 ---
 
-## Scénario 8: Bronchite (6-7 questions)
+## Scénario 8: Bronchite (9 questions)
 
 ### Profil Patient
 Patient avec toux productive et fièvre légère.
@@ -452,44 +475,53 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 2 (Non)
 
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
-→ Réponse: 2 (Non)
-
-Question 5: Avez-vous de la diarrhée?
-→ Réponse: 2 (Non)
-
-Question 6: Avez-vous de la fièvre?
+Question 4: Avez-vous de la fièvre?
 → Réponse: 1 (Oui)
   → Sous-question: Est-elle élevée (>38.5°C)?
   → Réponse: 2 (Non) [fievre_legere = oui]
 
-Question 7: Avez-vous de la toux?
+Question 5: Avez-vous de la toux?
 → Réponse: 1 (Oui)
   → Sous-question: Est-elle productive (avec crachats)?
   → Réponse: 1 (Oui)
 
-Question 8: Avez-vous le nez bouché?
-→ Réponse: 1 (Oui)
+Question 6: Avez-vous eternue frequemment?
+→ Réponse: 2 (Non)
 
-Question 9: Avez-vous la gorge irritée?
-→ Réponse: 1 (Oui)
+Question 7: Avez-vous de la diarrhée?
+→ Réponse: 2 (Non)
+
+Question 8: Ressentez-vous une fatigue intense?
+→ Réponse: 2 (Non)
+
+Question 9: Avez-vous un mal de gorge intense?
+→ Réponse: 2 (Non)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- fievre_legere = oui
-- toux = oui
-- toux_productive = oui
-- nez_bouche = oui
-- gorge_irritee = oui
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → yeux_rouges = non → Rejetée
+4. asthme → syndrome_respiratoire (R1: fievre_legere=oui, toux=oui) ✓, mais syndrome_allergique (eternuement=non) échoue → Rejetée
+5. gastro_enterite → syndrome_digestif (diarrhee=non) échoue → Rejetée
+6. grippe → syndrome_grippal (fatigue_intense=non) échoue → Rejetée
+7. angine → syndrome_orl (mal_gorge_intense=non) échoue → Rejetée
+8. bronchite → Testée:
 
-Syndromes déduits:
-- R1: fievre_legere ∧ toux → syndrome_respiratoire
-- R3: nez_bouche ∧ gorge_irritee → syndrome_respiratoire (alternative)
+Condition 1: syndrome_respiratoire
+- R1: fievre_legere ∧ toux (en cache via asthme)
+- syndrome_respiratoire = VRAI ✓
+
+Condition 2: fievre_legere
+- fievre_legere = oui (Q4, en cache)
+
+Condition 3: toux_productive
+- toux_productive = oui (Q5, en cache)
 
 Règle maladie activée:
 - R13: syndrome_respiratoire ∧ fievre_legere ∧ toux_productive → bronchite
@@ -505,7 +537,7 @@ Diagnostic: Bronchite
 
 ---
 
-## Scénario 9: Allergie Saisonnière (6-7 questions)
+## Scénario 9: Allergie Saisonnière (12 questions)
 
 ### Profil Patient
 Patient avec éternuements, yeux irrités, SANS difficultés respiratoires.
@@ -518,39 +550,60 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
-→ Réponse: 2 (Non)
-
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
-→ Réponse: 2 (Non)
-
-Question 5: Avez-vous de la diarrhée?
-→ Réponse: 2 (Non)
-
-Question 6: Avez-vous eternue frequemment?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 1 (Oui)
 
-Question 7: Avez-vous les yeux rouges?
+Question 4: Avez-vous les yeux qui piquent ou qui démangent?
 → Réponse: 1 (Oui)
 
-Question 8: Avez-vous les yeux qui piquent ou qui démangent?
+Question 5: Avez-vous des sécrétions purulentes aux yeux?
+→ Réponse: 2 (Non)
+
+Question 6: Avez-vous de la fièvre?
+→ Réponse: 2 (Non)
+
+Question 7: Avez-vous le nez bouché?
+→ Réponse: 2 (Non)
+
+Question 8: Avez-vous de la diarrhée?
+→ Réponse: 2 (Non)
+
+Question 9: Avez-vous un mal de gorge intense?
+→ Réponse: 2 (Non)
+
+Question 10: Avez-vous eternue frequemment?
 → Réponse: 1 (Oui)
 
-Question 9: Avez-vous des difficultés à respirer?
+Question 11: Avez-vous des difficultés à respirer?
 → Réponse: 2 (Non)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- eternuement = oui
-- yeux_rouges = oui
-- yeux_qui_piquent = oui
-- difficultes_respiratoires = non
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → syndrome_oculaire (yeux_rouges=oui, yeux_qui_piquent=oui) ✓, mais secretions_purulentes = non → Rejetée
+4. asthme → syndrome_respiratoire (R1/R2: fievre=non échoue, R3: nez_bouche=non) échoue → Rejetée
+5. gastro_enterite → syndrome_digestif (diarrhee=non) échoue → Rejetée
+6. grippe → syndrome_respiratoire (échoue, en cache) → Rejetée
+7. angine → syndrome_orl (mal_gorge_intense=non) échoue → Rejetée
+8. bronchite → syndrome_respiratoire (échoue, en cache) → Rejetée
+9. allergie → Testée:
 
-Syndromes déduits:
-- R6: eternuement → syndrome_allergique
-- R7: yeux_rouges ∧ yeux_qui_piquent → syndrome_oculaire
+Condition 1: syndrome_allergique
+- R6: eternuement
+  - eternuement = oui (Q10)
+- syndrome_allergique = VRAI ✓
+
+Condition 2: syndrome_oculaire
+- R7: yeux_rouges ∧ yeux_qui_piquent
+  - yeux_rouges = oui (Q3, en cache)
+  - yeux_qui_piquent = oui (Q4, en cache)
+- syndrome_oculaire = VRAI ✓
+
+Condition 3: ¬difficultes_respiratoires
+- difficultes_respiratoires = non (Q11)
 
 Règle maladie activée:
 - R16: syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultes_respiratoires → allergie
@@ -566,7 +619,7 @@ Diagnostic: Allergie saisonnière
 
 ---
 
-## Scénario 10: Rhume (7-8 questions)
+## Scénario 10: Rhume (12 questions)
 
 ### Profil Patient
 Patient avec symptômes respiratoires légers, SANS fièvre élevée ni fatigue intense.
@@ -579,45 +632,58 @@ Question 1: Avez-vous perdu l'odorat ou le goût?
 Question 2: Avez-vous un mal de tête intense?
 → Réponse: 2 (Non)
 
-Question 3: Avez-vous des sécrétions purulentes aux yeux?
+Question 3: Avez-vous les yeux rouges?
 → Réponse: 2 (Non)
 
-Question 4: Avez-vous un sifflement respiratoire (wheezing)?
+Question 4: Avez-vous de la fièvre?
 → Réponse: 2 (Non)
 
-Question 5: Avez-vous de la diarrhée?
-→ Réponse: 2 (Non)
-
-Question 6: Avez-vous eternue frequemment?
-→ Réponse: 2 (Non)
-
-Question 7: Avez-vous de la fièvre?
-→ Réponse: 2 (Non) [fievre_elevee = non, fievre_legere = non]
-
-Question 8: Avez-vous le nez bouché?
+Question 5: Avez-vous le nez bouché?
 → Réponse: 1 (Oui)
 
-Question 9: Avez-vous la gorge irritée?
+Question 6: Avez-vous la gorge irritée?
 → Réponse: 1 (Oui)
 
-Question 10: Ressentez-vous une fatigue intense?
+Question 7: Avez-vous eternue frequemment?
+→ Réponse: 2 (Non)
+
+Question 8: Avez-vous de la diarrhée?
+→ Réponse: 2 (Non)
+
+Question 9: Ressentez-vous une fatigue intense?
+→ Réponse: 2 (Non)
+
+Question 10: Avez-vous un mal de gorge intense?
 → Réponse: 2 (Non)
 ```
 
 ### Déduction Interne
 ```
-Symptômes confirmés:
-- nez_bouche = oui
-- gorge_irritee = oui
-- fievre_elevee = non
-- fatigue_intense = non
+Hypothèses testées et éliminées:
+1. covid19 → perte_odorat = non → Rejetée
+2. migraine → mal_tete_intense = non → Rejetée
+3. conjonctivite → yeux_rouges = non → Rejetée
+4. asthme → syndrome_respiratoire (R1/R2: fievre=non échoue, R3: nez_bouche=oui, gorge_irritee=oui) ✓, syndrome_allergique (eternuement=non) échoue → Rejetée
+5. gastro_enterite → syndrome_digestif (diarrhee=non) échoue → Rejetée
+6. grippe → syndrome_respiratoire (en cache) ✓, syndrome_grippal (fatigue_intense=non) échoue → Rejetée
+7. angine → syndrome_orl (mal_gorge_intense=non) échoue → Rejetée
+8. bronchite → syndrome_respiratoire (en cache) ✓, fievre_legere (=non, en cache) échoue → Rejetée
+9. allergie → syndrome_allergique (eternuement=non, en cache) échoue → Rejetée
+10. rhume → Testé:
 
-Syndromes déduits:
-- R3: nez_bouche ∧ gorge_irritee → syndrome_respiratoire
+Condition 1: syndrome_respiratoire
+- R3: nez_bouche ∧ gorge_irritee (en cache via asthme)
+- syndrome_respiratoire = VRAI ✓
 
-Vérification négations:
-- syndrome_febrile = FAUX (car fievre_elevee = non)
-- syndrome_grippal = FAUX (car fatigue_intense = non)
+Condition 2: ¬syndrome_febrile
+- syndrome_febrile teste fievre_elevee (en cache=non)
+- syndrome_febrile = FAUX
+- ¬syndrome_febrile = VRAI ✓
+
+Condition 3: ¬syndrome_grippal
+- syndrome_grippal teste fatigue_intense (en cache=non)
+- syndrome_grippal = FAUX
+- ¬syndrome_grippal = VRAI ✓
 
 Règle maladie activée:
 - R14: syndrome_respiratoire ∧ ¬syndrome_febrile ∧ ¬syndrome_grippal → rhume
