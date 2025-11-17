@@ -1,49 +1,14 @@
 /**
  * MAIN - Système Expert de Diagnostic Médical
  *
- * @author  Équipe TP2 - IFT2003
- * @version 1.0
- * @date    Novembre 2025
+ * Moteur d'inférence (backward chaining) + Interface utilisateur
+ * Équipe TP2 - IFT2003 - Novembre 2025
  *
- * @description
- * Ce module implémente le moteur d'inférence principal utilisant le chaînage
- * arrière (backward chaining) ainsi que l'interface utilisateur interactive
- * pour le système expert de diagnostic médical.
- *
- * Fonctionnalités principales:
- *   - Moteur de backward chaining pour tester les hypothèses de maladies
- *   - Gestion du cache des réponses (évite de poser 2x la même question)
- *   - Interface utilisateur en ligne de commande (Oui/Non)
- *   - Gestion de 2 cascades conditionnelles (fièvre, toux)
- *   - Traduction des symptômes, syndromes et maladies en français
- *   - Affichage des résultats avec recommandations médicales
- *
- * Prédicats principaux:
- *   - start/0              : Point d'entrée principal du système
- *   - diagnostiquer/1      : Moteur backward chaining (teste hypothèses)
- *   - verifier_symptome/1  : Vérifie un symptôme avec cache
- *   - afficher_diagnostic/1: Affiche le diagnostic et recommandations
- *
- * Ordre optimisé de test des maladies:
- *   1. covid19           (discriminant unique: perte_odorat)
- *   2. migraine          (discriminant: neurologique)
- *   3. conjonctivite     (discriminant: secretions_purulentes)
- *   4. asthme            (discriminants: wheezing + difficultes_respiratoires)
- *   5. gastro_enterite   (discriminants: digestif + febrile)
- *   6. grippe            (3 syndromes complexes)
- *   7. angine            (ORL + febrile)
- *   8. bronchite         (toux_productive + fievre_legere)
- *   9. allergie          (allergique + oculaire)
- *  10. rhume             (diagnostic par élimination)
- *
- * @remarks
- * - Charge automatiquement base_connaissances.pl
- * - Utilise get_single_char/1 pour UX optimisée (pas besoin d'Enter)
- * - Format sans accents pour compatibilité maximale
- * - Cache réponses dans base de faits dynamique connu/2
- *
- * @see base_connaissances.pl pour les 20 règles d'inférence
- * @see tests.pl pour la validation du système
+ * Fonctionnalités:
+ *   - Backward chaining avec ordre optimisé (covid19 → migraine → ... → rhume)
+ *   - Cache des réponses (évite redondances)
+ *   - 2 cascades conditionnelles (fièvre, toux)
+ *   - Affichage diagnostic avec justification des symptômes
  */
 
 % =============================================================================
@@ -337,6 +302,24 @@ collecter_syndromes(Syndromes) :-
         call(S)
     ), Syndromes).
 
+% Collecter les symptômes positifs
+collecter_symptomes_positifs(Symptomes) :-
+    findall(S, connu(S, oui), Symptomes).
+
+% Formater la liste de symptômes en français
+formater_symptomes_justification([], "").
+formater_symptomes_justification([S], Texte) :-
+    traduire_symptome(S, TexteFrancais),
+    atom_concat(TexteFrancais, "", Texte).
+formater_symptomes_justification([S1, S2], Texte) :-
+    traduire_symptome(S1, T1),
+    traduire_symptome(S2, T2),
+    atomic_list_concat([T1, " et ", T2], Texte).
+formater_symptomes_justification([S1, S2, S3 | Rest], Texte) :-
+    traduire_symptome(S1, T1),
+    formater_symptomes_justification([S2, S3 | Rest], Reste),
+    atomic_list_concat([T1, ", ", Reste], Texte).
+
 % Afficher diagnostic final
 afficher_diagnostic(Maladie) :-
     nl,
@@ -345,7 +328,9 @@ afficher_diagnostic(Maladie) :-
     write('======================================================='), nl,
     nl,
     traduire_maladie(Maladie, NomFrancais),
-    format('Diagnostic: ~w~n', [NomFrancais]),
+    collecter_symptomes_positifs(Symptomes),
+    formater_symptomes_justification(Symptomes, Justification),
+    format('Diagnostic: ~w, car vous presentez ~w.~n', [NomFrancais, Justification]),
     nl,
     afficher_recommandations(Maladie),
     nl.
