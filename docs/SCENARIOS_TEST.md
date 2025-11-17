@@ -630,7 +630,7 @@ Diagnostic: Allergie saisonnière
 
 ---
 
-## Scénario 10: Rhume (12 questions)
+## Scénario 10: Rhume (10 questions)
 
 ### Profil Patient
 Patient avec symptômes respiratoires légers, SANS fièvre élevée ni fatigue intense.
