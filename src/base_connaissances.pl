@@ -1,8 +1,50 @@
+/**
+ * BASE DE CONNAISSANCES - Système Expert de Diagnostic Médical
+ *
+ * @author  Équipe TP2 - IFT2003
+ * @version 1.0
+ * @date    Novembre 2025
+ *
+ * @description
+ * Ce module contient la base de connaissances médicale pour un système expert
+ * de diagnostic utilisant le chaînage arrière (backward chaining). Il implémente
+ * une architecture hiérarchique à 3 niveaux pour diagnostiquer 10 maladies courantes
+ * à partir de symptômes observés.
+ *
+ * Architecture:
+ *   - NIVEAU 1: 21 symptômes de base (+ 2 cascades conditionnelles)
+ *   - NIVEAU 2: 8 syndromes intermédiaires (combinaisons de symptômes)
+ *   - NIVEAU 3: 10 maladies diagnostiquées (combinaisons de syndromes)
+ *
+ * Règles d'inférence:
+ *   - 10 règles Niveau 1→2 (Symptômes → Syndromes)
+ *   - 10 règles Niveau 2→3 (Syndromes → Maladies)
+ *   - Total: 20 règles conformes aux exigences (20-30 règles)
+ *
+ * Maladies diagnostiquées:
+ *   1. Grippe              6. Allergie saisonnière
+ *   2. COVID-19            7. Asthme
+ *   3. Bronchite           8. Migraine
+ *   4. Rhume               9. Gastro-entérite
+ *   5. Angine             10. Conjonctivite
+ *
+ * Syndromes intermédiaires:
+ *   - syndrome_respiratoire, syndrome_febrile, syndrome_grippal
+ *   - syndrome_allergique, syndrome_oculaire, syndrome_digestif
+ *   - syndrome_neurologique, syndrome_orl
+ *
+ * @remarks
+ * - Ce module est conçu pour être chargé par main.pl
+ * - Utilise le prédicat verifier_symptome/1 défini dans main.pl
+ * - Format sans accents pour compatibilité maximale
+ * - Recommandations médicales fournies à titre informatif uniquement
+ *
+ * @see main.pl pour le moteur d'inférence
+ * @see tests.pl pour la validation (18 tests unitaires)
+ */
+
 % =============================================================================
-% BASE DE CONNAISSANCES - Système Expert de Diagnostic Médical
-% =============================================================================
-% Projet: TP2 - IFT2003
-% Description: Base de règles pour le diagnostic de 10 maladies
+% Projet: TP2 - IFT2003 Intelligence Artificielle 1
 % Architecture: 3 niveaux (Symptômes → Syndromes → Maladies)
 % Total: 20 règles (10 symptômes→syndromes + 10 syndromes→maladies)
 % =============================================================================

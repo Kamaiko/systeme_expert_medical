@@ -1,8 +1,71 @@
+/**
+ * TESTS - Système Expert de Diagnostic Médical
+ *
+ * @author  Équipe TP2 - IFT2003
+ * @version 1.0
+ * @date    Novembre 2025
+ *
+ * @description
+ * Ce module contient la suite complète de tests unitaires pour valider
+ * le système expert de diagnostic médical. Il teste exhaustivement les
+ * 20 règles d'inférence (8 syndromes + 10 maladies) de manière automatisée.
+ *
+ * Couverture de tests:
+ *   - 8 tests pour les syndromes (R1-R10, incluant règles simplifiées)
+ *   - 10 tests pour les maladies (R11-R20)
+ *   - Total: 18 tests unitaires = 100% de couverture
+ *
+ * Tests de syndromes:
+ *   - test_syndrome_resp_r1      : R1 (fievre_legere + toux)
+ *   - test_syndrome_febrile      : R4 (fievre_elevee) [simplifié]
+ *   - test_syndrome_grippal      : R5 (fatigue + courbatures + fievre)
+ *   - test_syndrome_allergique   : R6 (eternuement) [simplifié]
+ *   - test_syndrome_oculaire     : R7 (yeux_rouges + yeux_qui_piquent)
+ *   - test_syndrome_digestif     : R8 (diarrhee + vomissements)
+ *   - test_syndrome_neuro        : R9 (mal_tete_intense + photophobie)
+ *   - test_syndrome_orl          : R10 (mal_gorge_intense) [simplifié]
+ *
+ * Tests de maladies:
+ *   - test_maladie_grippe        : R11 (3 syndromes + ¬perte_odorat)
+ *   - test_maladie_covid19       : R12 (3 syndromes + perte_odorat)
+ *   - test_maladie_bronchite     : R13 (respiratoire + cascades)
+ *   - test_maladie_rhume         : R14 (respiratoire + négations)
+ *   - test_maladie_angine        : R15 (ORL + febrile)
+ *   - test_maladie_allergie      : R16 (allergique + oculaire)
+ *   - test_maladie_asthme        : R17 (respiratoire + allergique + discriminants)
+ *   - test_maladie_migraine      : R18 (neurologique)
+ *   - test_maladie_gastro        : R19 (digestif + febrile)
+ *   - test_maladie_conjonctivite : R20 (oculaire + secretions_purulentes)
+ *
+ * Prédicats principaux:
+ *   - test_all/0          : Lance tous les tests unitaires (18 tests)
+ *   - test_migraine/0     : Test interactif guidé pour migraine
+ *   - test_covid/0        : Test interactif guidé pour COVID-19
+ *   - test_rhume/0        : Test interactif guidé pour rhume
+ *
+ * Utilisation:
+ *   Pour lancer tous les tests automatiquement:
+ *     swipl -g "consult('tests.pl'), test_all, halt"
+ *
+ *   Pour tests interactifs guidés:
+ *     ?- consult('tests.pl').
+ *     ?- test_migraine.    % Scénario migraine
+ *     ?- test_covid.       % Scénario COVID-19
+ *
+ * @remarks
+ * - Tous les tests sont non-interactifs (assertions directes)
+ * - Utilise reinitialiser/0 avant chaque test pour nettoyer le cache
+ * - Valide également les cascades et négations
+ * - Symboles: ✓ = succès, ✗ = échec
+ *
+ * @see base_connaissances.pl pour les règles testées
+ * @see main.pl pour le moteur d'inférence
+ * @see docs/SCENARIOS_TEST.md pour scénarios interactifs détaillés
+ */
+
 % =============================================================================
-% TESTS - Systeme Expert de Diagnostic Medical
-% =============================================================================
-% Projet: TP2 - IFT2003
-% Tests manuels pour validation
+% Projet: TP2 - IFT2003 Intelligence Artificielle 1
+% Tests unitaires pour validation (18 tests = 100% couverture)
 % =============================================================================
 
 :- consult('base_connaissances.pl').

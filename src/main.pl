@@ -1,7 +1,53 @@
+/**
+ * MAIN - Système Expert de Diagnostic Médical
+ *
+ * @author  Équipe TP2 - IFT2003
+ * @version 1.0
+ * @date    Novembre 2025
+ *
+ * @description
+ * Ce module implémente le moteur d'inférence principal utilisant le chaînage
+ * arrière (backward chaining) ainsi que l'interface utilisateur interactive
+ * pour le système expert de diagnostic médical.
+ *
+ * Fonctionnalités principales:
+ *   - Moteur de backward chaining pour tester les hypothèses de maladies
+ *   - Gestion du cache des réponses (évite de poser 2x la même question)
+ *   - Interface utilisateur en ligne de commande (Oui/Non)
+ *   - Gestion de 2 cascades conditionnelles (fièvre, toux)
+ *   - Traduction des symptômes, syndromes et maladies en français
+ *   - Affichage des résultats avec recommandations médicales
+ *
+ * Prédicats principaux:
+ *   - start/0              : Point d'entrée principal du système
+ *   - diagnostiquer/1      : Moteur backward chaining (teste hypothèses)
+ *   - verifier_symptome/1  : Vérifie un symptôme avec cache
+ *   - afficher_diagnostic/1: Affiche le diagnostic et recommandations
+ *
+ * Ordre optimisé de test des maladies:
+ *   1. covid19           (discriminant unique: perte_odorat)
+ *   2. migraine          (discriminant: neurologique)
+ *   3. conjonctivite     (discriminant: secretions_purulentes)
+ *   4. asthme            (discriminants: wheezing + difficultes_respiratoires)
+ *   5. gastro_enterite   (discriminants: digestif + febrile)
+ *   6. grippe            (3 syndromes complexes)
+ *   7. angine            (ORL + febrile)
+ *   8. bronchite         (toux_productive + fievre_legere)
+ *   9. allergie          (allergique + oculaire)
+ *  10. rhume             (diagnostic par élimination)
+ *
+ * @remarks
+ * - Charge automatiquement base_connaissances.pl
+ * - Utilise get_single_char/1 pour UX optimisée (pas besoin d'Enter)
+ * - Format sans accents pour compatibilité maximale
+ * - Cache réponses dans base de faits dynamique connu/2
+ *
+ * @see base_connaissances.pl pour les 20 règles d'inférence
+ * @see tests.pl pour la validation du système
+ */
+
 % =============================================================================
-% MAIN - Systeme Expert de Diagnostic Medical
-% =============================================================================
-% Projet: TP2 - IFT2003
+% Projet: TP2 - IFT2003 Intelligence Artificielle 1
 % Moteur d'inference (backward chaining) + Interface utilisateur
 % =============================================================================
 
