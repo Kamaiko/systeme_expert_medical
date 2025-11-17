@@ -188,7 +188,7 @@ Diagnostic: Grippe
 
 ---
 
-## Scénario 4: Conjonctivite (4-5 questions)
+## Scénario 4: Conjonctivite (5 questions)
 
 ### Profil Patient
 Patient avec yeux rouges + sécrétions purulentes.
@@ -541,7 +541,7 @@ Diagnostic: Bronchite
 
 ---
 
-## Scénario 9: Allergie Saisonnière (12 questions)
+## Scénario 9: Allergie Saisonnière (11 questions)
 
 ### Profil Patient
 Patient avec éternuements, yeux irrités, SANS difficultés respiratoires.
@@ -619,7 +619,7 @@ Règle maladie activée:
 Diagnostic: Allergie saisonnière
 ```
 
-**Nombre de questions**: 9 ✅
+**Nombre de questions**: 11 ✅
 
 ---
 
