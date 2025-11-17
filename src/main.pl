@@ -115,7 +115,7 @@ poser_question_simple(eternuement, Reponse) :-
     write('2. Non'), nl,
     write('Votre reponse: '),
     lire_reponse(Reponse),
-    nl.
+    nl, !.
 
 % Cas general: Avez-vous...
 poser_question_simple(Symptome, Reponse) :-
