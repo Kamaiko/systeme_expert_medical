@@ -38,9 +38,9 @@ mainfont: "Times New Roman"
     - [Exemple de Trace de Raisonnement](#exemple-de-trace-de-raisonnement)
   - [1.5 Détails des Prédicats Utilisés dans le Code](#15-détails-des-prédicats-utilisés-dans-le-code)
 - [II. Les Cas de Test avec Résultats Obtenus](#ii-les-cas-de-test-avec-résultats-obtenus)
-  - [Scénario 1 : Migraine (Cas Optimal)](#scénario-1--migraine-cas-optimal)
-  - [Scénario 2 : COVID-19 (Cas Moyen)](#scénario-2--covid-19-cas-moyen)
-  - [Scénario 3 : Angine (Cas Typique)](#scénario-3--angine-cas-typique)
+  - [Scénario 1 : Migraine](#scénario-1--migraine)
+  - [Scénario 2 : COVID-19](#scénario-2--covid-19)
+  - [Scénario 3 : Angine](#scénario-3--angine)
   - [Synthèse Comparative des Trois Scénarios](#synthèse-comparative-des-trois-scénarios)
 - [Conclusion](#conclusion)
   - [Synthèse des Réalisations](#synthèse-des-réalisations)
@@ -205,14 +205,7 @@ Le tableau 5 présente les 10 règles permettant de déduire les maladies finale
 
 ### Justification de l'Interconnexion des Règles
 
-Conformément à la note importante de l'énoncé stipulant que *"la construction d'un arbre de dépendance (global) n'est possible que si certaines règles partagent au moins un fait commun dans leurs prémisses"*, notre architecture garantit une forte interconnexion :
-
-- **5 syndromes sur 8** (62,5 %) sont partagés par au moins 2 maladies
-- **8 maladies sur 10** (80 %) utilisent au moins un syndrome partagé
-- Le syndrome_respiratoire seul interconnecte **5 maladies** différentes
-- Le syndrome_fébrile seul interconnecte **4 maladies** différentes
-
-Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
+Conformément à la note importante de l'énoncé stipulant que *"la construction d'un arbre de dépendance (global) n'est possible que si certaines règles partagent au moins un fait commun dans leurs prémisses"*, notre architecture garantit une forte interconnexion : **5 syndromes sur 8** (62,5 %) sont partagés par au moins 2 maladies, et **8 maladies sur 10** (80 %) utilisent au moins un syndrome partagé. Le syndrome_respiratoire seul interconnecte **5 maladies** différentes, tandis que le syndrome_fébrile en interconnecte **4**. Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
 
 ## 1.3 Graphe de Dépendance de la Structure du Raisonnement
 
@@ -261,13 +254,7 @@ diagnostiquer(Maladie) :-
     call(Maladie).
 ```
 
-**Justification de l'ordre** :
-
-- **COVID-19 en premier** : La présence/absence de perte d'odorat permet de confirmer/infirmer rapidement (1-2 questions seulement)
-- **Migraine en deuxième** : Symptômes très spécifiques (mal de tête intense + photophobie)
-- **Rhume en dernier** : Pathologie nécessitant de vérifier de nombreuses négations (absence de fièvre, absence de fatigue intense, etc.)
-
-Cette stratégie réduit le nombre moyen de questions posées de **~10 questions** (approche naïve) à **~5-6 questions** (approche optimisée).
+**Justification de l'ordre** : Le COVID-19 est testé en premier car la présence/absence de perte d'odorat permet de confirmer/infirmer rapidement ce diagnostic (1-2 questions seulement). La Migraine vient en deuxième position grâce à des symptômes très spécifiques (mal de tête intense + photophobie). À l'inverse, le Rhume est placé en dernier car cette pathologie nécessite de vérifier de nombreuses négations (absence de fièvre, absence de fatigue intense, etc.). Cette stratégie réduit le nombre moyen de questions posées de **~10 questions** (approche naïve) à **~5-6 questions** (approche optimisée).
 
 ### Mécanisme de Cache et Gestion de la Mémoire
 
@@ -426,7 +413,7 @@ Cette architecture modulaire permet une maintenance facilitée : les règles mé
 
 Cette section présente trois scénarios de test démontrant le fonctionnement du système expert dans des situations cliniques variées. Chaque scénario illustre le processus complet de diagnostic, du questionnement initial au résultat final avec recommandations.
 
-## Scénario 1 : Migraine (Cas Optimal)
+## Scénario 1 : Migraine
 
 ### Description du Profil Patient
 
@@ -508,7 +495,7 @@ Session terminee.
 
 ---
 
-## Scénario 2 : COVID-19 (Cas Moyen)
+## Scénario 2 : COVID-19
 
 ### Description du Profil Patient
 
@@ -626,14 +613,11 @@ Session terminee.
 - **Syndromes déduits** : 3 (respiratoire, fébrile, grippal)
 - **Efficacité** : **Moyenne** – Complexité due aux 3 syndromes requis
 
-**Analyse** : Ce scénario illustre plusieurs aspects importants du système :
-- **Gestion des cascades** : Les questions fièvre et toux déclenchent automatiquement leurs sous-questions
-- **Réutilisation du cache** : `fievre_elevee` n'est demandée qu'une fois mais réutilisée 3 fois (R2, R5, R4)
-- **Ordre optimisé** : Le discriminant unique `perte_odorat` placé en premier dans R12 permet de confirmer rapidement COVID-19
+**Analyse** : Ce scénario illustre plusieurs aspects importants du système. La **gestion des cascades** permet aux questions fièvre et toux de déclencher automatiquement leurs sous-questions pour affiner les symptômes. La **réutilisation du cache** assure que `fievre_elevee` n'est demandée qu'une fois mais réutilisée 3 fois dans différents syndromes (R2, R5, R4), évitant toute redondance. Enfin, l'**ordre optimisé** place le discriminant unique `perte_odorat` en premier dans R12, permettant de confirmer rapidement le COVID-19 dès que ce symptôme est identifié.
 
 ---
 
-## Scénario 3 : Angine (Cas Typique)
+## Scénario 3 : Angine
 
 ### Description du Profil Patient
 
@@ -751,11 +735,7 @@ Session terminee.
 - **Syndromes déduits** : 2 (ORL, fébrile)
 - **Efficacité** : **Typique** – Position intermédiaire dans l'ordre de test
 
-**Analyse** : Ce scénario met en évidence :
-- **Stratégie de backward chaining** : Le système teste d'abord les maladies à discriminants uniques (covid19, migraine, etc.) avant d'arriver à Angine
-- **Questions d'élimination** : Les 6 premières questions éliminent rapidement les pathologies peu probables (covid19, migraine, conjonctivite, asthme, gastro-entérite, grippe)
-- **Réutilisation du cache** : `fievre_elevee` est vérifiée lors du test asthme puis réutilisée pour `syndrome_febrile`, évitant une re-question
-- **Interconnexion via `syndrome_febrile`** : Ce syndrome est partagé par 4 maladies (Grippe, COVID-19, Angine, Gastro-entérite), illustrant l'interconnexion de l'arbre de décision
+**Analyse** : Ce scénario met en évidence la **stratégie de backward chaining** qui teste d'abord les maladies à discriminants uniques (covid19, migraine, etc.) avant d'arriver à l'Angine. Les **6 premières questions d'élimination** permettent d'écarter rapidement les pathologies peu probables (covid19, migraine, conjonctivite, asthme, gastro-entérite, grippe). La **réutilisation du cache** s'illustre par `fievre_elevee` qui est vérifiée lors du test asthme puis réutilisée pour `syndrome_febrile`, évitant toute redondance. Ce scénario montre également l'**interconnexion via `syndrome_febrile`**, syndrome partagé par 4 maladies (Grippe, COVID-19, Angine, Gastro-entérite), démontrant la structure globale de l'arbre de décision.
 
 ---
 
@@ -801,92 +781,19 @@ Les tests réalisés sur trois scénarios cliniques variés (Migraine, COVID-19,
 
 ## Limites Identifiées
 
-Malgré ses qualités techniques, le système présente plusieurs limites importantes qu'il convient de souligner :
+Malgré ses qualités techniques, le système présente plusieurs limites importantes qu'il convient de souligner. D'un point de vue médical, la **simplification diagnostique** est excessive : les maladies réelles nécessitent des examens cliniques approfondis, des analyses biologiques et l'expertise d'un professionnel de santé, éléments absents de notre système. De plus, l'**absence de gestion des comorbidités** limite la réalité clinique où plusieurs pathologies peuvent coexister. Le format **questions binaires** (Oui/Non) ne permet pas de capturer les nuances importantes comme l'intensité des symptômes, leur durée d'évolution ou leur caractère intermittent. Les **recommandations génériques** fournies ne tiennent pas compte du profil individuel du patient (âge, antécédents, traitements en cours).
 
-### Limites Médicales
+Sur le plan technique, la **base de connaissances restreinte** à 10 maladies constitue une limitation majeure, alors que le diagnostic différentiel d'une simple fièvre peut impliquer des dizaines de pathologies. Le **système statique** ne s'améliore pas avec l'usage, contrairement aux systèmes modernes utilisant le machine learning. L'**absence de gestion de l'incertitude** (coefficients de confiance, probabilités bayésiennes) rend impossible l'expression de diagnostics différentiels pondérés. Le système ne dispose pas de **mécanisme d'explication** permettant d'expliquer à l'utilisateur pourquoi certaines questions sont posées ou comment le diagnostic a été établi.
 
-1. **Simplification diagnostique excessive** : Les maladies réelles nécessitent des examens cliniques approfondis, des analyses biologiques et l'expertise d'un professionnel de santé. Le système ne prend pas en compte l'anamnèse complète, l'examen physique ni les résultats de laboratoire.
-
-2. **Absence de gestion des comorbidités** : Le système cherche un diagnostic unique, alors que dans la réalité clinique, plusieurs pathologies peuvent coexister (par exemple, allergie + asthme, grippe + bronchite).
-
-3. **Questions binaires limitantes** : Le format Oui/Non ne permet pas de capturer les nuances importantes : intensité des symptômes (échelle 1-10), durée d'évolution (heures, jours, semaines), caractère intermittent ou permanent, facteurs déclenchants, etc.
-
-4. **Recommandations génériques** : Les conseils fournis sont généraux et ne tiennent pas compte du profil individuel du patient (âge, antécédents, traitements en cours, allergies, grossesse, etc.).
-
-5. **Absence de pondération des symptômes** : Tous les symptômes ont le même poids dans le raisonnement, alors qu'en pratique, certains sont plus discriminants ou plus graves que d'autres.
-
-### Limites Techniques
-
-1. **Base de connaissances restreinte** : Seulement 10 maladies couvertes, alors que le diagnostic différentiel d'une fièvre seule peut impliquer des dizaines de pathologies.
-
-2. **Système statique sans apprentissage** : La base de connaissances est figée et ne s'améliore pas avec l'usage, contrairement aux systèmes modernes utilisant le machine learning.
-
-3. **Dépendance à l'ordre des règles** : Bien qu'optimisé, l'ordre de test des hypothèses reste fixe et ne s'adapte pas dynamiquement selon les symptômes déjà observés.
-
-4. **Absence de gestion de l'incertitude** : Le système ne manipule pas de coefficients de confiance ni de probabilités bayésiennes, rendant impossible l'expression de diagnostics différentiels pondérés.
-
-5. **Pas de mécanisme d'explication détaillée** : Bien que le raisonnement soit traçable techniquement, le système n'explique pas à l'utilisateur *pourquoi* certaines questions sont posées ni *comment* le diagnostic a été établi.
-
-### Limites d'Interface et d'Utilisation
-
-1. **Interface textuelle austère** : Absence d'interface graphique moderne (web, mobile), limitant l'accessibilité et l'ergonomie.
-
-2. **Pas de persistance des données** : Le système ne conserve aucun historique des consultations précédentes d'un même patient, empêchant le suivi longitudinal.
-
-3. **Support linguistique unique** : Français uniquement, avec suppression des accents pour des raisons de compatibilité technique.
-
-4. **Pas de validation par des experts médicaux** : Les règles ont été construites sur la base de connaissances générales mais n'ont pas été validées par des professionnels de santé.
+Enfin, l'**interface textuelle austère** limite l'accessibilité, l'absence de **persistance des données** empêche le suivi longitudinal des patients, et les **règles n'ont pas été validées** par des professionnels de santé, demeurant des approximations basées sur des connaissances générales.
 
 ## Pistes d'Amélioration
 
-### Améliorations à Court Terme
+Plusieurs pistes d'amélioration peuvent être envisagées pour renforcer le système. À court terme, l'implémentation de la **logique floue** permettrait d'associer des degrés de certitude aux diagnostics (ex: "Grippe 85%"), tandis que l'**élargissement de la base de connaissances** à 20-30 maladies couvrirait davantage de spécialités médicales. L'ajout de **questions graduées** (échelles 0-10 pour l'intensité, durées précises) et d'un **historique patient** persistant améliorerait significativement la précision diagnostique et permettrait le suivi longitudinal. Un **module explicatif** montrant l'arbre de décision parcouru renforcerait la transparence du raisonnement.
 
-1. **Ajout de facteurs de confiance** : Implémenter la **logique floue** (*fuzzy logic*) pour associer des degrés de certitude aux symptômes et aux diagnostics. Par exemple, un diagnostic pourrait être retourné avec "Grippe (85 % de confiance)" permettant d'envisager des diagnostics alternatifs.
+À moyen terme, la combinaison de **chaînage mixte** (forward et backward) permettrait de gérer des diagnostics différentiels multiples, tandis que l'intégration d'**apprentissage automatique** (réseaux bayésiens, arbres de décision) ajusterait dynamiquement les poids des règles selon des données cliniques réelles. Le développement d'une **interface web/mobile moderne** améliorerait l'accessibilité, et la connexion à des **ontologies médicales standardisées** (SNOMED-CT, CIM-10) garantirait l'interopérabilité avec les systèmes de santé existants. La **gestion avancée des comorbidités** permettrait de retourner plusieurs diagnostics simultanés avec leurs interactions.
 
-2. **Élargissement de la base de connaissances** : Porter le nombre de maladies à 20-30, couvrir davantage de spécialités médicales (dermatologie, gastro-entérologie, etc.) et affiner la granularité des syndromes.
-
-3. **Questions graduées** : Remplacer certaines questions binaires par des échelles (0-10) pour l'intensité, des choix multiples pour la localisation, ou des durées précises.
-
-4. **Historique patient** : Implémenter un système de persistance (base de données) pour mémoriser les consultations antérieures, permettant un suivi dans le temps et la détection de pathologies chroniques.
-
-5. **Explication du raisonnement** : Ajouter un module explicatif montrant à l'utilisateur l'arbre de décision parcouru et justifiant chaque étape (par exemple, "Je vous pose cette question car vous avez déclaré avoir de la fièvre, ce qui peut indiquer...").
-
-### Évolutions à Moyen Terme
-
-1. **Chaînage mixte** : Combiner **forward chaining** et **backward chaining** pour permettre des hypothèses multiples simultanées et gérer les diagnostics différentiels.
-
-2. **Apprentissage automatique** : Intégrer des algorithmes de **machine learning** (arbres de décision, réseaux bayésiens, réseaux de neurones) pour ajuster dynamiquement les poids des règles en fonction de données cliniques réelles.
-
-3. **Interface web/mobile moderne** : Développer une application web responsive (React, Vue.js) ou une application mobile native pour améliorer l'accessibilité et l'ergonomie.
-
-4. **Intégration de standards médicaux** : Connecter la base de connaissances à des ontologies médicales standardisées comme **SNOMED-CT** (terminologie clinique internationale) ou **CIM-10** (Classification internationale des maladies).
-
-5. **Gestion avancée des comorbidités** : Permettre au système de retourner plusieurs diagnostics simultanés avec leurs interactions potentielles.
-
-### Évolutions à Long Terme
-
-1. **Validation clinique rigoureuse** :
-   - Collaboration avec des professionnels de santé pour valider et enrichir les règles
-   - Tests sur des corpus de cas cliniques réels
-   - Calcul de métriques de performance : **sensibilité**, **spécificité**, **valeur prédictive positive (VPP)**, **valeur prédictive négative (VPN)**
-
-2. **Intégration avec des systèmes de santé** :
-   - Connexion aux dossiers médicaux électroniques (DME)
-   - Accès aux résultats de laboratoire et d'imagerie médicale
-   - Prescription assistée et alertes d'interactions médicamenteuses
-
-3. **Support multilingue intelligent** :
-   - Traduction automatique avec conservation du contexte médical
-   - Adaptation culturelle des recommandations
-
-4. **Détection des urgences** :
-   - Algorithmes de détection de signaux d'alarme (*red flags*)
-   - Recommandations de consultation urgente ou d'appel au SAMU selon la gravité
-
-5. **Personnalisation avancée** :
-   - Adaptation des questions selon le profil du patient (âge, sexe, antécédents)
-   - Prise en compte des traitements en cours et des allergies connues
-   - Calcul de scores de risque personnalisés
+À plus long terme, une **validation clinique rigoureuse** en collaboration avec des professionnels de santé s'impose, incluant des tests sur corpus réels et le calcul de métriques de performance (sensibilité, spécificité, VPP, VPN). L'**intégration avec les dossiers médicaux électroniques** (DME), l'accès aux résultats de laboratoire et la prescription assistée transformeraient le système en véritable outil d'aide à la décision clinique. Enfin, la **détection automatique des urgences** (red flags) avec recommandations d'orientation selon la gravité, et la **personnalisation avancée** tenant compte du profil complet du patient (âge, antécédents, traitements en cours, allergies) constitueraient des évolutions majeures vers un système cliniquement opérationnel.
 
 ## Réflexion Finale
 
@@ -895,7 +802,3 @@ Ce projet a été une excellente introduction aux systèmes experts et à leurs 
 Bien que notre système soit volontairement simplifié à des fins pédagogiques, il illustre les principes fondamentaux qui sous-tendent les véritables systèmes d'aide à la décision clinique utilisés dans les hôpitaux modernes. Ces systèmes, nettement plus sophistiqués, intègrent des dizaines de milliers de règles, des bases de données médicales massives et des algorithmes d'apprentissage profond, mais reposent sur les mêmes fondations logiques que notre implémentation.
 
 L'intelligence artificielle médicale est un domaine en pleine expansion, avec des perspectives prometteuses pour améliorer l'accès aux soins, réduire les erreurs diagnostiques et assister les professionnels de santé. Toutefois, il est crucial de maintenir l'humain au centre du processus décisionnel : ces outils doivent être conçus comme des **assistants** augmentant les capacités du médecin, jamais comme des **substituts** à son expertise et à son jugement clinique.
-
----
-
-**Avertissement important** : Ce système expert a été développé dans un cadre strictement pédagogique. Il ne doit en aucun cas être utilisé pour établir un diagnostic médical réel ou prendre des décisions thérapeutiques. En cas de symptômes, il est impératif de consulter un professionnel de santé qualifié.
