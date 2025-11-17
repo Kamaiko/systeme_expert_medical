@@ -300,7 +300,23 @@ afficher_diagnostic(Maladie) :-
     nl,
     traduire_maladie(Maladie, NomFrancais),
     format('Diagnostic: ~w~n', [NomFrancais]),
+    nl,
+    afficher_recommandations(Maladie),
     nl.
+
+% Afficher recommandations medicales
+afficher_recommandations(Maladie) :-
+    recommandation(Maladie, Recommandations),
+    write('-------------------------------------------------------'), nl,
+    write('RECOMMANDATIONS:'), nl,
+    write('-------------------------------------------------------'), nl,
+    afficher_liste_recommandations(Recommandations).
+
+% Afficher liste de recommandations
+afficher_liste_recommandations([]).
+afficher_liste_recommandations([R|Rest]) :-
+    format('  - ~w~n', [R]),
+    afficher_liste_recommandations(Rest).
 
 % Afficher liste de syndromes traduits
 afficher_liste_syndromes([]).
@@ -336,7 +352,6 @@ start :-
     nl,
     write('Ce systeme vous posera quelques questions pour etablir'), nl,
     write('un diagnostic parmi 10 maladies courantes.'), nl,
-    write('Repondez par 1 (Oui) ou 2 (Non).'), nl,
     nl,
     write('-------------------------------------------------------'), nl,
     nl,

@@ -71,6 +71,15 @@ Votre reponse:
 Diagnostic: Migraine
 
 -------------------------------------------------------
+RECOMMANDATIONS:
+-------------------------------------------------------
+  - Repos dans piece sombre et calme
+  - Antalgiques des premiers symptomes
+  - Identifier facteurs declenchants
+  - Consulter si migraines frequentes (>4/mois)
+  - Tenir journal des crises
+
+-------------------------------------------------------
 Session terminee.
 ```
 
@@ -140,6 +149,16 @@ TOUS LES TESTS PASSES!
 ```
 
 ## Caracteristiques
+
+### Recommandations medicales
+
+Chaque diagnostic inclut des **recommandations pratiques** adaptees:
+- Conseils de repos et hydratation
+- Signes d'alerte necessitant consultation
+- Traitements symptomatiques suggeres
+- Mesures preventives
+
+**Note**: Ces recommandations sont a titre informatif uniquement. Consultez un professionnel de sante pour un avis medical personnalise.
 
 ### Cascades intelligentes
 

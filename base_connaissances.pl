@@ -273,3 +273,83 @@ gastro_enterite :-
 conjonctivite :-
     syndrome_oculaire,
     verifier_symptome(secretions_purulentes).
+
+% -----------------------------------------------------------------------------
+% RECOMMANDATIONS MEDICALES (SANS ACCENTS)
+% -----------------------------------------------------------------------------
+
+recommandation(grippe, [
+    "Repos au lit pendant 3-5 jours",
+    "Hydratation abondante (eau, tisanes)",
+    "Paracetamol pour fievre et douleurs",
+    "Consultation si symptomes persistent >7 jours"
+]).
+
+recommandation(covid19, [
+    "Isolement immediat pendant 5-10 jours",
+    "Repos et hydratation",
+    "Surveillance oxymetrie (consulter si <95%)",
+    "Consulter medecin pour evaluation et traitement",
+    "Informer contacts proches"
+]).
+
+recommandation(bronchite, [
+    "Repos et hydratation",
+    "Eviter fumee et irritants respiratoires",
+    "Humidificateur d'air recommande",
+    "Consulter si fievre persiste >3 jours",
+    "Antibiotiques seulement si prescrits"
+]).
+
+recommandation(rhume, [
+    "Repos leger",
+    "Hydratation reguliere",
+    "Lavages nasaux serum physiologique",
+    "Consultation si aggravation apres 7 jours"
+]).
+
+recommandation(angine, [
+    "Consulter medecin pour test streptocoque",
+    "Antibiotiques si angine bacterienne",
+    "Antalgiques pour douleur gorge",
+    "Repos et alimentation molle"
+]).
+
+recommandation(allergie, [
+    "Identifier et eviter allergenes",
+    "Antihistaminiques si necessaire",
+    "Lavages nasaux serum physiologique",
+    "Consulter allergologue pour tests cutanes"
+]).
+
+recommandation(asthme, [
+    "CONSULTATION URGENTE recommandee",
+    "Eviter allergenes et irritants",
+    "Bronchodilatateur si prescrit",
+    "Plan d'action asthme avec medecin",
+    "Surveillance reguliere fonction respiratoire"
+]).
+
+recommandation(migraine, [
+    "Repos dans piece sombre et calme",
+    "Antalgiques des premiers symptomes",
+    "Identifier facteurs declenchants",
+    "Consulter si migraines frequentes (>4/mois)",
+    "Tenir journal des crises"
+]).
+
+recommandation(gastro_enterite, [
+    "Hydratation intensive (SRO recommande)",
+    "Alimentation legere (riz, banane, compote)",
+    "Eviter produits laitiers temporairement",
+    "Consulter si deshydratation ou sang dans selles",
+    "Repos et hygiene des mains"
+]).
+
+recommandation(conjonctivite, [
+    "Lavages oculaires serum physiologique",
+    "Ne pas partager serviettes/oreillers",
+    "Consulter si secretions purulentes persistantes",
+    "Antibiotiques topiques si bacterienne",
+    "Eviter frottement yeux"
+]).

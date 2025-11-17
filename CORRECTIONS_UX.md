@@ -186,6 +186,68 @@ Question: Avez-vous un mal de tete intense?
 
 ---
 
+### ✅ 7. Ajout recommandations medicales
+
+**Nouveau**: Chaque diagnostic affiche maintenant des recommandations pratiques
+
+**Ajout dans [base_connaissances.pl](base_connaissances.pl:277)**:
+```prolog
+% RECOMMANDATIONS MEDICALES (SANS ACCENTS)
+recommandation(grippe, [
+    "Repos au lit pendant 3-5 jours",
+    "Hydratation abondante (eau, tisanes)",
+    "Paracetamol pour fievre et douleurs",
+    "Consultation si symptomes persistent >7 jours"
+]).
+% ... (10 maladies avec recommandations)
+```
+
+**Ajout dans [main.pl](main.pl:307)**:
+```prolog
+afficher_recommandations(Maladie) :-
+    recommandation(Maladie, Recommandations),
+    write('-------------------------------------------------------'), nl,
+    write('RECOMMANDATIONS:'), nl,
+    write('-------------------------------------------------------'), nl,
+    afficher_liste_recommandations(Recommandations).
+```
+
+**Exemple affichage**:
+```
+=== DIAGNOSTIC ===
+Diagnostic: Migraine
+
+-------------------------------------------------------
+RECOMMANDATIONS:
+-------------------------------------------------------
+  - Repos dans piece sombre et calme
+  - Antalgiques des premiers symptomes
+  - Identifier facteurs declenchants
+  - Consulter si migraines frequentes (>4/mois)
+  - Tenir journal des crises
+```
+
+---
+
+### ✅ 8. Retrait ligne "Repondez par 1 (Oui) ou 2 (Non)"
+
+**Avant**:
+```
+Ce systeme vous posera quelques questions pour etablir
+un diagnostic parmi 10 maladies courantes.
+Repondez par 1 (Oui) ou 2 (Non).  ← Redondant
+```
+
+**Apres**:
+```
+Ce systeme vous posera quelques questions pour etablir
+un diagnostic parmi 10 maladies courantes.
+```
+
+**Justification**: Les options sont deja visibles dans chaque question (1. Oui / 2. Non)
+
+---
+
 ## Comment tester les corrections
 
 ### Test COVID-19 (Ordre des questions)
@@ -257,10 +319,12 @@ swipl
 | Ordre questions COVID | Fievre en premier | Perte odorat en premier |
 | Timing diagnostic | Affiche pendant questions | Affiche apres toutes questions |
 | Presentation finale | Sobre | Encadree avec separateurs |
+| Instructions banner | Ligne redondante "Repondez par..." | Retiree (info dans questions) |
+| Recommandations | Aucune | **Recommandations medicales affichees** |
 
 ---
 
 **Date des corrections**: Session actuelle
 **Fichiers modifies**:
-- [main.pl](main.pl) - Interface et affichage
-- [base_connaissances.pl](base_connaissances.pl) - Ordre conditions COVID-19
+- [main.pl](main.pl) - Interface, affichage, recommandations
+- [base_connaissances.pl](base_connaissances.pl) - Ordre conditions COVID-19, recommandations medicales
