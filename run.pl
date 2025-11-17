@@ -26,4 +26,4 @@
 % =============================================================================
 
 :- consult('src/main.pl').
-:- initialization(start).
+:- initialization(start, main).
