@@ -27,11 +27,16 @@
 ### Structure de Fichiers Finale
 ```
 TP2/
-├── run.pl                   # Lancement rapide (swipl run.pl)
-├── base_connaissances.pl    # 20 règles + recommandations médicales
-├── main.pl                  # Moteur d'inférence backward chaining + interface
-├── tests.pl                 # 18 tests unitaires (8 syndromes + 10 maladies)
-└── README.md                # Documentation utilisateur complète
+├── run.pl                           # Lancement rapide (swipl run.pl)
+├── src/
+│   ├── base_connaissances.pl        # 20 règles + recommandations médicales
+│   ├── main.pl                      # Moteur d'inférence backward chaining + interface
+│   └── tests.pl                     # 18 tests unitaires (8 syndromes + 10 maladies)
+├── docs/                            # Documentation technique
+│   ├── RESUME_PLAN.md
+│   ├── arbre_dependance.md
+│   └── SCENARIOS_TEST.md
+└── README.md                        # Documentation utilisateur complète
 ```
 
 **Note**: Les 3 cas de test distincts demandés dans l'énoncé (scénarios de démonstration avec raisonnement) seront documentés dans le rapport final.

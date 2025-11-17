@@ -186,9 +186,7 @@ Conformément à la note importante de l'énoncé stipulant que *"la constructio
 
 Cette conception évite explicitement la création de sous-arbres isolés et respecte pleinement les exigences du projet.
 
-## 1.3 Représentation Graphique de la Structure du Raisonnement
-
-## 1.4 Description du Moteur d'Inférence et du Mécanisme de Raisonnement
+## 1.3 Description du Moteur d'Inférence et du Mécanisme de Raisonnement
 
 ### Principe du Chaînage Arrière (Backward Chaining)
 
@@ -332,7 +330,7 @@ Prenons l'exemple d'un diagnostic de **Grippe**. Le système teste séquentielle
 
 Ce mécanisme illustre l'efficacité du backward chaining : seules les questions nécessaires sont posées, et le cache évite toute redondance.
 
-## 1.5 Détails des Prédicats Utilisés dans le Code
+## 1.4 Détails des Prédicats Utilisés dans le Code
 
 Cette section présente une description exhaustive des 27 prédicats principaux implémentés dans les modules `main.pl` et `base_connaissances.pl`.
 
@@ -686,7 +684,7 @@ Question: Avez-vous de la toux?
 2. Non
 Votre reponse: 2
 
-Question: Eternuez-vous frequemment?
+Question: Avez-vous le nez bouche?
 1. Oui
 2. Non
 Votre reponse: 2
@@ -727,7 +725,7 @@ Session terminee.
 - **`covid19`** : `perte_odorat` → **Non** → Rejetée ✗
 - **`migraine`** : `mal_tete_intense` → **Non** → Rejetée ✗
 - **`conjonctivite`** : `yeux_rouges` → **Non** → Rejetée ✗
-- **`asthme`** : Teste `syndrome_respiratoire` (fievre_elevee=oui, toux=non) → R1/R2 échouent → R3 non testé car toux=non → Rejetée ✗
+- **`asthme`** : Teste `syndrome_respiratoire` → R1 échoue (fievre_legere=non), R2 échoue (toux=non), R3 échoue (nez_bouche=non) → Rejetée ✗
 - **`gastro_enterite`** : `diarrhee` → **Non** → Rejetée ✗
 - **`grippe`** : Nécessite `syndrome_grippal` (fatigue_intense non testée) → Rejetée ✗
 - **`angine`** : Testée en 7ème position
@@ -750,8 +748,8 @@ Session terminee.
 
 **4. Statistiques :**
 
-- **Nombre de questions posées** : **8** (7 principales + 1 sous-question cascade fièvre)
-- **Dont questions d'élimination** : 6 (perte odorat, mal tête, yeux rouges, toux, éternuements, diarrhée)
+- **Nombre de questions posées** : **9** (8 principales + 1 sous-question cascade fièvre)
+- **Dont questions d'élimination** : 6 (perte odorat, mal tête, yeux rouges, toux, nez bouché, diarrhée)
 - **Règles activées** : R10 (syndrome ORL), R4 (syndrome fébrile), R15 (diagnostic Angine)
 - **Syndromes déduits** : 2 (ORL, fébrile)
 - **Efficacité** : **Typique** – Position intermédiaire dans l'ordre de test
@@ -768,7 +766,7 @@ Session terminee.
 
 | Critère | Migraine | COVID-19 | Angine |
 |:--------|:--------:|:--------:|:------:|
-| **Nombre de questions** | 3 | 7 | 8 |
+| **Nombre de questions** | 3 | 7 | 9 |
 | **Dont cascades** | 0 | 2 | 1 |
 | **Syndromes déduits** | 1 | 3 | 2 |
 | **Règles activées** | 2 | 4 | 3 |
@@ -780,7 +778,7 @@ Session terminee.
 
 **Observations générales :**
 
-1. **Variabilité du nombre de questions** : Entre 3 (optimal) et 8 (cas d'éliminations multiples), démontrant l'adaptabilité du backward chaining
+1. **Variabilité du nombre de questions** : Entre 3 (optimal) et 9 (cas d'éliminations multiples), démontrant l'adaptabilité du backward chaining
 
 2. **Impact de l'ordre optimisé** : Les maladies testées en premier (covid19, migraine) nécessitent moins de questions que celles testées plus tard (angine)
 
@@ -800,7 +798,7 @@ Ce projet a permis de concevoir et d'implémenter avec succès un système exper
 
 La base de connaissances comprend **20 règles d'inférence** structurées, permettant de diagnostiquer **10 maladies courantes** à partir de **21 symptômes** regroupés en **8 syndromes intermédiaires**. L'architecture garantit une forte interconnexion des règles, avec 62,5 % des syndromes partagés par plusieurs maladies, évitant ainsi la fragmentation en sous-arbres isolés.
 
-Le moteur d'inférence implémenté utilise efficacement le **backward chaining** avec un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à **3-8 questions** selon la complexité du cas. Les mécanismes de **cache des réponses** et de **gestion des cascades conditionnelles** assurent une expérience utilisateur fluide et cohérente.
+Le moteur d'inférence implémenté utilise efficacement le **backward chaining** avec un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à **3-9 questions** selon la complexité du cas. Les mécanismes de **cache des réponses** et de **gestion des cascades conditionnelles** assurent une expérience utilisateur fluide et cohérente.
 
 Les tests réalisés sur trois scénarios cliniques variés (Migraine, COVID-19, Angine) ont démontré la robustesse et la fiabilité du système, avec des diagnostics corrects accompagnés de recommandations médicales adaptées.
 
