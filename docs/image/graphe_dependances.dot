@@ -1,0 +1,170 @@
+/**
+ * Graphe de Dépendances entre Règles
+ * Système Expert de Diagnostic Médical - TP2 IFT2003
+ *
+ * Architecture: 3 colonnes verticales (Règles → Syndromes → Maladies)
+ * Organisation: Left-to-Right pour format portrait
+ */
+
+digraph DependancesRegles {
+    // =========================================================================
+    // CONFIGURATION GÉNÉRALE
+    // =========================================================================
+
+    rankdir=LR;                    // Left-to-Right (3 colonnes verticales)
+    splines=spline;                // Courbes B-splines douces (plus élégantes)
+    nodesep=1.0;                   // Espacement vertical entre nœuds (augmenté pour flèches)
+    ranksep=2.2;                   // Espacement entre colonnes
+    bgcolor=white;                 // Fond blanc
+    dpi=300;                       // Haute résolution
+    concentrate=false;             // Pas de fusion auto
+    overlap=false;                 // Éviter chevauchements de nœuds
+    sep="+0.3";                    // Séparation minimale entre objets
+
+    // Style par défaut
+    node [fontname="Helvetica", fontsize=10, color=black];
+    edge [color=black, arrowhead=vee];
+
+    // =========================================================================
+    // COLONNE 1: RÈGLES R1-R10 (Symptômes → Syndromes)
+    // =========================================================================
+
+    node [shape=box, style=rounded, penwidth=1, width=2.2, height=0.5];
+
+    // Groupées par syndrome cible (facilite lecture des connexions)
+    R1 [label="R1\nfievre_legere + toux"];
+    R2 [label="R2\nfievre_elevee + toux"];
+    R3 [label="R3\nnez_bouche + gorge_irritee"];
+    R4 [label="R4\nfievre_elevee"];
+    R5 [label="R5\nfatigue_intense +\ncourbatures + fievre_elevee"];
+    R6 [label="R6\neternuement"];
+    R7 [label="R7\nyeux_rouges +\nyeux_qui_piquent"];
+    R8 [label="R8\ndiarrhee + vomissements"];
+    R9 [label="R9\nmal_tete_intense +\nphotophobie"];
+    R10 [label="R10\nmal_gorge_intense"];
+
+    // =========================================================================
+    // COLONNE 2: SYNDROMES (Nœuds de jonction)
+    // =========================================================================
+
+    node [shape=hexagon, style=filled, fillcolor=lightgray, penwidth=2,
+          fontsize=10, width=2.0, height=0.7];
+
+    // Organisation optimisée pour minimiser croisements de flèches
+    SYN_RESP  [label="syndrome_\nrespiratoire"];
+    SYN_GRIP  [label="syndrome_\ngrippal"];
+    SYN_FEBR  [label="syndrome_\nfebrile"];
+    SYN_ALLER [label="syndrome_\nallergique"];
+    SYN_OCUL  [label="syndrome_\noculaire"];
+    SYN_ORL   [label="syndrome_\norl"];
+    SYN_DIGES [label="syndrome_\ndigestif"];
+    SYN_NEURO [label="syndrome_\nneurologique"];
+
+    // =========================================================================
+    // COLONNE 3: RÈGLES R11-R20 (Syndromes → Maladies)
+    // =========================================================================
+
+    node [shape=box, style=rounded, peripheries=2, penwidth=1.5,
+          fillcolor=white, width=2.0, height=0.5];
+
+    // Ordre optimisé : grouper maladies par proximité de syndromes sources
+    // Groupe Respiratoire (haut)
+    R11 [label="R11\nGrippe"];
+    R12 [label="R12\nCOVID-19"];
+    R13 [label="R13\nBronchite"];
+    R14 [label="R14\nRhume"];
+    R17 [label="R17\nAsthme"];
+    // Groupe Allergique/Oculaire
+    R16 [label="R16\nAllergie saisonnière"];
+    R20 [label="R20\nConjonctivite"];
+    // Groupe Fébrile secondaire
+    R15 [label="R15\nAngine"];
+    R19 [label="R19\nGastro-entérite"];
+    // Groupe Neurologique (bas)
+    R18 [label="R18\nMigraine"];
+
+    // =========================================================================
+    // CONTRAINTES D'ALIGNEMENT (organisation verticale des colonnes)
+    // =========================================================================
+
+    // Forcer les 3 colonnes avec rank constraints
+    { rank=source; R1; R2; R3; R4; R5; R6; R7; R8; R9; R10; }
+    { rank=same; SYN_RESP; SYN_GRIP; SYN_FEBR; SYN_ALLER; SYN_OCUL; SYN_ORL; SYN_DIGES; SYN_NEURO; }
+    { rank=sink; R11; R12; R13; R14; R17; R16; R20; R15; R19; R18; }
+
+    // Ordre vertical (haut → bas) dans chaque colonne via arêtes invisibles
+    // Poids très élevé pour forcer l'ordre vertical strict (minimise croisements)
+    R1 -> R2 -> R3 -> R4 -> R5 -> R6 -> R7 -> R8 -> R9 -> R10 [style=invis, weight=100];
+    SYN_RESP -> SYN_GRIP -> SYN_FEBR -> SYN_ALLER -> SYN_OCUL ->
+    SYN_ORL -> SYN_DIGES -> SYN_NEURO [style=invis, weight=100];
+    R11 -> R12 -> R13 -> R14 -> R17 -> R16 -> R20 -> R15 -> R19 -> R18 [style=invis, weight=100];
+
+    // =========================================================================
+    // ARÊTES: COLONNE 1 → COLONNE 2 (Symptômes → Syndromes)
+    // =========================================================================
+
+    // Syndrome Respiratoire
+    R1 -> SYN_RESP;
+    R2 -> SYN_RESP;
+    R3 -> SYN_RESP;
+
+    // Syndrome Fébrile
+    R4 -> SYN_FEBR;
+
+    // Syndrome Grippal
+    R5 -> SYN_GRIP;
+
+    // Syndrome Allergique
+    R6 -> SYN_ALLER;
+
+    // Syndrome Oculaire
+    R7 -> SYN_OCUL;
+
+    // Syndrome Digestif
+    R8 -> SYN_DIGES;
+
+    // Syndrome Neurologique
+    R9 -> SYN_NEURO;
+
+    // Syndrome ORL
+    R10 -> SYN_ORL;
+
+    // =========================================================================
+    // ARÊTES: COLONNE 2 → COLONNE 3 (Syndromes → Maladies)
+    // SANS PORTS - Distribution naturelle (moins de stacking)
+    // =========================================================================
+
+    // Syndrome Respiratoire → 5 maladies (PARTAGE MAXIMAL)
+    SYN_RESP -> R11;
+    SYN_RESP -> R12;
+    SYN_RESP -> R13;
+    SYN_RESP -> R14;
+    SYN_RESP -> R17;
+
+    // Syndrome Fébrile → 4 maladies (PARTAGE ÉLEVÉ)
+    SYN_FEBR -> R11;
+    SYN_FEBR -> R12;
+    SYN_FEBR -> R15;
+    SYN_FEBR -> R19;
+
+    // Syndrome Grippal → 2 maladies
+    SYN_GRIP -> R11;
+    SYN_GRIP -> R12;
+
+    // Syndrome Allergique → 2 maladies
+    SYN_ALLER -> R16;
+    SYN_ALLER -> R17;
+
+    // Syndrome Oculaire → 2 maladies
+    SYN_OCUL -> R16;
+    SYN_OCUL -> R20;
+
+    // Syndrome Digestif → 1 maladie
+    SYN_DIGES -> R19;
+
+    // Syndrome Neurologique → 1 maladie
+    SYN_NEURO -> R18;
+
+    // Syndrome ORL → 1 maladie
+    SYN_ORL -> R15;
+}
