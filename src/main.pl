@@ -80,6 +80,33 @@ traduire_syndrome(syndrome_neurologique, "Syndrome neurologique").
 traduire_syndrome(syndrome_orl, "Syndrome ORL").
 
 % -----------------------------------------------------------------------------
+% QUESTIONS - Format adapte pour chaque symptome (SANS ACCENTS)
+% -----------------------------------------------------------------------------
+
+question_symptome(perte_odorat, "Avez-vous une perte d'odorat?").
+question_symptome(fievre, "Avez-vous de la fievre?").
+question_symptome(frissons, "Avez-vous des frissons?").
+question_symptome(toux, "Avez-vous de la toux?").
+question_symptome(nez_bouche, "Avez-vous le nez bouche?").
+question_symptome(difficultes_respiratoires, "Avez-vous de la difficulte a respirer?").
+question_symptome(wheezing, "Entendez-vous un sifflement lorsque vous respirez?").
+question_symptome(gorge_irritee, "Votre gorge est-elle irritée?").
+question_symptome(mal_gorge_intense, "Avez-vous un mal de gorge intense?").
+question_symptome(difficulte_avaler, "Avez-vous de la difficulte a avaler?").
+question_symptome(eternuement, "Eternuez-vous frequemment?").
+question_symptome(nez_qui_coule_clair, "Avez-vous le nez qui coule?").
+question_symptome(yeux_rouges, "Vos yeux sont-ils rouges?").
+question_symptome(yeux_qui_piquent, "Vos yeux piquent-ils?").
+question_symptome(secretions_purulentes, "Avez-vous des secretions purulentes aux yeux?").
+question_symptome(fatigue_intense, "Sentez-vous de la fatigue intense?").
+question_symptome(courbatures, "Avez-vous des courbatures?").
+question_symptome(mal_tete_intense, "Avez-vous un mal de tete intense?").
+question_symptome(photophobie, "Etes-vous sensible a la lumiere?").
+question_symptome(diarrhee, "Avez-vous de la diarrhee?").
+question_symptome(vomissements, "Avez-vous des vomissements?").
+
+
+% -----------------------------------------------------------------------------
 % INTERFACE UTILISATEUR - Gestion des questions
 % -----------------------------------------------------------------------------
 
@@ -101,9 +128,9 @@ lire_reponse(Reponse) :-
 
 % Poser question simple (pas de cascade)
 poser_question_simple(Symptome, Reponse) :-
-    traduire_symptome(Symptome, TexteFrancais),
+    question_symptome(Symptome, TexteQuestion),
     nl,
-    format('Question: Avez-vous ~w?~n', [TexteFrancais]),
+    format('Question: ~w~n', [TexteQuestion]),
     write('1. Oui'), nl,
     write('2. Non'), nl,
     write('Votre reponse: '),
@@ -118,9 +145,9 @@ poser_question_simple(Symptome, Reponse) :-
 % Enregistre: fievre, fievre_elevee, fievre_legere (selon reponses)
 
 poser_question_fievre :-
-    traduire_symptome(fievre, TexteFievre),
+    question_symptome(fievre, TexteQuestion),
     nl,
-    format('Question: Avez-vous ~w?~n', [TexteFievre]),
+    format('Question: ~w~n', [TexteQuestion]),
     write('1. Oui'), nl,
     write('2. Non'), nl,
     write('Votre reponse: '),
@@ -130,7 +157,7 @@ poser_question_fievre :-
         (
             % Sous-question: fievre elevee?
             nl,
-            format('Question: Est-elle elevee (temperature >38.5°C)?~n', []),
+            format('Question: Votre fievre est-elle elevee (temperature >38.5°C)?~n', []),
             write('1. Oui'), nl,
             write('2. Non'), nl,
             write('Votre reponse: '),
@@ -162,9 +189,9 @@ poser_question_fievre :-
 % Enregistre: toux, toux_productive (selon reponses)
 
 poser_question_toux :-
-    traduire_symptome(toux, TexteToux),
+    question_symptome(toux, TexteQuestion),
     nl,
-    format('Question: Avez-vous ~w?~n', [TexteToux]),
+    format('Question: ~w~n', [TexteQuestion]),
     write('1. Oui'), nl,
     write('2. Non'), nl,
     write('Votre reponse: '),
@@ -174,7 +201,7 @@ poser_question_toux :-
         (
             % Sous-question: toux productive?
             nl,
-            format('Question: Est-elle productive (avec crachats/expectorations)?~n', []),
+            format('Question: Votre toux est-elle productive (avec crachats/expectorations)?~n', []),
             write('1. Oui'), nl,
             write('2. Non'), nl,
             write('Votre reponse: '),
@@ -288,8 +315,12 @@ collecter_syndromes(Syndromes) :-
     ), Syndromes).
 
 % Collecter les symptômes positifs
+% Sauf les symptômes génériques de fièvre et de toux (si productive)
 collecter_symptomes_positifs(Symptomes) :-
-    findall(S, connu(S, oui), Symptomes).
+    findall(S, (connu(S, oui),
+                \+S=fievre,
+                \+S=toux; \+ connu(toux_productive,oui)),
+            Symptomes).
 
 % Afficher liste de symptômes en français (format puces)
 afficher_liste_symptomes([]).
