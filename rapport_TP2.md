@@ -159,9 +159,13 @@ Les syndromes intermédiaires constituent le niveau central de raisonnement, agr
 
 **Tableau 3** : Syndromes intermédiaires avec leurs conditions de déclenchement.
 
-### Les 20 Règles d'Inférence
+### La sous classe RFG
 
-La base de connaissances est constituée de **20 règles d'inférence** réparties en deux niveaux de déduction.
+Afin de rendre la lecture du graphe de dépendance plus facile, nous avons créer une sous-classe de maladie nommée RFG. Quelqu'un a une maladie RFG quand il a les syndromes suivants: Respiratoire, Fébrile et Grippal.
+
+### Les 21 Règles d'Inférence
+
+La base de connaissances est constituée de **21 règles d'inférence** réparties en deux niveaux de déduction.
 
 #### Niveau 1 → Niveau 2 : Symptômes → Syndromes (10 règles)
 
@@ -182,24 +186,34 @@ Le tableau 4 présente les 10 premières règles permettant de déduire les synd
 
 **Tableau 4** : Règles d'inférence de Niveau 1 → Niveau 2.
 
-#### Niveau 2 → Niveau 3 : Syndromes → Maladies (10 règles)
+#### Maladie RFG
 
-Le tableau 5 présente les 10 règles permettant de déduire les maladies finales à partir des syndromes identifiés.
+Le tableau 5 présente la règle permettant de déduire si le patient a une maladie RFG
 
 | # | Règle logique | Maladie diagnostiquée |
 |:-:|:--------------|:----------------------|
-| R11 | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ ¬perte_odorat → grippe | Grippe |
-| R12 | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ perte_odorat → covid19 | COVID-19 |
-| R13 | syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive → bronchite | Bronchite |
-| R14 | syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal → rhume | Rhume |
-| R15 | syndrome_orl ∧ syndrome_fébrile → angine | Angine |
-| R16 | syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires → allergie | Allergie saisonnière |
-| R17 | syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires → asthme | Asthme |
-| R18 | syndrome_neurologique → migraine | Migraine |
-| R19 | syndrome_digestif ∧ syndrome_fébrile → gastro_entérite | Gastro-entérite |
-| R20 | syndrome_oculaire ∧ sécrétions_purulentes → conjonctivite | Conjonctivite |
+| R11 | syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile| Maladie RFG |
 
-**Tableau 5** : Règles d'inférence de Niveau 2 → Niveau 3.
+**Tableau 5** : Règles d'inférence pour la sous-classe Maladie RFG.
+
+#### Niveau 2 → Niveau 3 : Syndromes → Maladies (10 règles)
+
+Le tableau 6 présente les 10 règles permettant de déduire les maladies finales à partir des syndromes identifiés.
+
+| # | Règle logique | Maladie diagnostiquée |
+|:-:|:--------------|:----------------------|
+| R12 | Maladie RFG ∧ ¬perte_odorat → grippe | Grippe |
+| R13 | Maladie RFG ∧ perte_odorat → covid19 | COVID-19 |
+| R14 | syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive → bronchite | Bronchite |
+| R15 | syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal → rhume | Rhume |
+| R16 | syndrome_orl ∧ syndrome_fébrile → angine | Angine |
+| R17 | syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires → allergie | Allergie saisonnière |
+| R18 | syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires → asthme | Asthme |
+| R19 | syndrome_neurologique → migraine | Migraine |
+| R20 | syndrome_digestif ∧ syndrome_fébrile → gastro_entérite | Gastro-entérite |
+| R21 | syndrome_oculaire ∧ sécrétions_purulentes → conjonctivite | Conjonctivite |
+
+**Tableau 6** : Règles d'inférence de Niveau 2 → Niveau 3.
 
 ### Justification de l'Interconnexion des Règles
 
@@ -235,7 +249,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 | `diagnostiquer/1` | **Moteur de backward chaining**. Teste séquentiellement les 10 maladies dans un ordre optimisé. Retourne la première maladie dont toutes les conditions sont satisfaites. |
 | `reinitialiser/0` | **Efface le cache** des réponses (`connu/2`) pour permettre une nouvelle session de diagnostic indépendante. |
 
-**Tableau 6a** : Prédicats principaux du système (1/3).
+**Tableau 7a** : Prédicats principaux du système (1/3).
 
 | Prédicat | Description |
 |:---------|:------------|
@@ -246,7 +260,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 | `poser_question_toux/0` | **Gestion cascade toux**. Pose la question principale "Avez-vous de la toux?", puis si oui, pose "Est-elle productive?". Enregistre simultanément `toux` et `toux_productive` dans le cache. |
 | `lire_reponse/1` | **Lecture et validation de l'entrée utilisateur**. Utilise `get_single_char/1` pour une lecture immédiate (sans Enter). Valide que la réponse est '1' ou '2', redemande sinon. Convertit en `oui`/`non`. |
 
-**Tableau 6b** : Prédicats de vérification et d'interrogation (2/3).
+**Tableau 7b** : Prédicats de vérification et d'interrogation (2/3).
 
 | Prédicat | Description |
 |:---------|:------------|
@@ -256,7 +270,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 | `collecter_syndromes/1` | **Collecte des syndromes détectés**. Utilise `findall/3` pour identifier tous les syndromes qui sont actuellement vrais (utilisé pour debug/trace, non affiché par défaut). |
 | `afficher_aucun_diagnostic/0` | **Message d'échec diagnostique**. Affiché si aucune des 10 maladies ne correspond aux symptômes fournis. Recommande une consultation médicale. |
 
-**Tableau 6c** : Prédicats d'affichage des résultats (3/3).
+**Tableau 7c** : Prédicats d'affichage des résultats (3/3).
 
 ### Prédicats de Traduction (main.pl)
 
@@ -266,7 +280,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 | `traduire_maladie/2` | **Mapping Prolog → Français pour maladies**. Base de 10 faits associant chaque maladie Prolog (ex: `covid19`) à son nom français (ex: "COVID-19"). |
 | `traduire_syndrome/2` | **Mapping Prolog → Français pour syndromes**. Base de 8 faits associant chaque syndrome Prolog (ex: `syndrome_respiratoire`) à son nom français (ex: "Syndrome respiratoire"). |
 
-**Tableau 7** : Prédicats de traduction français.
+**Tableau 8** : Prédicats de traduction français.
 
 ### Prédicats de la Base de Connaissances (base_connaissances.pl)
 
@@ -281,22 +295,22 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 | `syndrome_neurologique/0` | **Déduction syndrome neurologique**. 1 clause (R9) : mal_tête_intense ∧ photophobie. |
 | `syndrome_orl/0` | **Déduction syndrome ORL**. 1 clause (R10) : mal_gorge_intense suffit (règle simplifiée). |
 
-**Tableau 8** : Prédicats de déduction des syndromes (Règles R1-R10).
+**Tableau 9** : Prédicats de déduction des syndromes (Règles R1-R10).
 
 | Prédicat | Description |
 |:---------|:------------|
-| `grippe/0` | **Règle R11**. Diagnostic Grippe : syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ ¬perte_odorat. |
-| `covid19/0` | **Règle R12**. Diagnostic COVID-19 : perte_odorat ∧ syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile. Discriminant unique en premier pour optimisation. |
-| `bronchite/0` | **Règle R13**. Diagnostic Bronchite : syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive. |
-| `rhume/0` | **Règle R14**. Diagnostic Rhume : syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal. |
-| `angine/0` | **Règle R15**. Diagnostic Angine : syndrome_orl ∧ syndrome_fébrile. |
-| `allergie/0` | **Règle R16**. Diagnostic Allergie saisonnière : syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires. |
-| `asthme/0` | **Règle R17**. Diagnostic Asthme : syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires. |
-| `migraine/0` | **Règle R18**. Diagnostic Migraine : syndrome_neurologique. |
-| `gastro_enterite/0` | **Règle R19**. Diagnostic Gastro-entérite : syndrome_digestif ∧ syndrome_fébrile. |
-| `conjonctivite/0` | **Règle R20**. Diagnostic Conjonctivite : syndrome_oculaire ∧ sécrétions_purulentes. |
+| `grippe/0` | **Règle R12**. Diagnostic Grippe : syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile ∧ ¬perte_odorat. |
+| `covid19/0` | **Règle R13**. Diagnostic COVID-19 : perte_odorat ∧ syndrome_respiratoire ∧ syndrome_grippal ∧ syndrome_fébrile. Discriminant unique en premier pour optimisation. |
+| `bronchite/0` | **Règle R14**. Diagnostic Bronchite : syndrome_respiratoire ∧ fièvre_légère ∧ toux_productive. |
+| `rhume/0` | **Règle R15**. Diagnostic Rhume : syndrome_respiratoire ∧ ¬syndrome_fébrile ∧ ¬syndrome_grippal. |
+| `angine/0` | **Règle R16**. Diagnostic Angine : syndrome_orl ∧ syndrome_fébrile. |
+| `allergie/0` | **Règle R17**. Diagnostic Allergie saisonnière : syndrome_allergique ∧ syndrome_oculaire ∧ ¬difficultés_respiratoires. |
+| `asthme/0` | **Règle R18**. Diagnostic Asthme : syndrome_respiratoire ∧ syndrome_allergique ∧ wheezing ∧ difficultés_respiratoires. |
+| `migraine/0` | **Règle R19**. Diagnostic Migraine : syndrome_neurologique. |
+| `gastro_enterite/0` | **Règle R20**. Diagnostic Gastro-entérite : syndrome_digestif ∧ syndrome_fébrile. |
+| `conjonctivite/0` | **Règle R21**. Diagnostic Conjonctivite : syndrome_oculaire ∧ sécrétions_purulentes. |
 
-**Tableau 9** : Prédicats de diagnostic des maladies (Règles R11-R20).
+**Tableau 10** : Prédicats de diagnostic des maladies (Règles R12-R21).
 
 ### Prédicat de Recommandations (base_connaissances.pl)
 
@@ -304,7 +318,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 |:---------|:------------|
 | `recommandation/2` | **Base de recommandations médicales**. 10 faits associant chaque maladie à une liste de 4-5 conseils pratiques (repos, hydratation, consultation, traitements). Format sans accents. **Attention** : informations à titre indicatif uniquement, ne remplacent pas un avis médical. |
 
-**Tableau 10** : Prédicat de recommandations médicales.
+**Tableau 11** : Prédicat de recommandations médicales.
 
 ### Base de Faits Dynamique
 
@@ -312,7 +326,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 |:----------|:------------|
 | `:- dynamic connu/2.` | Déclare le prédicat `connu/2` comme **dynamique**, permettant l'ajout (`assert`) et la suppression (`retract`) de faits en cours d'exécution. Utilisé pour le cache des réponses sous la forme `connu(symptome, oui/non)`. |
 
-**Tableau 11** : Directive de base dynamique.
+**Tableau 12** : Directive de base dynamique.
 
 Cette architecture modulaire permet une maintenance facilitée : les règles médicales sont isolées dans `base_connaissances.pl`, tandis que la logique de contrôle et l'interface utilisateur sont dans `main.pl`, respectant ainsi le principe de séparation des préoccupations.
 
