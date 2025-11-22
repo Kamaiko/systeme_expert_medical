@@ -221,6 +221,15 @@ Notre architecture garantit une forte interconnexion : 5 syndromes sur 8 (62,5 %
 
 ## 1.3 Graphe de Dépendance de la Structure du Raisonnement
 
+Comme mentionné plus haut, nous avons créer une nouvelle règle afin de rendre le graphe plus facile à lire, la règle R11.
+
+De plus, la négation est présente dans certaines des règles, ce que nous n'avons pas vu dans les diapositives du cours. Suivant le conseil que notre professeur nous a donné, nous avons utilisé ChatGPT afin de savoir comment inclure la négation dans le graphe.
+
+Finalement, le logiciel que nous avons utilisé pour faire le graphe était un peu limité dans ces options. Nous avons donc fini par faire que les condition "Et" (∧) soient ce qui est entre deux points, incluant les lignes où les points sont sur. Par exemple, la règle R7 indique qu'avoir les yeux rouges et les yeux qui piquent montre que le patient a un syndrome occulaire.
+
+<img width="2178" height="1122" alt="Graphe de dépendances" src="https://github.com/user-attachments/assets/677621d6-c875-4b05-aa7f-d9a5a4edb9da" />
+
+
 ## 1.4 Description du Moteur d'Inférence et du Mécanisme de Raisonnement
 
 Le système utilise le **chaînage arrière** (backward chaining), une stratégie d'inférence orientée-but qui part d'une hypothèse de diagnostic et tente de la valider en vérifiant récursivement si les conditions nécessaires sont satisfaites. Cette approche se distingue du chaînage avant (forward chaining) qui partirait des symptômes pour déduire progressivement les conclusions possibles. Le backward chaining est particulièrement adapté à notre contexte diagnostique car il minimise le nombre de questions posées à l'utilisateur en ne vérifiant que les symptômes strictement nécessaires à la validation de l'hypothèse courante.
