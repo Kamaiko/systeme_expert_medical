@@ -30,7 +30,6 @@ traduire_symptome(perte_odorat, "Perte de gout ou odorat").
 traduire_symptome(fievre, "Fievre").
 traduire_symptome(fievre_elevee, "Fievre elevee (>38.5°C)").
 traduire_symptome(fievre_legere, "Fievre legere").
-traduire_symptome(frissons, "Frissons").
 traduire_symptome(toux, "Toux").
 traduire_symptome(toux_productive, "Toux productive").
 traduire_symptome(nez_bouche, "Nez bouche (congestion nasale)").
@@ -38,7 +37,6 @@ traduire_symptome(difficultes_respiratoires, "Difficultes respiratoires").
 traduire_symptome(wheezing, "Sifflement respiratoire (wheezing)").
 traduire_symptome(gorge_irritee, "Gorge irritee").
 traduire_symptome(mal_gorge_intense, "Mal de gorge intense").
-traduire_symptome(difficulte_avaler, "Difficulte a avaler").
 traduire_symptome(eternuement, "Eternuements frequents").
 traduire_symptome(nez_qui_coule_clair, "Nez qui coule (ecoulement clair)").
 traduire_symptome(yeux_rouges, "Yeux rouges").
