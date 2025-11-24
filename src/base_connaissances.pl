@@ -63,9 +63,10 @@ syndrome_neurologique :-
 syndrome_orl :-
     verifier_symptome(mal_gorge_intense).
 
-% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------c
 % NIVEAU 2 → NIVEAU 3: Syndromes → Maladies (10 regles)
 % -----------------------------------------------------------------------------
+%
 
 % R11: Grippe = Respiratoire ∧ Grippal ∧ Febrile ∧ ¬Perte odorat
 grippe :-
@@ -125,6 +126,30 @@ gastro_enterite :-
 conjonctivite :-
     syndrome_oculaire,
     verifier_symptome(secretions_purulentes).
+
+% -----------------------------------------------------------------------------
+% SYMPTOMES ASSOCIES (SANS ACCENTS)
+% -----------------------------------------------------------------------------
+
+symptomes_associes(grippe, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee, fatigue_intense, courbatures]).
+
+symptomes_associes(covid19, [perte_odorat, nez_bouche, gorge_irritee, fatigue_intense, courbatures, fievre_elevee]).
+
+symptomes_associes(bronchite, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee, toux_productive]).
+
+symptomes_associes(rhume, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee]).
+
+symptomes_associes(angine, [mal_gorge_intense, fievre_elevee]).
+
+symptomes_associes(allergie, [eternument, yeux_rouges, yeux_qui_piquent]).
+
+symptomes_associes(asthme, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee, eternument, wheezing, difficultes_respiratoires]).
+
+symptomes_associes(migraine, [mal_tete_intense, photophobie]).
+
+symptomes_associes(gastro_enterite, [diarrhee, vomissements, fievre_elevee]).
+
+symptomes_associes(conjonctivite, [yeux_rouges, yeux_qui_piquent, secretions_purulentes]).
 
 % -----------------------------------------------------------------------------
 % RECOMMANDATIONS MEDICALES (SANS ACCENTS)

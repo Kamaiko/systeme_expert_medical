@@ -322,6 +322,17 @@ collecter_symptomes_positifs(Symptomes) :-
                 \+S=toux; \+ connu(toux_productive,oui)),
             Symptomes).
 
+collecter_symptomes_associes(Maladie, Symptomes) :-
+    symptomes_associes(Maladie, Associes),
+    collecter_symptomes_positifs(Positifs),
+    findall(S, (member(S, Positifs), member(S, Associes)), Symptomes).
+
+
+collecter_symptomes_non_associes(Maladie, Symptomes) :-
+    symptomes_associes(Maladie, Associes),
+    collecter_symptomes_positifs(Positifs),
+    findall(S, (member(S, Positifs), \+ member(S, Associes)), Symptomes).
+
 % Afficher liste de symptômes en français (format puces)
 afficher_liste_symptomes([]).
 afficher_liste_symptomes([S|Rest]) :-
@@ -339,9 +350,12 @@ afficher_diagnostic(Maladie) :-
     traduire_maladie(Maladie, NomFrancais),
     format('~w~n~n', [NomFrancais]),
     write('Base sur les symptomes suivants:'), nl,
-    collecter_symptomes_positifs(Symptomes),
-    afficher_liste_symptomes(Symptomes),
+    collecter_symptomes_associes(Maladie, Symptomes_associes),
+    afficher_liste_symptomes(Symptomes_associes),
     nl,
+    write('Autres symptomes:'), nl,
+    collecter_symptomes_non_associes(Maladie, Autres_symptomes),
+    afficher_liste_symptomes(Autres_symptomes),
     nl,
     afficher_recommandations(Maladie),
     nl.
