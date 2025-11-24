@@ -407,10 +407,24 @@ start :-
     ;   afficher_aucun_diagnostic
     ),
 
+    % Menu: Nouveau diagnostic ou Quitter
     nl,
     write('-------------------------------------------------------'), nl,
-    write('Session terminee.'), nl,
+    write('Que souhaitez-vous faire?'), nl,
+    write('1. Nouveau diagnostic'), nl,
+    write('2. Quitter'), nl,
+    write('Votre choix: '),
+    lire_reponse(Choix),
     nl,
 
-    % Fermeture automatique du programme (code 0 = succes)
-    halt(0).
+    (   Choix = oui ->  % '1' converti en 'oui' par lire_reponse/1
+        % Recommencer un nouveau diagnostic
+        start
+    ;   % Choix = non ('2')
+        % Quitter le programme
+        write('-------------------------------------------------------'), nl,
+        write('Au revoir!'), nl,
+        write('-------------------------------------------------------'), nl,
+        nl,
+        halt(0)
+    ).
