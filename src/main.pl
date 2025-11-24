@@ -27,10 +27,8 @@ reinitialiser :-
 % -----------------------------------------------------------------------------
 
 traduire_symptome(perte_odorat, "Perte de gout ou odorat").
-traduire_symptome(fievre, "Fievre").
 traduire_symptome(fievre_elevee, "Fievre elevee (>38.5°C)").
 traduire_symptome(fievre_legere, "Fievre legere").
-traduire_symptome(toux, "Toux").
 traduire_symptome(toux_productive, "Toux productive").
 traduire_symptome(nez_bouche, "Congestion nasale").
 traduire_symptome(difficultes_respiratoires, "Difficultes respiratoires").

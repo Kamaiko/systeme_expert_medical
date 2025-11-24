@@ -63,7 +63,7 @@ syndrome_neurologique :-
 syndrome_orl :-
     verifier_symptome(mal_gorge_intense).
 
-% -----------------------------------------------------------------------------c
+% -----------------------------------------------------------------------------
 % NIVEAU 2 → NIVEAU 3: Syndromes → Maladies (10 regles)
 % -----------------------------------------------------------------------------
 %
@@ -131,9 +131,9 @@ conjonctivite :-
 % SYMPTOMES ASSOCIES (SANS ACCENTS)
 % -----------------------------------------------------------------------------
 
-symptomes_associes(grippe, [fievre_elevee, toux, fatigue_intense, courbatures]).
+symptomes_associes(grippe, [fievre_elevee, fatigue_intense, courbatures]).
 
-symptomes_associes(covid19, [perte_odorat, fievre_elevee, toux, fatigue_intense, courbatures]).
+symptomes_associes(covid19, [perte_odorat, fievre_elevee, fatigue_intense, courbatures]).
 
 symptomes_associes(bronchite, [fievre_legere, toux_productive, nez_bouche, gorge_irritee]).
 
