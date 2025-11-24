@@ -373,7 +373,7 @@ Question: Avez-vous un mal de tete intense?
 2. Non
 Votre reponse: 1
 
-Question: Etes-vous sensible a la lumiere (photophobie)?
+Question: Etes-vous sensible a la lumiere?
 1. Oui
 2. Non
 Votre reponse: 1
@@ -393,12 +393,8 @@ RECOMMANDATIONS:
 -------------------------------------------------------
   - Repos dans piece sombre et calme
   - Antalgiques des premiers symptomes
-  - Identifier facteurs declenchants
-  - Consulter si migraines frequentes (>4/mois)
-  - Tenir journal des crises
 
 -------------------------------------------------------
-Session terminee.
 ```
 
 ### Raisonnement Suivi
@@ -437,7 +433,7 @@ Question: Avez-vous de la fievre?
 2. Non
 Votre reponse: 1
 
-Question: Est-elle elevee (temperature >38.5°C)?
+Question: Votre fievre est-elle elevee (temperature >38.5°C)?
 1. Oui
 2. Non
 Votre reponse: 1
@@ -447,17 +443,17 @@ Question: Avez-vous de la toux?
 2. Non
 Votre reponse: 1
 
-Question: Est-elle productive (avec crachats/expectorations)?
+Question: Votre toux est-elle productive (avec crachats/expectorations)?
 1. Oui
 2. Non
 Votre reponse: 2
 
-Question: Ressentez-vous une fatigue intense?
+Question: Sentez-vous de la fatigue intense?
 1. Oui
 2. Non
 Votre reponse: 1
 
-Question: Avez-vous des courbatures (douleurs musculaires)?
+Question: Avez-vous des courbatures?
 1. Oui
 2. Non
 Votre reponse: 1
@@ -471,7 +467,6 @@ COVID-19
 Base sur les symptomes suivants:
   - Perte de gout ou odorat
   - Fievre elevee (>38.5°C)
-  - Toux
   - Fatigue intense
   - Courbatures
 
@@ -479,13 +474,9 @@ Base sur les symptomes suivants:
 RECOMMANDATIONS:
 -------------------------------------------------------
   - Isolement immediat pendant 5-10 jours
-  - Repos et hydratation
-  - Surveillance oxymetrie (consulter si <95%)
   - Consulter medecin pour evaluation et traitement
-  - Informer contacts proches
 
 -------------------------------------------------------
-Session terminee.
 ```
 
 ### Raisonnement Suivi
@@ -524,7 +515,7 @@ Question: Avez-vous un mal de tete intense?
 2. Non
 Votre reponse: 2
 
-Question: Avez-vous les yeux rouges?
+Question: Vos yeux sont-ils rouges?
 1. Oui
 2. Non
 Votre reponse: 2
@@ -534,7 +525,7 @@ Question: Avez-vous de la fievre?
 2. Non
 Votre reponse: 1
 
-Question: Est-elle elevee (temperature >38.5°C)?
+Question: Votre fievre est-elle elevee (temperature >38.5°C)?
 1. Oui
 2. Non
 Votre reponse: 1
@@ -573,12 +564,9 @@ Base sur les symptomes suivants:
 RECOMMANDATIONS:
 -------------------------------------------------------
   - Consulter medecin pour test streptocoque
-  - Antibiotiques si angine bacterienne
   - Antalgiques pour douleur gorge
-  - Repos et alimentation molle
 
 -------------------------------------------------------
-Session terminee.
 ```
 
 ### Raisonnement Suivi
