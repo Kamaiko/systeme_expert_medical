@@ -1,13 +1,13 @@
 /** <module> Base de Connaissances
 
-Définition des 20 règles d'inférence du système expert
-(architecture 3 niveaux: Symptômes → Syndromes → Maladies).
+Définition des 21 règles d'inférence du système expert
+(architecture 4 niveaux: Symptômes → Syndromes → RFG → Maladies).
 
 @author   Équipe 6
 @course   TP2 - IFT2003 Intelligence Artificielle 1
 @date     Novembre 2025
-@brief    - 20 règles (R1-R10: symptômes→syndromes, R11-R20: syndromes→maladies)
-          - 8 syndromes intermédiaires, 10 maladies diagnosticables
+@brief    - 21 règles (R1-R10: symptômes→syndromes, R11: syndromes→RFG, R12-R21: RFG/syndromes→maladies)
+          - 8 syndromes intermédiaires, 1 abstraction RFG, 10 maladies diagnosticables
           - 2 cascades: fièvre (légère/élevée), toux (productive/non)
 */
 
@@ -64,65 +64,73 @@ syndrome_orl :-
     verifier_symptome(mal_gorge_intense).
 
 % -----------------------------------------------------------------------------
-% NIVEAU 2 → NIVEAU 3: Syndromes → Maladies (10 regles)
+% NIVEAU 2 → NIVEAU 2.5: Syndromes → Maladie RFG (1 regle)
 % -----------------------------------------------------------------------------
-%
 
-% R11: Grippe = Respiratoire ∧ Grippal ∧ Febrile ∧ ¬Perte odorat
-grippe :-
-    syndrome_respiratoire,
-    syndrome_grippal,
-    syndrome_febrile,
-    \+ verifier_symptome(perte_odorat).
-
-% R12: COVID-19 = Perte odorat ∧ Respiratoire ∧ Grippal ∧ Febrile
-% NOTE: perte_odorat EN PREMIER (discriminant unique) pour optimiser backward chaining
-covid19 :-
-    verifier_symptome(perte_odorat),
+% R11: Maladie RFG = Respiratoire ∧ Grippal ∧ Febrile
+% Abstraction regroupant les 3 syndromes communs a Grippe et COVID-19
+% (introduite pour simplifier le graphe de dependances)
+maladie_rfg :-
     syndrome_respiratoire,
     syndrome_grippal,
     syndrome_febrile.
 
-% R13: Bronchite = Respiratoire ∧ Fievre legere ∧ Toux productive
+% -----------------------------------------------------------------------------
+% NIVEAU 2.5 → NIVEAU 3: Maladie RFG/Syndromes → Diagnostics finaux
+% (2 regles RFG + 8 regles syndromes = 10 maladies)
+% -----------------------------------------------------------------------------
+
+% R12: Grippe = RFG ∧ ¬Perte odorat
+grippe :-
+    maladie_rfg,
+    \+ verifier_symptome(perte_odorat).
+
+% R13: COVID-19 = Perte odorat ∧ RFG
+% NOTE: perte_odorat EN PREMIER (discriminant unique) pour optimiser backward chaining
+covid19 :-
+    verifier_symptome(perte_odorat),
+    maladie_rfg.
+
+% R14: Bronchite = Respiratoire ∧ Fievre legere ∧ Toux productive
 bronchite :-
     syndrome_respiratoire,
     verifier_symptome(fievre_legere),
     verifier_symptome(toux_productive).
 
-% R14: Rhume = Respiratoire ∧ ¬Febrile ∧ ¬Grippal
+% R15: Rhume = Respiratoire ∧ ¬Febrile ∧ ¬Grippal
 rhume :-
     syndrome_respiratoire,
     \+ syndrome_febrile,
     \+ syndrome_grippal.
 
-% R15: Angine = ORL ∧ Febrile
+% R16: Angine = ORL ∧ Febrile
 angine :-
     syndrome_orl,
     syndrome_febrile.
 
-% R16: Allergie saisonniere = Allergique ∧ Oculaire ∧ ¬Difficultes respiratoires
+% R17: Allergie saisonniere = Allergique ∧ Oculaire ∧ ¬Difficultes respiratoires
 allergie :-
     syndrome_allergique,
     syndrome_oculaire,
     \+ verifier_symptome(difficultes_respiratoires).
 
-% R17: Asthme = Respiratoire ∧ Allergique ∧ Wheezing ∧ Difficultes respiratoires
+% R18: Asthme = Respiratoire ∧ Allergique ∧ Wheezing ∧ Difficultes respiratoires
 asthme :-
     syndrome_respiratoire,
     syndrome_allergique,
     verifier_symptome(wheezing),
     verifier_symptome(difficultes_respiratoires).
 
-% R18: Migraine = Neurologique
+% R19: Migraine = Neurologique
 migraine :-
     syndrome_neurologique.
 
-% R19: Gastro-enterite = Digestif ∧ Febrile
+% R20: Gastro-enterite = Digestif ∧ Febrile
 gastro_enterite :-
     syndrome_digestif,
     syndrome_febrile.
 
-% R20: Conjonctivite = Oculaire ∧ Secretions purulentes
+% R21: Conjonctivite = Oculaire ∧ Secretions purulentes
 conjonctivite :-
     syndrome_oculaire,
     verifier_symptome(secretions_purulentes).
