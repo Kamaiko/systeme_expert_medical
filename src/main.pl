@@ -68,7 +68,7 @@ traduire_maladie(conjonctivite, "Conjonctivite").
 % QUESTIONS - Format adapte pour chaque symptome (SANS ACCENTS)
 % -----------------------------------------------------------------------------
 
-question_symptome(perte_odorat, "Avez-vous une perte de gout ou d'odorat?").
+question_symptome(perte_odorat, "Avez-vous perdu l'odorat ou le gout?").
 question_symptome(fievre, "Avez-vous de la fievre?").
 question_symptome(toux, "Avez-vous de la toux?").
 question_symptome(nez_bouche, "Avez-vous le nez bouche?").

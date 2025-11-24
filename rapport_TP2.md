@@ -363,7 +363,7 @@ un diagnostic parmi 10 maladies courantes.
 
 -------------------------------------------------------
 
-Question: Avez-vous une perte de gout ou d'odorat?
+Question: Avez-vous perdu l'odorat ou le gout?
 1. Oui
 2. Non
 Votre reponse: 2
@@ -427,7 +427,7 @@ un diagnostic parmi 10 maladies courantes.
 
 -------------------------------------------------------
 
-Question: Avez-vous une perte de gout ou d'odorat?
+Question: Avez-vous perdu l'odorat ou le gout?
 1. Oui
 2. Non
 Votre reponse: 1
@@ -514,7 +514,7 @@ un diagnostic parmi 10 maladies courantes.
 
 -------------------------------------------------------
 
-Question: Avez-vous une perte de gout ou d'odorat?
+Question: Avez-vous perdu l'odorat ou le gout?
 1. Oui
 2. Non
 Votre reponse: 2
