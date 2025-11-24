@@ -131,19 +131,19 @@ conjonctivite :-
 % SYMPTOMES ASSOCIES (SANS ACCENTS)
 % -----------------------------------------------------------------------------
 
-symptomes_associes(grippe, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee, fatigue_intense, courbatures]).
+symptomes_associes(grippe, [fievre_elevee, toux, fatigue_intense, courbatures]).
 
-symptomes_associes(covid19, [perte_odorat, nez_bouche, gorge_irritee, fatigue_intense, courbatures, fievre_elevee]).
+symptomes_associes(covid19, [perte_odorat, fievre_elevee, toux, fatigue_intense, courbatures]).
 
-symptomes_associes(bronchite, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee, toux_productive]).
+symptomes_associes(bronchite, [fievre_legere, toux_productive]).
 
-symptomes_associes(rhume, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee]).
+symptomes_associes(rhume, [nez_bouche, gorge_irritee]).
 
 symptomes_associes(angine, [mal_gorge_intense, fievre_elevee]).
 
-symptomes_associes(allergie, [eternument, yeux_rouges, yeux_qui_piquent]).
+symptomes_associes(allergie, [eternuement, yeux_rouges, yeux_qui_piquent]).
 
-symptomes_associes(asthme, [fievre_legere, fievre_elevee, toux, nez_bouche, gorge_irritee, eternument, wheezing, difficultes_respiratoires]).
+symptomes_associes(asthme, [eternuement, wheezing, difficultes_respiratoires]).
 
 symptomes_associes(migraine, [mal_tete_intense, photophobie]).
 

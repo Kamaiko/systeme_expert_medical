@@ -67,19 +67,6 @@ traduire_maladie(gastro_enterite, "Gastro-enterite").
 traduire_maladie(conjonctivite, "Conjonctivite").
 
 % -----------------------------------------------------------------------------
-% TRADUCTIONS - Syndromes (SANS ACCENTS)
-% -----------------------------------------------------------------------------
-
-traduire_syndrome(syndrome_respiratoire, "Syndrome respiratoire").
-traduire_syndrome(syndrome_febrile, "Syndrome febrile").
-traduire_syndrome(syndrome_grippal, "Syndrome grippal").
-traduire_syndrome(syndrome_allergique, "Syndrome allergique").
-traduire_syndrome(syndrome_oculaire, "Syndrome oculaire").
-traduire_syndrome(syndrome_digestif, "Syndrome digestif").
-traduire_syndrome(syndrome_neurologique, "Syndrome neurologique").
-traduire_syndrome(syndrome_orl, "Syndrome ORL").
-
-% -----------------------------------------------------------------------------
 % QUESTIONS - Format adapte pour chaque symptome (SANS ACCENTS)
 % -----------------------------------------------------------------------------
 
@@ -305,15 +292,6 @@ diagnostiquer(Maladie) :-
 % AFFICHAGE RESULTATS
 % -----------------------------------------------------------------------------
 
-% Collecter les syndromes detectes
-collecter_syndromes(Syndromes) :-
-    findall(S, (
-        member(S, [syndrome_respiratoire, syndrome_febrile, syndrome_grippal,
-                   syndrome_allergique, syndrome_oculaire, syndrome_digestif,
-                   syndrome_neurologique, syndrome_orl]),
-        call(S)
-    ), Syndromes).
-
 % Collecter les symptômes positifs
 % Sauf les symptômes génériques de fièvre et de toux (si productive)
 collecter_symptomes_positifs(Symptomes) :-
@@ -322,15 +300,13 @@ collecter_symptomes_positifs(Symptomes) :-
                 \+S=toux; \+ connu(toux_productive,oui)),
             Symptomes).
 
-collecter_symptomes_associes(Maladie, Symptomes) :-
+% Version optimisee: accepte les symptomes positifs en parametre (evite double appel)
+collecter_symptomes_associes(Maladie, Positifs, Symptomes) :-
     symptomes_associes(Maladie, Associes),
-    collecter_symptomes_positifs(Positifs),
     findall(S, (member(S, Positifs), member(S, Associes)), Symptomes).
 
-
-collecter_symptomes_non_associes(Maladie, Symptomes) :-
+collecter_symptomes_non_associes(Maladie, Positifs, Symptomes) :-
     symptomes_associes(Maladie, Associes),
-    collecter_symptomes_positifs(Positifs),
     findall(S, (member(S, Positifs), \+ member(S, Associes)), Symptomes).
 
 % Afficher liste de symptômes en français (format puces)
@@ -349,12 +325,16 @@ afficher_diagnostic(Maladie) :-
     nl,
     traduire_maladie(Maladie, NomFrancais),
     format('~w~n~n', [NomFrancais]),
+
+    % Optimisation: calculer les positifs une seule fois
+    collecter_symptomes_positifs(Positifs),
+
     write('Base sur les symptomes suivants:'), nl,
-    collecter_symptomes_associes(Maladie, Symptomes_associes),
+    collecter_symptomes_associes(Maladie, Positifs, Symptomes_associes),
     afficher_liste_symptomes(Symptomes_associes),
     nl,
     write('Autres symptomes:'), nl,
-    collecter_symptomes_non_associes(Maladie, Autres_symptomes),
+    collecter_symptomes_non_associes(Maladie, Positifs, Autres_symptomes),
     afficher_liste_symptomes(Autres_symptomes),
     nl,
     afficher_recommandations(Maladie),
@@ -373,16 +353,6 @@ afficher_liste_recommandations([]).
 afficher_liste_recommandations([R|Rest]) :-
     format('  - ~w~n', [R]),
     afficher_liste_recommandations(Rest).
-
-% Afficher liste de syndromes traduits
-afficher_liste_syndromes([]).
-afficher_liste_syndromes([S]) :-
-    traduire_syndrome(S, NomFrancais),
-    write(NomFrancais), !.
-afficher_liste_syndromes([S|Rest]) :-
-    traduire_syndrome(S, NomFrancais),
-    format('~w, ', [NomFrancais]),
-    afficher_liste_syndromes(Rest).
 
 % Si aucun diagnostic trouve
 afficher_aucun_diagnostic :-
