@@ -33,7 +33,7 @@ traduire_symptome(fievre_legere, "Fievre legere").
 traduire_symptome(frissons, "Frissons").
 traduire_symptome(toux, "Toux").
 traduire_symptome(toux_productive, "Toux productive").
-traduire_symptome(nez_bouche, "Nez bouche").
+traduire_symptome(nez_bouche, "Nez bouche (congestion nasale)").
 traduire_symptome(difficultes_respiratoires, "Difficultes respiratoires").
 traduire_symptome(wheezing, "Sifflement respiratoire (wheezing)").
 traduire_symptome(gorge_irritee, "Gorge irritee").
