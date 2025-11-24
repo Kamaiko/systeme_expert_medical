@@ -289,11 +289,11 @@ diagnostiquer(Maladie) :-
 % -----------------------------------------------------------------------------
 
 % Collecter les symptômes positifs
-% Sauf les symptômes génériques de fièvre et de toux (si productive)
+% Sauf les symptômes génériques de fièvre et de toux
 collecter_symptomes_positifs(Symptomes) :-
     findall(S, (connu(S, oui),
                 \+S=fievre,
-                \+S=toux; \+ connu(toux_productive,oui)),
+                \+S=toux),
             Symptomes).
 
 % Version optimisee: accepte les symptomes positifs en parametre (evite double appel)
