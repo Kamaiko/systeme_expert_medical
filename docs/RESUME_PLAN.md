@@ -43,7 +43,7 @@ TP2/
 
 ### Structure Hiérarchique (3 Niveaux)
 ```
-NIVEAU 1: SYMPTÔMES (21 symptômes + 2 cascades)
+NIVEAU 1: SYMPTÔMES (19 symptômes + 2 cascades)
     ↓ (10 règles)
 NIVEAU 2: SYNDROMES (8 syndromes intermédiaires)
     ↓ (10 règles)
@@ -103,16 +103,16 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 
 ## Les Symptômes
 
-Le système utilise **21 questions principales** avec **2 questions en cascade conditionnelle** (fièvre, toux).
+Le système utilise **19 questions principales** avec **2 questions en cascade conditionnelle** (fièvre, toux).
 
 ### Organisation Thématique des Symptômes
 
 | Thème | Symptômes Prolog | Questions en français |
 |-------|------------------|----------------------|
 | **COVID/Unique** | `perte_odorat` | Avez-vous perdu l'odorat ou le goût? |
-| **Fièvre** | `fievre` **(CASCADE)** → `fievre_elevee` / `fievre_legere`, `frissons` | Avez-vous de la fièvre? → Si OUI: Est-elle élevée (>38.5°C)? <br> Avez-vous des frissons? |
+| **Fièvre** | `fievre` **(CASCADE)** → `fievre_elevee` / `fievre_legere` | Avez-vous de la fièvre? → Si OUI: Est-elle élevée (>38.5°C)? |
 | **Respiratoires** | `toux` **(CASCADE)** → `toux_productive`, `nez_bouche`, `difficultes_respiratoires`, `wheezing` | Avez-vous de la toux? → Si OUI: Est-elle productive? <br> Avez-vous le nez bouché? <br> Avez-vous des difficultés à respirer? <br> Avez-vous un sifflement respiratoire (wheezing)? |
-| **Gorge (ORL)** | `gorge_irritee`, `mal_gorge_intense`, `difficulte_avaler` | Avez-vous la gorge irritée? <br> Avez-vous un mal de gorge intense? <br> Avez-vous de la difficulté à avaler? |
+| **Gorge (ORL)** | `gorge_irritee`, `mal_gorge_intense` | Avez-vous la gorge irritée? <br> Avez-vous un mal de gorge intense? |
 | **Nasaux/Allergiques** | `eternuement`, `nez_qui_coule_clair` | Éternuez-vous fréquemment? <br> Avez-vous le nez qui coule (écoulement clair)? |
 | **Oculaires** | `yeux_rouges`, `yeux_qui_piquent`, `secretions_purulentes` | Avez-vous les yeux rouges? <br> Avez-vous les yeux qui piquent? <br> Avez-vous des sécrétions purulentes aux yeux? |
 | **Systémiques/Grippaux** | `fatigue_intense`, `courbatures` | Ressentez-vous une fatigue intense? <br> Avez-vous des courbatures? |
@@ -138,26 +138,24 @@ Le système pose les questions groupées par **thèmes médicaux** pour un flow 
 | 1 | COVID/Unique | `perte_odorat` | Avez-vous perdu l'odorat ou le goût? |
 | 2 | Fièvre | `fievre` | Avez-vous de la fièvre? |
 | 2a | ↳ Cascade | `fievre_elevee` / `fievre_legere` | **→ Si OUI:** Est-elle élevée (>38.5°C)? |
-| 3 | Fièvre | `frissons` | Avez-vous des frissons? |
-| 4 | Respiratoire | `toux` | Avez-vous de la toux? |
-| 4a | ↳ Cascade | `toux_productive` | **→ Si OUI:** Est-elle productive (avec crachats)? |
-| 5 | Respiratoire | `nez_bouche` | Avez-vous le nez bouché? |
-| 6 | Respiratoire | `difficultes_respiratoires` | Avez-vous des difficultés à respirer? |
-| 7 | Respiratoire | `wheezing` | Avez-vous un sifflement respiratoire (wheezing)? |
-| 8 | Gorge (ORL) | `gorge_irritee` | Avez-vous la gorge irritée? |
-| 9 | Gorge (ORL) | `mal_gorge_intense` | Avez-vous un mal de gorge intense? |
-| 10 | Gorge (ORL) | `difficulte_avaler` | Avez-vous de la difficulté à avaler? |
-| 11 | Nasaux/Allergique | `eternuement` | Éternuez-vous fréquemment? |
-| 12 | Nasaux/Allergique | `nez_qui_coule_clair` | Avez-vous le nez qui coule (écoulement clair)? |
-| 13 | Oculaire | `yeux_rouges` | Avez-vous les yeux rouges? |
-| 14 | Oculaire | `yeux_qui_piquent` | Avez-vous les yeux qui piquent ou qui démangent? |
-| 15 | Oculaire | `secretions_purulentes` | Avez-vous des sécrétions purulentes aux yeux? |
-| 16 | Systémique/Grippal | `fatigue_intense` | Ressentez-vous une fatigue intense? |
-| 17 | Systémique/Grippal | `courbatures` | Avez-vous des courbatures (douleurs musculaires)? |
-| 18 | Neurologique | `mal_tete_intense` | Avez-vous un mal de tête intense? |
-| 19 | Neurologique | `photophobie` | Êtes-vous sensible à la lumière (photophobie)? |
-| 20 | Digestif | `diarrhee` | Avez-vous de la diarrhée? |
-| 21 | Digestif | `vomissements` | Avez-vous des vomissements? |
+| 3 | Respiratoire | `toux` | Avez-vous de la toux? |
+| 3a | ↳ Cascade | `toux_productive` | **→ Si OUI:** Est-elle productive (avec crachats)? |
+| 4 | Respiratoire | `nez_bouche` | Avez-vous le nez bouché? |
+| 5 | Respiratoire | `difficultes_respiratoires` | Avez-vous des difficultés à respirer? |
+| 6 | Respiratoire | `wheezing` | Avez-vous un sifflement respiratoire (wheezing)? |
+| 7 | Gorge (ORL) | `gorge_irritee` | Avez-vous la gorge irritée? |
+| 8 | Gorge (ORL) | `mal_gorge_intense` | Avez-vous un mal de gorge intense? |
+| 9 | Nasaux/Allergique | `eternuement` | Éternuez-vous fréquemment? |
+| 10 | Nasaux/Allergique | `nez_qui_coule_clair` | Avez-vous le nez qui coule (écoulement clair)? |
+| 11 | Oculaire | `yeux_rouges` | Avez-vous les yeux rouges? |
+| 12 | Oculaire | `yeux_qui_piquent` | Avez-vous les yeux qui piquent ou qui démangent? |
+| 13 | Oculaire | `secretions_purulentes` | Avez-vous des sécrétions purulentes aux yeux? |
+| 14 | Systémique/Grippal | `fatigue_intense` | Ressentez-vous une fatigue intense? |
+| 15 | Systémique/Grippal | `courbatures` | Avez-vous des courbatures (douleurs musculaires)? |
+| 16 | Neurologique | `mal_tete_intense` | Avez-vous un mal de tête intense? |
+| 17 | Neurologique | `photophobie` | Êtes-vous sensible à la lumière (photophobie)? |
+| 18 | Digestif | `diarrhee` | Avez-vous de la diarrhée? |
+| 19 | Digestif | `vomissements` | Avez-vous des vomissements? |
 
 **Stratégie de questionnement:**
 - **Organisation thématique**: Questions regroupées par catégories médicales (Fièvre, Respiratoire, Gorge, etc.)

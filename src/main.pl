@@ -72,14 +72,12 @@ traduire_maladie(conjonctivite, "Conjonctivite").
 
 question_symptome(perte_odorat, "Avez-vous une perte d'odorat?").
 question_symptome(fievre, "Avez-vous de la fievre?").
-question_symptome(frissons, "Avez-vous des frissons?").
 question_symptome(toux, "Avez-vous de la toux?").
 question_symptome(nez_bouche, "Avez-vous le nez bouche?").
 question_symptome(difficultes_respiratoires, "Avez-vous de la difficulte a respirer?").
 question_symptome(wheezing, "Entendez-vous un sifflement lorsque vous respirez?").
 question_symptome(gorge_irritee, "Votre gorge est-elle irritée?").
 question_symptome(mal_gorge_intense, "Avez-vous un mal de gorge intense?").
-question_symptome(difficulte_avaler, "Avez-vous de la difficulte a avaler?").
 question_symptome(eternuement, "Eternuez-vous frequemment?").
 question_symptome(nez_qui_coule_clair, "Avez-vous le nez qui coule?").
 question_symptome(yeux_rouges, "Vos yeux sont-ils rouges?").

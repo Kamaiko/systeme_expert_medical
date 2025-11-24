@@ -69,7 +69,7 @@ Le système expert développé repose sur une **architecture hiérarchique à tr
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    NIVEAU 1: SYMPTÔMES                      │
-│                        23 symptômes                         │
+│                        19 symptômes                         │
 │   (fièvre, toux, mal de tête, photophobie, diarrhée, ...)   │
 └───────────────────────────┬─────────────────────────────────┘
                             │
@@ -102,7 +102,7 @@ Le tableau 1 présente un récapitulatif quantitatif des différentes composante
 
 | Composante | Quantité | Description |
 |:-----------|:--------:|:------------|
-| **Symptômes** | 23 | Observations cliniques élémentaires (fièvre, toux, mal de tête, fièvre élevée, fièvre légère, toux productive, etc.) |
+| **Symptômes** | 19 | Observations cliniques élémentaires (fièvre, toux, mal de tête, fièvre élevée, fièvre légère, toux productive, nez qui coule, etc.) |
 | **Syndromes intermédiaires** | 8 | Groupements de symptômes formant des entités cliniques cohérentes |
 | **Maladies diagnostiquées** | 10 | Pathologies courantes identifiables par le système |
 | **Règles Niveau 1→2** | 10 | Déduction des syndromes à partir des symptômes |
@@ -595,7 +595,7 @@ Ce projet a permis de concevoir et d'implémenter avec succès un système exper
 
 ## Synthèse des Réalisations
 
-La base de connaissances comprend 20 règles d'inférence structurées, permettant de diagnostiquer 10 maladies courantes à partir de 23 symptômes regroupés en 8 syndromes intermédiaires.
+La base de connaissances comprend 20 règles d'inférence structurées, permettant de diagnostiquer 10 maladies courantes à partir de 19 symptômes regroupés en 8 syndromes intermédiaires.
 
 Le moteur d'inférence implémenté utilise un ordre de test optimisé, permettant de réduire le nombre moyen de questions de ~10 (approche naïve) à 3-9 questions selon la complexité du cas. Le mécanisme de cache des réponses assure une expérience utilisateur fluide et cohérente en évitant de poser deux fois la même question.
 

@@ -135,9 +135,9 @@ symptomes_associes(grippe, [fievre_elevee, toux, fatigue_intense, courbatures]).
 
 symptomes_associes(covid19, [perte_odorat, fievre_elevee, toux, fatigue_intense, courbatures]).
 
-symptomes_associes(bronchite, [fievre_legere, toux_productive]).
+symptomes_associes(bronchite, [fievre_legere, toux_productive, nez_bouche, gorge_irritee]).
 
-symptomes_associes(rhume, [nez_bouche, gorge_irritee]).
+symptomes_associes(rhume, [nez_bouche, gorge_irritee, nez_qui_coule_clair]).
 
 symptomes_associes(angine, [mal_gorge_intense, fievre_elevee]).
 
