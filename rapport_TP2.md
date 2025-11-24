@@ -285,7 +285,7 @@ Cette section présente une description exhaustive des 27 prédicats principaux 
 
 | Prédicat | Description |
 |:---------|:------------|
-| `traduire_symptome/2` | **Mapping Prolog → Français pour symptômes**. Base de 21 faits associant chaque atome Prolog (ex: `perte_odorat`) à sa question en français (ex: "perdu l'odorat ou le goût"). Format sans accents pour compatibilité. |
+| `traduire_symptome/2` | **Mapping Prolog → Français pour symptômes**. Base de 19 faits associant chaque atome Prolog (ex: `perte_odorat`) à sa question en français (ex: "perdu l'odorat ou le goût"). Format sans accents pour compatibilité. |
 | `traduire_maladie/2` | **Mapping Prolog → Français pour maladies**. Base de 10 faits associant chaque maladie Prolog (ex: `covid19`) à son nom français (ex: "COVID-19"). |
 | `traduire_syndrome/2` | **Mapping Prolog → Français pour syndromes**. Base de 8 faits associant chaque syndrome Prolog (ex: `syndrome_respiratoire`) à son nom français (ex: "Syndrome respiratoire"). |
 

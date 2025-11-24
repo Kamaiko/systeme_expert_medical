@@ -60,7 +60,7 @@ NIVEAU 3: MALADIES (10 diagnostics finaux)
 |------------|----------|---------|
 | **Maladies** | 10 | Grippe, COVID-19, Bronchite, Rhume, Angine, Allergie saisonnière, Asthme, Migraine, Gastro-entérite, Conjonctivite |
 | **Syndromes** | 8 | Respiratoire, Fébrile, Grippal, Allergique, Oculaire, Digestif, Neurologique, ORL |
-| **Questions** | 21 (+2 cascades) | 21 questions principales + 2 sous-questions conditionnelles (fièvre_elevee, toux_productive) |
+| **Questions** | 19 (+2 cascades) | 19 questions principales + 2 sous-questions conditionnelles (fievre_elevee, toux_productive) |
 | **Règles totales** | 20 | 10 règles (Symptômes → Syndromes) + 10 règles (Syndromes → Maladies) |
 
 **Principe clé**: Les syndromes intermédiaires créent un arbre de dépendance global interconnecté (évite les sous-arbres isolés).
