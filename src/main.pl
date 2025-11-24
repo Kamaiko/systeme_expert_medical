@@ -301,10 +301,6 @@ collecter_symptomes_associes(Maladie, Positifs, Symptomes) :-
     symptomes_associes(Maladie, Associes),
     findall(S, (member(S, Positifs), member(S, Associes)), Symptomes).
 
-collecter_symptomes_non_associes(Maladie, Positifs, Symptomes) :-
-    symptomes_associes(Maladie, Associes),
-    findall(S, (member(S, Positifs), \+ member(S, Associes)), Symptomes).
-
 % Afficher liste de symptômes en français (format puces)
 afficher_liste_symptomes([]).
 afficher_liste_symptomes([S|Rest]) :-
@@ -328,10 +324,6 @@ afficher_diagnostic(Maladie) :-
     write('Base sur les symptomes suivants:'), nl,
     collecter_symptomes_associes(Maladie, Positifs, Symptomes_associes),
     afficher_liste_symptomes(Symptomes_associes),
-    nl,
-    write('Autres symptomes:'), nl,
-    collecter_symptomes_non_associes(Maladie, Positifs, Autres_symptomes),
-    afficher_liste_symptomes(Autres_symptomes),
     nl,
     afficher_recommandations(Maladie),
     nl.
